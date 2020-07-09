@@ -1,8 +1,12 @@
 import { Format, getFormat } from "./format";
 import Table from "./Table";
+import { assert } from "console";
+import PageType from "./PageType";
 
 export default class MDBReader {
-    public constructor(public readonly buffer: Buffer) {}
+    public constructor(public readonly buffer: Buffer) {
+        assert(this.buffer[0] === PageType.DatabaseDefinitionPage);
+    }
 
     public getFormat(): Format {
         return getFormat(this.buffer);
