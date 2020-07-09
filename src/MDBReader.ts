@@ -1,6 +1,6 @@
 import { Format, getFormat } from "./format";
 import Table from "./Table";
-import { assert } from "console";
+import * as assert from "assert";
 import PageType from "./PageType";
 
 export default class MDBReader {
