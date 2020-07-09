@@ -9,7 +9,7 @@ jobs:
         steps:
             - checkout
             - node/install-packages
-            - run: npm test -- --passWithNoTests
+            - run: npm test
             - run: npm run build
 
 workflows:
