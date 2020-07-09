@@ -3,15 +3,16 @@ orbs:
     node: circleci/node@3.0.1
 
 jobs:
-    build:
+    build-and-test:
         executor:
             name: node/default
         steps:
             - checkout
             - node/install-packages
+            - run: npm test -- --passWithNoTests
             - run: npm run build
 
 workflows:
-    build:
+    build-and-test:
         jobs:
-            - build
+            - build-and-test
