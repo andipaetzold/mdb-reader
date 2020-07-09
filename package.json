@@ -1,26 +1,41 @@
 {
-  "name": "mdb-reader",
-  "version": "1.0.0",
-  "description": "Node Library to read data from Access databases",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/andipaetzold/mdb-reader.git"
-  },
-  "keywords": [
-    "mdb",
-    "microsoft",
-    "access",
-    "database"
-  ],
-  "author": {
-    "name": "Andi Pätzold",
-    "email": "github@andipaetzold.com",
-    "url": "https://github.com/andipaetzold"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/andipaetzold/mdb-reader/issues"
-  },
-  "homepage": "https://github.com/andipaetzold/mdb-reader#readme"
+    "name": "mdb-reader",
+    "version": "1.0.0",
+    "description": "Node Library to read data from Access databases",
+    "main": "lib/index.js",
+    "module": "lib/index.es.js",
+    "files": [
+        "lib"
+    ],
+    "type": "lib/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/andipaetzold/mdb-reader.git"
+    },
+    "keywords": [
+        "mdb",
+        "microsoft",
+        "access",
+        "database"
+    ],
+    "author": {
+        "name": "Andi Pätzold",
+        "email": "github@andipaetzold.com",
+        "url": "https://github.com/andipaetzold"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/andipaetzold/mdb-reader/issues"
+    },
+    "homepage": "https://github.com/andipaetzold/mdb-reader#readme",
+    "devDependencies": {
+        "rollup": "2.21.0",
+        "rollup-plugin-terser": "6.1.0",
+        "rollup-plugin-typescript2": "0.27.1",
+        "typescript": "3.9.6"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "watch": "rollup -cw"
+    }
 }
