@@ -1,4 +1,4 @@
-import Column from "./Column";
+import Column from "./column";
 
 export default class Table {
     public constructor() {}

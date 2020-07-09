@@ -1,5 +1,5 @@
 import MDBReader from "./MDBReader";
 export default MDBReader;
 
-export type { default as Column, ColumnType } from "./Column";
+export type { Column, ColumnType } from "./column";
 export type { default as Table } from "./Table";
