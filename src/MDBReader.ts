@@ -1,7 +1,12 @@
+import { Format, getFormat } from "./format";
 import Table from "./Table";
 
 export default class MDBReader {
     public constructor(public readonly buffer: Buffer) {}
+
+    public getFormat(): Format {
+        return getFormat(this.buffer);
+    }
 
     public getTableNames(
         {
