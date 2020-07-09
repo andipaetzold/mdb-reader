@@ -11,6 +11,10 @@ export default class Table {
         throw new Error("Method not implemented.");
     }
 
+    public getColumnNames(): string[] {
+        return this.getColumns().map((column) => column.name);
+    }
+
     public getData(): { [column: string]: any } {
         throw new Error("Method not implemented.");
     }
