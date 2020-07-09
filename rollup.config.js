@@ -14,6 +14,7 @@ export default {
             format: "es",
         },
     ],
+    external: [...Object.keys(pkg.dependencies)],
     plugins: [
         typescript({
             typescript: require("typescript"),

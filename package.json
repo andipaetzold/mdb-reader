@@ -37,5 +37,8 @@
     "scripts": {
         "build": "rollup -c",
         "watch": "rollup -cw"
+    },
+    "dependencies": {
+        "@types/node": "^14.0.20"
     }
 }
