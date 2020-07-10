@@ -1,7 +1,11 @@
 import Database from "./Database";
 import { Format } from "./format";
 import PageType, { assertPageType } from "./PageType";
-import SysObject, { isSysObjectType } from "./SysObject";
+import SysObject, {
+    isSysObjectType,
+    isSystemObject,
+    SysObjectType,
+} from "./SysObject";
 import Table from "./Table";
 
 const MSYS_OBJECTS_TABLE = "MSysObjects";
@@ -48,7 +52,25 @@ export default class MDBReader {
             linkedTables: boolean;
         } = { normalTables: true, systemTables: false, linkedTables: false }
     ): string[] {
-        throw new Error("Method not implemented.");
+        const filteredSysObjects: SysObject[] = [];
+        for (const sysObject of this.sysObjects) {
+            if (sysObject.objectType === SysObjectType.Table) {
+                if (!isSystemObject(sysObject)) {
+                    if (normalTables) {
+                        filteredSysObjects.push(sysObject);
+                    }
+                } else if (systemTables) {
+                    filteredSysObjects.push(sysObject);
+                }
+            } else if (
+                sysObject.objectType === SysObjectType.LinkedTable &&
+                linkedTables
+            ) {
+                filteredSysObjects.push(sysObject);
+            }
+        }
+
+        return filteredSysObjects.map((o) => o.objectName);
     }
 
     public getTable(name: string): Table {
