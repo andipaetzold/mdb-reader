@@ -8,6 +8,14 @@ export interface Constants {
         rowCountOffset: number;
     };
     tableDefinitionPage: {
+        rowCountOffset: number;
+
+        columnCountOffset: number;
+        variableColumnCountOffset: number;
+
+        logicalIndexCountOffset: number;
+        realIndexCountOffset: number;
+
         usageMapOffset: number;
     };
 }
@@ -20,6 +28,14 @@ const jet3Constants: Constants = {
         rowCountOffset: 0x08,
     },
     tableDefinitionPage: {
+        rowCountOffset: 12,
+
+        columnCountOffset: 25,
+        variableColumnCountOffset: 25,
+
+        logicalIndexCountOffset: 27,
+        realIndexCountOffset: 31,
+
         usageMapOffset: 35,
     },
 };
@@ -31,6 +47,14 @@ const jet4Constants: Constants = {
         rowCountOffset: 0x0c,
     },
     tableDefinitionPage: {
+        rowCountOffset: 16,
+
+        variableColumnCountOffset: 43,
+        columnCountOffset: 45,
+
+        logicalIndexCountOffset: 47,
+        realIndexCountOffset: 51,
+
         usageMapOffset: 55,
     },
 };

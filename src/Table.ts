@@ -5,8 +5,16 @@ import { findMapPages } from "./usage-map";
 
 export default class Table {
     private readonly definitionBuffer: Buffer;
-
     private readonly dataPages: number[];
+
+    public readonly rowCount: number;
+    public readonly columnCount: number;
+
+    private readonly variableColumnCount: number;
+    private readonly fixedColumnCount: number;
+
+    private readonly logicalIndexCount: number;
+    private readonly realIndexCount: number;
 
     /**
      * @param name Table name. As this is stored in a MSysObjects, it has to be passed in
@@ -34,6 +42,26 @@ export default class Table {
             nextDefinitionPage = curBuffer.readUInt32LE(4);
         }
         this.definitionBuffer = buffer!;
+
+        // Read row, column, and index counts
+        this.rowCount = this.definitionBuffer.readUInt32LE(
+            this.db.constants.tableDefinitionPage.rowCountOffset
+        );
+
+        this.columnCount = this.definitionBuffer.readUInt32LE(
+            this.db.constants.tableDefinitionPage.columnCountOffset
+        );
+        this.variableColumnCount = this.definitionBuffer.readUInt16LE(
+            this.db.constants.tableDefinitionPage.variableColumnCountOffset
+        );
+        this.fixedColumnCount = this.columnCount - this.variableColumnCount;
+
+        this.logicalIndexCount = this.definitionBuffer.readInt32LE(
+            this.db.constants.tableDefinitionPage.logicalIndexCountOffset
+        );
+        this.realIndexCount = this.definitionBuffer.readInt32LE(
+            this.db.constants.tableDefinitionPage.realIndexCountOffset
+        );
 
         // Usage Map
         const usageMapBuffer = this.db.findPageRow(
