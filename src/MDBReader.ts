@@ -73,7 +73,20 @@ export default class MDBReader {
         return filteredSysObjects.map((o) => o.objectName);
     }
 
+    /**
+     * Returns a table by its name.
+     *
+     * @param name Name of the table. Case sensitive.
+     */
     public getTable(name: string): Table {
-        throw new Error("Method not implemented.");
+        const sysObject = this.sysObjects
+            .filter((o) => o.objectType === SysObjectType.Table)
+            .find((o) => o.objectName === name);
+
+        if (!sysObject) {
+            throw new Error(`Could not find table with name ${name}`);
+        }
+
+        return new Table(name, this.db, sysObject.tablePage);
     }
 }
