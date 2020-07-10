@@ -7,6 +7,9 @@ export interface Constants {
     dataPage: {
         rowCountOffset: number;
     };
+    tableDefinitionPage: {
+        usageMapOffset: number;
+    };
 }
 
 const jet3Constants: Constants = {
@@ -16,6 +19,9 @@ const jet3Constants: Constants = {
     dataPage: {
         rowCountOffset: 0x08,
     },
+    tableDefinitionPage: {
+        usageMapOffset: 35,
+    },
 };
 
 const jet4Constants: Constants = {
@@ -23,6 +29,9 @@ const jet4Constants: Constants = {
     pageSize: 4096,
     dataPage: {
         rowCountOffset: 0x0c,
+    },
+    tableDefinitionPage: {
+        usageMapOffset: 55,
     },
 };
 

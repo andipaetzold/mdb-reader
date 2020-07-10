@@ -1,9 +1,12 @@
 import { Column } from "./column";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
+import { findMapPages } from "./usage-map";
 
 export default class Table {
     private readonly definitionBuffer: Buffer;
+
+    private readonly dataPages: number[];
 
     /**
      * @param name Table name. As this is stored in a MSysObjects, it has to be passed in
@@ -31,6 +34,14 @@ export default class Table {
             nextDefinitionPage = curBuffer.readUInt32LE(4);
         }
         this.definitionBuffer = buffer!;
+
+        // Usage Map
+        const usageMapBuffer = this.db.findPageRow(
+            this.definitionBuffer.readUInt32LE(
+                this.db.constants.tableDefinitionPage.usageMapOffset
+            )
+        );
+        this.dataPages = findMapPages(usageMapBuffer);
     }
 
     public getColumn(name: string): Column {
