@@ -1,12 +1,11 @@
-import * as assert from "assert";
 import { Constants, getConstants } from "./constants";
-import PageType from "./PageType";
+import PageType, { assertPageType } from "./PageType";
 
 export default class Database {
     public readonly constants: Constants;
 
     public constructor(private readonly buffer: Buffer) {
-        assert(this.buffer[0] === PageType.DatabaseDefinitionPage);
+        assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
         this.constants = getConstants(this.buffer);
     }
