@@ -3,7 +3,7 @@ export interface Column {
     type: ColumnType;
     size: number;
 
-    pos: number;
+    index: number;
 
     fixedLength: boolean;
     nullable: boolean;

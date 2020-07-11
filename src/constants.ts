@@ -20,7 +20,7 @@ export interface Constants {
         realIndexEntrySize: number;
 
         columnsDefinition: {
-            posOffset: number;
+            indexOffset: number;
             flagsOffset: number;
             sizeOffset: number;
 
@@ -57,7 +57,7 @@ const jet3Constants: Constants = {
         realIndexEntrySize: 8,
 
         columnsDefinition: {
-            posOffset: 1,
+            indexOffset: 1,
             flagsOffset: 13,
             sizeOffset: 16,
 
@@ -90,7 +90,7 @@ const jet4Constants: Constants = {
         realIndexEntrySize: 12,
 
         columnsDefinition: {
-            posOffset: 5,
+            indexOffset: 5,
             flagsOffset: 15,
             sizeOffset: 25,
 

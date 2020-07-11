@@ -133,9 +133,9 @@ export default class Table {
                                   .columnsDefinition.sizeOffset
                           ),
 
-                pos: columnBuffer.readUInt8(
+                index: columnBuffer.readUInt8(
                     this.db.constants.tableDefinitionPage.columnsDefinition
-                        .posOffset
+                        .indexOffset
                 ),
 
                 ...parseColumnFlags(
@@ -157,7 +157,7 @@ export default class Table {
                 .columnsDefinition.entrySize;
         }
 
-        columns.sort((a, b) => a.pos - b.pos);
+        columns.sort((a, b) => a.index - b.index);
 
         return columns;
     }
