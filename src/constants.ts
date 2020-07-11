@@ -121,7 +121,7 @@ const jet4Constants: Constants = {
             variableIndexOffset: 7,
             flagsOffset: 15,
             fixedIndexOffset: 21,
-            sizeOffset: 25,
+            sizeOffset: 23,
 
             entrySize: 25,
         },
