@@ -346,7 +346,8 @@ export default class Table {
                 } else if (value !== null) {
                     value = readFieldValue(
                         pageBuffer.slice(start, start + size),
-                        column
+                        column,
+                        this.db.constants
                     );
                 }
 

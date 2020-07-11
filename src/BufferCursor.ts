@@ -2,7 +2,7 @@
  * @see https://github.com/bmancini55/node-buffer-cursor/blob/master/src/buffer-cursor.js
  */
 export default class BufferCursor {
-    public constructor(public readonly buffer: Buffer, private pos = 0) {}
+    public constructor(public readonly buffer: Buffer, public pos = 0) {}
 
     public getBuffer() {
         return this.buffer;

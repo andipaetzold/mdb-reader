@@ -1,6 +1,12 @@
 import { ColumnDefinition } from "./column";
+import { uncompressText } from "./unicodeCompression";
+import { Constants } from "./constants";
 
-export function readFieldValue(buffer: Buffer, column: ColumnDefinition): any {
+export function readFieldValue(
+    buffer: Buffer,
+    column: ColumnDefinition,
+    constants: Pick<Constants, "format">
+): any {
     if (column.type === "boolean") {
         throw new Error("readFieldValue does not handle type boolean");
     }
@@ -21,7 +27,7 @@ export function readFieldValue(buffer: Buffer, column: ColumnDefinition): any {
             return readBinary(buffer);
         }
         case "text": {
-            return readText(buffer);
+            return readText(buffer, constants);
         }
         case "repid":
             return readRepID(buffer);
@@ -58,9 +64,11 @@ function readBinary(buffer: Buffer): Buffer {
     return result;
 }
 
-function readText(buffer: Buffer): string {
-    // TODO: decrypt
-    return buffer.toString("ucs-2");
+function readText(
+    buffer: Buffer,
+    constants: Pick<Constants, "format">
+): string {
+    return uncompressText(buffer, constants);
 }
 
 function readRepID(buffer: Buffer): string {
