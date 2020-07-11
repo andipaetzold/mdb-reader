@@ -26,13 +26,13 @@ TBD
 
 ### Access Database versions
 
-- Access 97 (Jet 3)
-- Access 2000, XP and 2003 (Jet 4)
-- Access 2010 (ACE14)
-- Access 2013 (ACE15)
-- Access 2016 (ACE16)
+-   Access 97 (Jet 3)
+-   Access 2000, XP and 2003 (Jet 4)
+-   Access 2010 (ACE14)
+-   Access 2013 (ACE15)
+-   Access 2016 (ACE16)
 
-_Only Jet 4 was tested during development and issues might occur with other database versions_
+_Jet 3 databases were not tested during development_
 
 ## Usage
 
@@ -56,8 +56,17 @@ TBD
 
 ## Resources
 
-- [MDB Tool](https://github.com/brianb/mdbtools): Set of applications to read and write Access files, written in C. Main source of knowledge about the file structure and algorithms to extract data from it.
-- [Jackcess](https://jackcess.sourceforge.io): Java library to read and write Access files. It inspired the interface of this library.
+### MDB Tool
+
+[GitHub](https://github.com/brianb/mdbtools)
+
+Set of applications to read and write Access files, written in C. Main source of knowledge about the file structure and algorithms to extract data from it.
+
+### Jackcess
+
+[Jackcess](https://jackcess.sourceforge.io)
+
+Java library to read and write Access files. It inspired the interface of this library. The databases used for testing are copied from the [repository](https://github.com/jahlborn/jackcess).
 
 ## License
 
