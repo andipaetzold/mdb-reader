@@ -5,7 +5,7 @@ import {
     getColumnType,
     parseColumnFlags,
 } from "./column";
-import { readFieldValue } from "./data";
+import { readFieldValue, Value } from "./data";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
 import { findMapPages } from "./usage-map";
@@ -195,7 +195,7 @@ export default class Table {
         return this.getColumns().map((column) => column.name);
     }
 
-    public getData(): { [column: string]: any }[] {
+    public getData(): { [column: string]: Value }[] {
         const columnDefinitions = this.getColumnDefinitions();
 
         const data = [];
@@ -210,7 +210,7 @@ export default class Table {
     private getDataFromPage(
         page: number,
         columns: ColumnDefinition[]
-    ): { [column: string]: any }[] {
+    ): { [column: string]: Value }[] {
         const pageBuffer = this.db.getPage(page);
         assertPageType(pageBuffer, PageType.DataPage);
 
@@ -243,7 +243,7 @@ export default class Table {
             });
         }
 
-        const data: { [column: string]: any }[] = [];
+        const data: { [column: string]: Value }[] = [];
 
         for (const recordOffset of recordOffsets) {
             let recordStart = recordOffset.start;
@@ -301,13 +301,13 @@ export default class Table {
             );
             let fixedColumnsFound = 0;
 
-            const recordValues: { [column: string]: any } = {};
+            const recordValues: { [column: string]: Value } = {};
             for (const column of columns) {
                 /**
                  * undefined = will be set later. Undefined will never be returned to the user.
                  * null = actually null
                  */
-                let value: any = undefined;
+                let value: Value | undefined = undefined;
                 let start: number;
                 let size: number;
 

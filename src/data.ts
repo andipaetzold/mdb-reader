@@ -2,11 +2,13 @@ import { ColumnDefinition } from "./column";
 import { uncompressText } from "./unicodeCompression";
 import { Constants } from "./constants";
 
+export type Value = number | string | Buffer | Date | boolean | null;
+
 export function readFieldValue(
     buffer: Buffer,
     column: ColumnDefinition,
     constants: Pick<Constants, "format">
-): any {
+): Exclude<Value, boolean | null> {
     if (column.type === "boolean") {
         throw new Error("readFieldValue does not handle type boolean");
     }
@@ -23,12 +25,10 @@ export function readFieldValue(
             return readFloat(buffer);
         case "double":
             return readDouble(buffer);
-        case "binary": {
+        case "binary":
             return readBinary(buffer);
-        }
-        case "text": {
+        case "text":
             return readText(buffer, constants);
-        }
         case "repid":
             return readRepID(buffer);
         case "datetime":
