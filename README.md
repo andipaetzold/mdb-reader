@@ -52,7 +52,140 @@ table.getData(); // [{id: 5, name: 'Ashley', color: 'black'}, ...]
 
 ## API
 
-TBD
+### MDBReader
+
+```typescript
+class MDBReader {
+    /**
+     * @param buffer Buffer of the database.
+     */
+    constructor(buffer: Buffer);
+
+    /**
+     * Buffer of the database.
+     */
+    readonly buffer: Buffer;
+
+    getFormat(): "Jet3" | "Jet4";
+
+    /**
+     * Returns an array of table names.
+     *
+     * @param normalTables Includes user tables.
+     * @param systemTables Includes system tables.
+     * @param linkedTables Includes linked tables.
+     */
+    getTableNames({
+        normalTables,
+        systemTables,
+        linkedTables,
+    }?: {
+        normalTables: boolean;
+        systemTables: boolean;
+        linkedTables: boolean;
+    }): string[];
+
+    /**
+     * Returns a table by its name.
+     *
+     * @param name Name of the table. Case sensitive.
+     */
+    getTable(name: string): Table;
+}
+```
+
+### Table
+
+```typescript
+class Table {
+
+    /**
+     * Name of the table
+     */
+    readonly name: string,
+
+    /**
+     * Number of rows.
+     */
+    readonly rowCount: number;
+
+    /**
+     * Number of columns.
+     */
+    readonly columnCount: number;
+
+    /**
+     * Returns an ordered array of all column definitions.
+     */
+    getColumns(): Column[];
+
+    /**
+     * Returns a column definition by its name.
+     *
+     * @param name Name of the column. Case sensitive.
+     */
+    getColumn(name: string): Column;
+
+    /**
+     * Returns an ordered array of all column names.
+     */
+    getColumnNames(): string[];
+
+    /**
+     * Returns all rows.
+     */
+    getData(): {
+        [column: string]: number | string | Buffer | Date | boolean | null;
+    };
+}
+```
+
+### Column
+
+```typescript
+interface Column {
+    /**
+     * Name of the table
+     */
+    name: string;
+
+    /**
+     * Type of the table
+     */
+    type:
+        | "boolean"
+        | "byte"
+        | "integer"
+        | "long"
+        | "money"
+        | "float"
+        | "double"
+        | "datetime"
+        | "binary"
+        | "text"
+        | "ole"
+        | "memo"
+        | "repid"
+        | "numeric"
+        | "complex";
+    size: number;
+
+    fixedLength: boolean;
+    nullable: boolean;
+    autoLong: boolean;
+    autoUUID: boolean;
+
+    /**
+     * Only exists if type = 'numeric'
+     */
+    precision?: number;
+
+    /**
+     * Only exists if type = 'numeric'
+     */
+    scale?: number;
+}
+```
 
 ## Resources
 

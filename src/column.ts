@@ -1,5 +1,12 @@
 export interface Column {
+    /**
+     * Name of the table
+     */
     name: string;
+
+    /**
+     * Type of the table
+     */
     type: ColumnType;
     size: number;
 

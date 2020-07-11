@@ -15,7 +15,15 @@ export default class MDBReader {
     private readonly sysObjects: SysObject[];
     private readonly db: Database;
 
-    public constructor(public readonly buffer: Buffer) {
+    /**
+     * @param buffer Buffer of the database.
+     */
+    public constructor(
+        /**
+         * Buffer of the database.
+         */
+        public readonly buffer: Buffer
+    ) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
         this.db = new Database(this.buffer);
@@ -41,6 +49,13 @@ export default class MDBReader {
         return this.db.constants.format;
     }
 
+    /**
+     * Returns an array of table names.
+     *
+     * @param normalTables Includes user tables. Default true.
+     * @param systemTables Includes system tables. Default false.
+     * @param linkedTables Includes linked tables. Default false.
+     */
     public getTableNames(
         {
             normalTables,

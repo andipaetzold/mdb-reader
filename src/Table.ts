@@ -20,7 +20,14 @@ export default class Table {
     private readonly definitionBuffer: Buffer;
     private readonly dataPages: number[];
 
+    /**
+     * Number of rows.
+     */
     public readonly rowCount: number;
+
+    /**
+     * Number of columns.
+     */
     public readonly columnCount: number;
 
     private readonly variableColumnCount: number;
@@ -35,6 +42,9 @@ export default class Table {
      * @param firstDefinitionPage The first page of the table definition referenced in the corresponding MSysObject
      */
     public constructor(
+        /**
+         * Table of the table.
+         */
         public readonly name: string,
         private readonly db: Database,
         private readonly firstDefinitionPage: number
@@ -100,6 +110,9 @@ export default class Table {
         return column;
     }
 
+    /**
+     * Returns an ordered array of all column definitions.
+     */
     public getColumns(): Column[] {
         const columnDefinitions = this.getColumnDefinitions();
 
@@ -191,10 +204,16 @@ export default class Table {
         return columns;
     }
 
+    /**
+     * Returns an ordered array of all column names.
+     */
     public getColumnNames(): string[] {
         return this.getColumns().map((column) => column.name);
     }
 
+    /**
+     * Returns all rows.
+     */
     public getData(): { [column: string]: Value }[] {
         const columnDefinitions = this.getColumnDefinitions();
 
