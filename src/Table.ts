@@ -294,13 +294,47 @@ export default class Table {
                             recordEnd - bitmaskSize
                         );
 
-                        // TODO: https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L125-L147
+                        // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L125-L147
+                        const recordLength = recordEnd - recordStart + 1;
+                        let jumpCount = (recordLength - 1) / 256;
+                        const columnPointer =
+                            recordEnd - bitmaskSize - jumpCount - 1;
+
+                        /* If last jump is a dummy value, ignore it */
+                        if (
+                            (columnPointer -
+                                recordStart -
+                                variableColumnCount) /
+                                256 <
+                            jumpCount
+                        ) {
+                            --jumpCount;
+                        }
+
+                        let jumpsUsed = 0;
+                        for (let i = 0; i < variableColumnCount + 1; ++i) {
+                            while (
+                                jumpsUsed < jumpCount &&
+                                i ===
+                                    pageBuffer.readUInt8(
+                                        recordEnd - bitmaskSize - jumpsUsed - 1
+                                    )
+                            ) {
+                                ++jumpsUsed;
+                            }
+                            variableColumnOffsets.push(
+                                pageBuffer.readUInt8(columnPointer - i) +
+                                    jumpsUsed * 256
+                            );
+                        }
+
                         break;
                     case "Jet4":
                         variableColumnCount = pageBuffer.readUInt16LE(
                             recordEnd - bitmaskSize - 1
                         );
 
+                        // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L115-L124
                         for (let i = 0; i < variableColumnCount + 1; ++i) {
                             variableColumnOffsets.push(
                                 pageBuffer.readUInt16LE(
