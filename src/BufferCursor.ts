@@ -12,10 +12,6 @@ export default class BufferCursor {
         this.pos = newPos;
     }
 
-    public getPos(): number {
-        return this.pos;
-    }
-
     public readUInt8(): number {
         const result = this.buffer.readUInt8(this.pos);
         this.pos += 1;
