@@ -74,8 +74,19 @@ export default class Table {
         this.dataPages = findMapPages(usageMapBuffer);
     }
 
+    /**
+     * Returns a column definition by its name.
+     *
+     * @param name Name of the column. Case sensitive.
+     */
     public getColumn(name: string): Column {
-        throw new Error("Method not implemented.");
+        const column = this.getColumns().find((c) => c.name === name);
+
+        if (column === undefined) {
+            throw new Error(`Could not find column with name ${name}`);
+        }
+
+        return column;
     }
 
     public getColumns(): Column[] {
