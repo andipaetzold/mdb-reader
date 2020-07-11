@@ -20,9 +20,13 @@ export interface Constants {
         realIndexEntrySize: number;
 
         columnsDefinition: {
+            typeOffset: number;
             indexOffset: number;
             flagsOffset: number;
             sizeOffset: number;
+
+            variableOffsetOffset: number;
+            fixedOffsetOffset: number;
 
             entrySize: number;
         };
@@ -57,8 +61,11 @@ const jet3Constants: Constants = {
         realIndexEntrySize: 8,
 
         columnsDefinition: {
+            typeOffset: 0,
             indexOffset: 1,
+            variableOffsetOffset: 3,
             flagsOffset: 13,
+            fixedOffsetOffset: 14,
             sizeOffset: 16,
 
             entrySize: 18,
@@ -90,8 +97,11 @@ const jet4Constants: Constants = {
         realIndexEntrySize: 12,
 
         columnsDefinition: {
+            typeOffset: 0,
             indexOffset: 5,
+            variableOffsetOffset: 7,
             flagsOffset: 15,
+            fixedOffsetOffset: 21,
             sizeOffset: 25,
 
             entrySize: 25,

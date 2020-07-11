@@ -99,7 +99,9 @@ export default class Table {
 
         columnDefinitions.sort((a, b) => a.index - b.index);
 
-        return columnDefinitions.map(({ index, ...rest }) => rest);
+        return columnDefinitions.map(
+            ({ index, variableOffset, fixedOffset, ...rest }) => rest
+        );
     }
 
     private getColumnDefinitions(): ColumnDefinition[] {
@@ -128,7 +130,11 @@ export default class Table {
             );
 
             const type = getColumnType(
-                this.definitionBuffer.readUInt8(curDefinitionPos)
+                this.definitionBuffer.readUInt8(
+                    curDefinitionPos +
+                        this.db.constants.tableDefinitionPage.columnsDefinition
+                            .typeOffset
+                )
             );
 
             const column: ColumnDefinition = {
@@ -138,6 +144,14 @@ export default class Table {
                         .nameLengthSize
                 ),
                 type,
+                index: columnBuffer.readUInt8(
+                    this.db.constants.tableDefinitionPage.columnsDefinition
+                        .indexOffset
+                ),
+                variableOffset: columnBuffer.readUInt8(
+                    this.db.constants.tableDefinitionPage.columnsDefinition
+                        .variableOffsetOffset
+                ),
                 size:
                     type === "boolean"
                         ? 0
@@ -145,12 +159,10 @@ export default class Table {
                               this.db.constants.tableDefinitionPage
                                   .columnsDefinition.sizeOffset
                           ),
-
-                index: columnBuffer.readUInt8(
+                fixedOffset: columnBuffer.readUInt8(
                     this.db.constants.tableDefinitionPage.columnsDefinition
-                        .indexOffset
+                        .fixedOffsetOffset
                 ),
-
                 ...parseColumnFlags(
                     columnBuffer.readUInt8(
                         this.db.constants.tableDefinitionPage.columnsDefinition
@@ -178,6 +190,8 @@ export default class Table {
     }
 
     public getData(): { [column: string]: any } {
+        const columnDefinitions = this.getColumnDefinitions();
+
         throw new Error("Method not implemented.");
     }
 }
