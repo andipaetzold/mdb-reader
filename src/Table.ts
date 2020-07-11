@@ -8,7 +8,13 @@ import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
 import { findMapPages } from "./usage-map";
 import BufferCursor from "./BufferCursor";
-import { readNextString } from "./util";
+import {
+    readNextString,
+    readNumber,
+    roundToFullByte,
+    getBitmapValue,
+} from "./util";
+import { assert } from "console";
 
 export default class Table {
     private readonly definitionBuffer: Buffer;
@@ -100,7 +106,7 @@ export default class Table {
         columnDefinitions.sort((a, b) => a.index - b.index);
 
         return columnDefinitions.map(
-            ({ index, variableOffset, fixedOffset, ...rest }) => rest
+            ({ index, variableIndex, fixedIndex, ...rest }) => rest
         );
     }
 
@@ -148,9 +154,9 @@ export default class Table {
                     this.db.constants.tableDefinitionPage.columnsDefinition
                         .indexOffset
                 ),
-                variableOffset: columnBuffer.readUInt8(
+                variableIndex: columnBuffer.readUInt8(
                     this.db.constants.tableDefinitionPage.columnsDefinition
-                        .variableOffsetOffset
+                        .variableIndexOffset
                 ),
                 size:
                     type === "boolean"
@@ -159,9 +165,9 @@ export default class Table {
                               this.db.constants.tableDefinitionPage
                                   .columnsDefinition.sizeOffset
                           ),
-                fixedOffset: columnBuffer.readUInt8(
+                fixedIndex: columnBuffer.readUInt8(
                     this.db.constants.tableDefinitionPage.columnsDefinition
-                        .fixedOffsetOffset
+                        .fixedIndexOffset
                 ),
                 ...parseColumnFlags(
                     columnBuffer.readUInt8(
@@ -189,9 +195,216 @@ export default class Table {
         return this.getColumns().map((column) => column.name);
     }
 
-    public getData(): { [column: string]: any } {
+    public getData(): { [column: string]: any }[] {
         const columnDefinitions = this.getColumnDefinitions();
 
-        throw new Error("Method not implemented.");
+        const data = [];
+
+        for (const dataPage of this.dataPages) {
+            data.push(...this.getDataFromPage(dataPage, columnDefinitions));
+        }
+
+        return [];
+    }
+
+    private getDataFromPage(
+        page: number,
+        columns: ColumnDefinition[]
+    ): { [column: string]: any }[] {
+        const pageBuffer = this.db.getPage(page);
+        assertPageType(pageBuffer, PageType.DataPage);
+
+        if (pageBuffer.readUInt32LE() !== this.firstDefinitionPage) {
+            throw new Error(
+                `Data page ${page} does not belong to table ${this.name}`
+            );
+        }
+
+        const recordCount = pageBuffer.readUInt16BE(
+            this.db.constants.dataPage.recordCountOffset
+        );
+        const recordOffsets: { start: number; end: number }[] = [];
+        const offsetMask = 0x1fff; // 13 bits: 1111111111111
+        for (let record = 0; record < recordCount; ++record) {
+            const start = pageBuffer.readUInt16LE(
+                this.db.constants.dataPage.record.countOffset * 2 + record * 2
+            );
+            const nextStart =
+                record === 0
+                    ? this.db.constants.pageSize
+                    : pageBuffer.readUInt16LE(
+                          this.db.constants.dataPage.record.countOffset +
+                              record * 2
+                      ) & offsetMask;
+            const length = nextStart - (start & offsetMask);
+            recordOffsets.push({
+                start,
+                end: start + length - 1,
+            });
+        }
+
+        const data: { [column: string]: any }[] = [];
+
+        for (const recordOffset of recordOffsets) {
+            let recordStart = recordOffset.start;
+            if (recordStart & 0x4000) {
+                // deleted record
+                continue;
+            }
+            if (recordStart & 0x8000) {
+                // lookup record
+                continue;
+            }
+            recordStart &= offsetMask; // remove flags
+
+            const recordEnd = recordOffset.end;
+
+            const totalVariableCount = readNumber(
+                new BufferCursor(pageBuffer, recordStart),
+                this.db.constants.dataPage.record.columnCountSize
+            );
+
+            const bitmaskSize = roundToFullByte(totalVariableCount);
+
+            let variableColumnCount = 0;
+            const variableColumnOffsets: number[] = [];
+            if (this.variableColumnCount > 0) {
+                switch (this.db.constants.format) {
+                    case "Jet3":
+                        variableColumnCount = pageBuffer.readUInt8(
+                            recordEnd - bitmaskSize
+                        );
+
+                        // TODO: https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L125-L147
+                        break;
+                    case "Jet4":
+                        variableColumnCount = pageBuffer.readUInt16LE(
+                            recordEnd - bitmaskSize - 1
+                        );
+
+                        for (let i = 0; i < variableColumnCount + 1; ++i) {
+                            variableColumnOffsets.push(
+                                pageBuffer.readUInt16LE(
+                                    recordEnd - bitmaskSize - 3 - i * 2
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+
+            const fixedColumnCount = totalVariableCount - variableColumnCount;
+
+            const nullMask = pageBuffer.slice(
+                recordEnd - bitmaskSize + 1,
+                recordEnd - bitmaskSize + 1 + roundToFullByte(this.columnCount)
+            );
+            let fixedColumnsFound = 0;
+
+            const recordValues: { [column: string]: any } = {};
+            for (const column of columns) {
+                /**
+                 * undefined = will be set later. Undefined will never be returned to the user.
+                 * null = actually null
+                 */
+                let value: any = undefined;
+                let start: number;
+                let size: number;
+
+                if (!getBitmapValue(nullMask, column.index)) {
+                    value = null;
+                }
+
+                if (
+                    column.fixedLength &&
+                    fixedColumnsFound < fixedColumnCount
+                ) {
+                    const colStart =
+                        column.fixedIndex +
+                        this.db.constants.dataPage.record.columnCountSize;
+                    start = recordStart + colStart;
+                    size = column.size;
+                    ++fixedColumnsFound;
+                } else if (
+                    !column.fixedLength &&
+                    column.variableIndex < variableColumnCount
+                ) {
+                    const colStart =
+                        variableColumnOffsets[column.variableIndex];
+                    start = recordStart + colStart;
+                    size =
+                        variableColumnOffsets[column.variableIndex + 1] -
+                        colStart;
+                } else {
+                    start = 0;
+                    value = null;
+                    size = 0;
+                }
+
+                if (column.type === "boolean") {
+                    value = value === undefined;
+                } else if (value !== null) {
+                    value = this.getFieldValue(pageBuffer, column, start, size);
+                }
+
+                recordValues[column.name] = value;
+            }
+
+            data.push(recordValues);
+        }
+
+        return data;
+    }
+
+    private getFieldValue(
+        pageBuffer: Buffer,
+        column: ColumnDefinition,
+        start: number,
+        size: number
+    ): any {
+        assertPageType(pageBuffer, PageType.DataPage);
+        if (column.type === "boolean") {
+            throw new Error("getFieldValue does not handle type boolean");
+        }
+
+        switch (column.type) {
+            case "byte":
+                return pageBuffer.readInt8(start);
+            case "integer":
+                return pageBuffer.readInt16LE(start);
+            case "complex":
+            case "long":
+                return pageBuffer.readInt32LE(start);
+            case "float":
+                return pageBuffer.readFloatLE(start);
+            case "double":
+                return pageBuffer.readDoubleLE(start);
+            case "binary": {
+                if (size < 0) {
+                    return Buffer.alloc(0);
+                }
+
+                return pageBuffer.slice(start, start + size);
+            }
+            case "text": {
+                if (size < 0) {
+                    return "";
+                }
+
+                // TODO: decrypt
+                return pageBuffer.slice(start, start + size).toString("ucs-2");
+            }
+            case "repid":
+                const str = pageBuffer.toString("hex", start, start + size);
+                return `${str.slice(0, 8)}-${str.slice(8, 12)}-${str.slice(
+                    12,
+                    16
+                )}-${str.slice(16, 20)}-${str.slice(20)}`;
+            default:
+                console.warn(
+                    `Column type ${column.type} is currently not supported. Returning null.`
+                );
+                return null;
+        }
     }
 }

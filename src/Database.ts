@@ -39,7 +39,7 @@ export default class Database {
      * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/data.c#L126-L138
      */
     public findRow(pageBuffer: Buffer, row: number): Buffer {
-        const rco = this.constants.dataPage.rowCountOffset;
+        const rco = this.constants.dataPage.recordCountOffset;
 
         if (row > 1000) {
             throw new Error("Cannot read rows > 1000"); // TODO: why?

@@ -24,8 +24,8 @@ export interface Column {
  */
 export interface ColumnDefinition extends Column {
     index: number;
-    variableOffset: number;
-    fixedOffset: number;
+    variableIndex: number;
+    fixedIndex: number;
 }
 
 export type ColumnType =

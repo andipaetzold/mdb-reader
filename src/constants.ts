@@ -5,8 +5,15 @@ export interface Constants {
     pageSize: number;
 
     dataPage: {
-        rowCountOffset: number;
+        recordCountOffset: number;
+
+        record: {
+            countOffset: number;
+
+            columnCountSize: number;
+        };
     };
+
     tableDefinitionPage: {
         rowCountOffset: number;
 
@@ -25,8 +32,8 @@ export interface Constants {
             flagsOffset: number;
             sizeOffset: number;
 
-            variableOffsetOffset: number;
-            fixedOffsetOffset: number;
+            variableIndexOffset: number;
+            fixedIndexOffset: number;
 
             entrySize: number;
         };
@@ -46,7 +53,13 @@ const jet3Constants: Constants = {
     pageSize: 2048,
 
     dataPage: {
-        rowCountOffset: 0x08,
+        recordCountOffset: 8,
+
+        record: {
+            countOffset: 8,
+
+            columnCountSize: 1,
+        },
     },
     tableDefinitionPage: {
         rowCountOffset: 12,
@@ -63,9 +76,9 @@ const jet3Constants: Constants = {
         columnsDefinition: {
             typeOffset: 0,
             indexOffset: 1,
-            variableOffsetOffset: 3,
+            variableIndexOffset: 3,
             flagsOffset: 13,
-            fixedOffsetOffset: 14,
+            fixedIndexOffset: 14,
             sizeOffset: 16,
 
             entrySize: 18,
@@ -82,7 +95,13 @@ const jet4Constants: Constants = {
     format: "Jet4",
     pageSize: 4096,
     dataPage: {
-        rowCountOffset: 0x0c,
+        recordCountOffset: 12,
+
+        record: {
+            countOffset: 12,
+
+            columnCountSize: 2,
+        },
     },
     tableDefinitionPage: {
         rowCountOffset: 16,
@@ -99,9 +118,9 @@ const jet4Constants: Constants = {
         columnsDefinition: {
             typeOffset: 0,
             indexOffset: 5,
-            variableOffsetOffset: 7,
+            variableIndexOffset: 7,
             flagsOffset: 15,
-            fixedOffsetOffset: 21,
+            fixedIndexOffset: 21,
             sizeOffset: 25,
 
             entrySize: 25,
