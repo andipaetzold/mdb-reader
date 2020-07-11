@@ -1,20 +1,20 @@
+import BufferCursor from "./BufferCursor";
 import {
     Column,
+    ColumnDefinition,
     getColumnType,
     parseColumnFlags,
-    ColumnDefinition,
 } from "./column";
+import { readFieldValue } from "./data";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
 import { findMapPages } from "./usage-map";
-import BufferCursor from "./BufferCursor";
 import {
+    getBitmapValue,
     readNextString,
     readNumber,
     roundToFullByte,
-    getBitmapValue,
 } from "./util";
-import { assert } from "console";
 
 export default class Table {
     private readonly definitionBuffer: Buffer;
@@ -344,7 +344,10 @@ export default class Table {
                 if (column.type === "boolean") {
                     value = value === undefined;
                 } else if (value !== null) {
-                    value = this.getFieldValue(pageBuffer, column, start, size);
+                    value = readFieldValue(
+                        pageBuffer.slice(start, start + size),
+                        column
+                    );
                 }
 
                 recordValues[column.name] = value;
@@ -354,57 +357,5 @@ export default class Table {
         }
 
         return data;
-    }
-
-    private getFieldValue(
-        pageBuffer: Buffer,
-        column: ColumnDefinition,
-        start: number,
-        size: number
-    ): any {
-        assertPageType(pageBuffer, PageType.DataPage);
-        if (column.type === "boolean") {
-            throw new Error("getFieldValue does not handle type boolean");
-        }
-
-        switch (column.type) {
-            case "byte":
-                return pageBuffer.readInt8(start);
-            case "integer":
-                return pageBuffer.readInt16LE(start);
-            case "complex":
-            case "long":
-                return pageBuffer.readInt32LE(start);
-            case "float":
-                return pageBuffer.readFloatLE(start);
-            case "double":
-                return pageBuffer.readDoubleLE(start);
-            case "binary": {
-                if (size < 0) {
-                    return Buffer.alloc(0);
-                }
-
-                return pageBuffer.slice(start, start + size);
-            }
-            case "text": {
-                if (size < 0) {
-                    return "";
-                }
-
-                // TODO: decrypt
-                return pageBuffer.slice(start, start + size).toString("ucs-2");
-            }
-            case "repid":
-                const str = pageBuffer.toString("hex", start, start + size);
-                return `${str.slice(0, 8)}-${str.slice(8, 12)}-${str.slice(
-                    12,
-                    16
-                )}-${str.slice(16, 20)}-${str.slice(20)}`;
-            default:
-                console.warn(
-                    `Column type ${column.type} is currently not supported. Returning null.`
-                );
-                return null;
-        }
     }
 }
