@@ -3,8 +3,6 @@ export interface Column {
     type: ColumnType;
     size: number;
 
-    index: number;
-
     fixedLength: boolean;
     nullable: boolean;
     autoLong: boolean;
@@ -19,6 +17,13 @@ export interface Column {
      * Only exists if type = 'numeric'
      */
     scale?: number;
+}
+
+/**
+ * Includes internal fields that are not relevant for the user of the library.
+ */
+export interface ColumnDefinition extends Column {
+    index: number;
 }
 
 export type ColumnType =

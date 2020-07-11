@@ -1,4 +1,9 @@
-import { Column, getColumnType, parseColumnFlags } from "./column";
+import {
+    Column,
+    getColumnType,
+    parseColumnFlags,
+    ColumnDefinition,
+} from "./column";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
 import { findMapPages } from "./usage-map";
@@ -90,7 +95,15 @@ export default class Table {
     }
 
     public getColumns(): Column[] {
-        const columns: Column[] = [];
+        const columnDefinitions = this.getColumnDefinitions();
+
+        columnDefinitions.sort((a, b) => a.index - b.index);
+
+        return columnDefinitions.map(({ index, ...rest }) => rest);
+    }
+
+    private getColumnDefinitions(): ColumnDefinition[] {
+        const columns: ColumnDefinition[] = [];
 
         let curDefinitionPos =
             this.db.constants.tableDefinitionPage.realIndexStartOffset +
@@ -118,7 +131,7 @@ export default class Table {
                 this.definitionBuffer.readUInt8(curDefinitionPos)
             );
 
-            const column: Column = {
+            const column: ColumnDefinition = {
                 name: readNextString(
                     namesCursor,
                     this.db.constants.tableDefinitionPage.columnNames
@@ -156,8 +169,6 @@ export default class Table {
             curDefinitionPos += this.db.constants.tableDefinitionPage
                 .columnsDefinition.entrySize;
         }
-
-        columns.sort((a, b) => a.index - b.index);
 
         return columns;
     }
