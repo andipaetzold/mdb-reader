@@ -8,9 +8,10 @@ jobs:
             name: node/default
         steps:
             - checkout
-            - node/install-packages
-            - run: npm test
-            - run: npm run build
+            - node/install-packages:
+                  pkg-manager: yarn
+            - run: yarn test
+            - run: yarn run build
 
 workflows:
     build-and-test:
