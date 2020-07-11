@@ -204,7 +204,7 @@ export default class Table {
             data.push(...this.getDataFromPage(dataPage, columnDefinitions));
         }
 
-        return [];
+        return data;
     }
 
     private getDataFromPage(
