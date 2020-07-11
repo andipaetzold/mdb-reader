@@ -220,7 +220,7 @@ export default class Table {
             );
         }
 
-        const recordCount = pageBuffer.readUInt16BE(
+        const recordCount = pageBuffer.readUInt16LE(
             this.db.constants.dataPage.recordCountOffset
         );
         const recordOffsets: { start: number; end: number }[] = [];
