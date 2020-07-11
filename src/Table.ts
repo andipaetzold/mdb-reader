@@ -61,7 +61,7 @@ export default class Table {
             this.db.constants.tableDefinitionPage.rowCountOffset
         );
 
-        this.columnCount = this.definitionBuffer.readUInt32LE(
+        this.columnCount = this.definitionBuffer.readUInt16LE(
             this.db.constants.tableDefinitionPage.columnCountOffset
         );
         this.variableColumnCount = this.definitionBuffer.readUInt16LE(
