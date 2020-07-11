@@ -214,7 +214,7 @@ export default class Table {
         const pageBuffer = this.db.getPage(page);
         assertPageType(pageBuffer, PageType.DataPage);
 
-        if (pageBuffer.readUInt32LE() !== this.firstDefinitionPage) {
+        if (pageBuffer.readUInt32LE(4) !== this.firstDefinitionPage) {
             throw new Error(
                 `Data page ${page} does not belong to table ${this.name}`
             );
