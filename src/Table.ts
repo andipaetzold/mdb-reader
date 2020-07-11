@@ -1,7 +1,9 @@
-import { Column } from "./column";
+import { Column, getColumnType, parseColumnFlags } from "./column";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
 import { findMapPages } from "./usage-map";
+import BufferCursor from "./BufferCursor";
+import { readNextString } from "./util";
 
 export default class Table {
     private readonly definitionBuffer: Buffer;
@@ -77,7 +79,76 @@ export default class Table {
     }
 
     public getColumns(): Column[] {
-        throw new Error("Method not implemented.");
+        const columns: Column[] = [];
+
+        let curDefinitionPos =
+            this.db.constants.tableDefinitionPage.realIndexStartOffset +
+            this.realIndexCount *
+                this.db.constants.tableDefinitionPage.realIndexEntrySize;
+
+        const namesCursor = new BufferCursor(
+            this.definitionBuffer,
+
+            curDefinitionPos +
+                this.columnCount *
+                    this.db.constants.tableDefinitionPage.columnsDefinition
+                        .entrySize
+        );
+
+        for (let i = 0; i < this.columnCount; ++i) {
+            const columnBuffer = this.definitionBuffer.slice(
+                curDefinitionPos,
+                curDefinitionPos +
+                    this.db.constants.tableDefinitionPage.columnsDefinition
+                        .entrySize
+            );
+
+            const type = getColumnType(
+                this.definitionBuffer.readUInt8(curDefinitionPos)
+            );
+
+            const column: Column = {
+                name: readNextString(
+                    namesCursor,
+                    this.db.constants.tableDefinitionPage.columnNames
+                        .nameLengthSize
+                ),
+                type,
+                size:
+                    type === "boolean"
+                        ? 0
+                        : columnBuffer.readUInt16LE(
+                              this.db.constants.tableDefinitionPage
+                                  .columnsDefinition.sizeOffset
+                          ),
+
+                pos: columnBuffer.readUInt8(
+                    this.db.constants.tableDefinitionPage.columnsDefinition
+                        .posOffset
+                ),
+
+                ...parseColumnFlags(
+                    columnBuffer.readUInt8(
+                        this.db.constants.tableDefinitionPage.columnsDefinition
+                            .flagsOffset
+                    )
+                ),
+            };
+
+            if (type === "numeric") {
+                column.precision = columnBuffer.readUInt8(11);
+                column.scale = columnBuffer.readUInt8(12);
+            }
+
+            columns.push(column);
+
+            curDefinitionPos += this.db.constants.tableDefinitionPage
+                .columnsDefinition.entrySize;
+        }
+
+        columns.sort((a, b) => a.pos - b.pos);
+
+        return columns;
     }
 
     public getColumnNames(): string[] {

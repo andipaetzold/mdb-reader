@@ -16,6 +16,23 @@ export interface Constants {
         logicalIndexCountOffset: number;
         realIndexCountOffset: number;
 
+        realIndexStartOffset: number;
+        realIndexEntrySize: number;
+
+        columnsDefinition: {
+            posOffset: number;
+            flagsOffset: number;
+            sizeOffset: number;
+
+            entrySize: number;
+        };
+        columnNames: {
+            /**
+             * Number of bytes that store the length of the column name
+             */
+            nameLengthSize: number;
+        };
+
         usageMapOffset: number;
     };
 }
@@ -36,6 +53,20 @@ const jet3Constants: Constants = {
         logicalIndexCountOffset: 27,
         realIndexCountOffset: 31,
 
+        realIndexStartOffset: 43,
+        realIndexEntrySize: 8,
+
+        columnsDefinition: {
+            posOffset: 1,
+            flagsOffset: 13,
+            sizeOffset: 16,
+
+            entrySize: 18,
+        },
+        columnNames: {
+            nameLengthSize: 1,
+        },
+
         usageMapOffset: 35,
     },
 };
@@ -54,6 +85,20 @@ const jet4Constants: Constants = {
 
         logicalIndexCountOffset: 47,
         realIndexCountOffset: 51,
+
+        realIndexStartOffset: 63,
+        realIndexEntrySize: 12,
+
+        columnsDefinition: {
+            posOffset: 5,
+            flagsOffset: 15,
+            sizeOffset: 25,
+
+            entrySize: 25,
+        },
+        columnNames: {
+            nameLengthSize: 2,
+        },
 
         usageMapOffset: 55,
     },

@@ -1,3 +1,5 @@
+import BufferCursor from "./BufferCursor";
+
 /**
  * Reads a specific bit of a bitmap. Returns true for 1 and false for 0.
  *
@@ -14,4 +16,23 @@ export function getBitmapValue(bitmap: Buffer, pos: number): boolean {
  */
 export function roundToFullByte(bits: number): number {
     return Math.floor((bits + 7) / 8);
+}
+
+export function readNextString(
+    cursor: BufferCursor,
+    lengthSize: number
+): string {
+    let length: number;
+    switch (lengthSize) {
+        case 1:
+            length = cursor.readUInt8();
+            break;
+        case 2:
+            length = cursor.readUInt16LE();
+            break;
+        default:
+            throw new Error(`Length Size ${lengthSize} is not supported`);
+    }
+
+    return cursor.readString(length);
 }

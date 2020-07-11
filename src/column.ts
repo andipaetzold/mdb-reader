@@ -3,6 +3,8 @@ export interface Column {
     type: ColumnType;
     size: number;
 
+    pos: number;
+
     fixedLength: boolean;
     nullable: boolean;
     autoLong: boolean;
@@ -16,7 +18,7 @@ export interface Column {
     /**
      * Only exists if type = 'numeric'
      */
-    scale: number;
+    scale?: number;
 }
 
 export type ColumnType =
