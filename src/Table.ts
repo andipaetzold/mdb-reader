@@ -227,7 +227,7 @@ export default class Table {
         const offsetMask = 0x1fff; // 13 bits: 1111111111111
         for (let record = 0; record < recordCount; ++record) {
             const start = pageBuffer.readUInt16LE(
-                this.db.constants.dataPage.record.countOffset * 2 + record * 2
+                this.db.constants.dataPage.record.countOffset + 2 + record * 2
             );
             const nextStart =
                 record === 0
