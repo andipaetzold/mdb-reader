@@ -28,10 +28,7 @@ export function readFieldValue(buffer: Buffer, column: ColumnDefinition): any {
         case "datetime":
             return readDateTime(buffer);
         default:
-            console.warn(
-                `Column type ${column.type} is currently not supported. Returning null.`
-            );
-            return null;
+            return `Column type ${column.type} is currently not supported`;
     }
 }
 
