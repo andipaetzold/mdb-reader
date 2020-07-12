@@ -1,6 +1,7 @@
 import { ColumnDefinition } from "./column";
-import { uncompressText } from "./unicodeCompression";
 import { Constants } from "./constants";
+import { readNumeric } from "./money";
+import { uncompressText } from "./unicodeCompression";
 
 export type Value = number | string | Buffer | Date | boolean | null;
 
@@ -33,6 +34,8 @@ export function readFieldValue(
             return readRepID(buffer);
         case "datetime":
             return readDateTime(buffer);
+        case "numeric":
+            return readNumeric(buffer, column.precision!, column.scale!);
         default:
             return `Column type ${column.type} is currently not supported`;
     }
