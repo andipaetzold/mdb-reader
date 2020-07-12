@@ -19,6 +19,10 @@ export default {
         typescript({
             typescript: require("typescript"),
         }),
-        terser(),
+        terser({
+            output: {
+                comments: false,
+            },
+        }),
     ],
 };
