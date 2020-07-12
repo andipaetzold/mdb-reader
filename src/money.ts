@@ -57,7 +57,7 @@ export function readNumeric(
     for (let i = 0; i < bytesCount; ++i) {
         product = multiplyByte(
             product,
-            bytes[12 - 4 * (i / 4) + (i % 4)],
+            bytes[12 - 4 * Math.floor(i / 4) + (i % 4)],
             multiplier
         );
 
@@ -107,14 +107,10 @@ function multiplyByte(
 function doCarry(product: number[]): number[] {
     const result = [...product];
     for (let j = 0; j < MAX_NUMERIC_PRECISION - 1; ++j) {
-        if (product[j] > 9) {
-            product[j + 1] += product[j] / 10;
-            product[j] = product[j] % 10;
-        }
+        product[j + 1] += Math.floor(product[j] / 10);
+        product[j] = product[j] % 10;
     }
-    if (product[MAX_NUMERIC_PRECISION] > 9) {
-        product[MAX_NUMERIC_PRECISION] = product[MAX_NUMERIC_PRECISION] % 10;
-    }
+    product[MAX_NUMERIC_PRECISION] = product[MAX_NUMERIC_PRECISION] % 10;
     return result;
 }
 
