@@ -1,5 +1,15 @@
 module.exports = {
     displayName: "MDB Reader",
+    reporters: [
+        'default',
+        [
+            'jest-junit',
+            {
+                suiteName: 'MDB Reader',
+                outputDirectory: 'test-results',
+            },
+        ],
+    ],
     transform: {
         "^.+\\.ts$": "ts-jest",
     },

@@ -26,7 +26,11 @@ jobs:
                   install-npm: false
             - node/install-packages:
                   pkg-manager: yarn
-            - run: yarn test
+            - run: yarn test --ci --runInBand
+            - store_test_results:
+                  path: test-results
+            - store_artifacts:
+                  path: test-results
 
 workflows:
     build-and-test:
