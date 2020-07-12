@@ -187,6 +187,28 @@ interface Column {
 }
 ```
 
+## Data Types
+
+The data types returned by `Table.getData()` depends on the column type. Null values are always returned as `null`.
+
+| Column Type | JavaScript Type |
+| ----------- | --------------- |
+| boolean     | `boolean`       |
+| byte        | `number`        |
+| integer     | `number`        |
+| long        | `number`        |
+| money       | `number`        |
+| float       | `number`        |
+| double      | `number`        |
+| datetime    | `Date`          |
+| binary      | `Buffer`        |
+| text        | `string`        |
+| ole         | TBD             |
+| memo        | TBD             |
+| repid       | `string`        |
+| numeric     | `number`        |
+| complex     | `number`        |
+
 ## Resources
 
 ### MDB Tool
