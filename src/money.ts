@@ -1,16 +1,16 @@
+import { addArray, multiplyArray, toArray } from "./array";
+
 const MAX_NUMERIC_PRECISION = 28;
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L36-L80
  */
-export function readMoney(buffer: Buffer): number {
+export function readMoney(buffer: Buffer): string {
     const bytesCount = 8;
     const scale = 4;
 
-    let product: number[] = new Array(MAX_NUMERIC_PRECISION).fill(0);
-    let multiplier: number[] = new Array(MAX_NUMERIC_PRECISION).fill(0);
-    multiplier[0] = 1;
-
+    let product: ReadonlyArray<number> = toArray(0, MAX_NUMERIC_PRECISION);
+    let multiplier: ReadonlyArray<number> = toArray(1, MAX_NUMERIC_PRECISION);
     const bytes = buffer.slice(0, bytesCount);
 
     let negative = false;
@@ -28,14 +28,12 @@ export function readMoney(buffer: Buffer): number {
     }
 
     for (let i = 0; i < bytesCount; ++i) {
-        product = multiplyByte(product, bytes[i], multiplier);
-
-        const temp = multiplier.slice(0, MAX_NUMERIC_PRECISION);
-        multiplier.fill(0, 0, MAX_NUMERIC_PRECISION);
-        multiplier = multiplyByte(multiplier, 256, temp);
+        const byte = bytes[i];
+        product = addArray(product, multiplyArray(multiplier, toArray(byte, MAX_NUMERIC_PRECISION)));
+        multiplier = multiplyArray(multiplier, toArray(256, MAX_NUMERIC_PRECISION));
     }
 
-    return calcValue(product, scale, negative);
+    return buildValue(product, scale, negative);
 }
 
 /**
@@ -45,89 +43,44 @@ export function readNumeric(
     buffer: Buffer,
     _precision: number,
     scale: number
-): number {
-    const bytesCount = 16;
+): string {
+    let product: ReadonlyArray<number> = toArray(0, MAX_NUMERIC_PRECISION);
+    let multiplier: ReadonlyArray<number> = toArray(1, MAX_NUMERIC_PRECISION);
 
-    let product: number[] = new Array(MAX_NUMERIC_PRECISION).fill(0);
-    let multiplier: number[] = new Array(MAX_NUMERIC_PRECISION).fill(0);
-    multiplier[0] = 1;
-
-    const bytes = buffer.slice(1, bytesCount);
-
-    for (let i = 0; i < bytesCount; ++i) {
-        product = multiplyByte(
-            product,
-            bytes[12 - 4 * Math.floor(i / 4) + (i % 4)],
-            multiplier
-        );
-
-        const temp = multiplier.slice(0, MAX_NUMERIC_PRECISION);
-        multiplier.fill(0, 0, MAX_NUMERIC_PRECISION);
-        multiplier = multiplyByte(multiplier, 256, temp);
+    const bytes = buffer.slice(1, 17);
+    for (let i = 0; i < bytes.length; ++i) {
+        const byte = bytes[12 - 4 * Math.floor(i / 4) + (i % 4)];
+        product = addArray(product, multiplyArray(multiplier, toArray(byte, MAX_NUMERIC_PRECISION)));
+        multiplier = multiplyArray(multiplier, toArray(256, MAX_NUMERIC_PRECISION));
     }
 
     const negative = !!(buffer[0] & 0x80);
-    return calcValue(product, scale, negative);
+    return buildValue(product, scale, negative);
 }
 
 /**
- * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L109-L127
+ * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L143-L167
  */
-function multiplyByte(
-    product: number[],
-    num: number,
-    multiplier: number[]
-): number[] {
-    const number = [
-        num % 10,
-        Math.floor(num / 10) % 10,
-        Math.floor(num / 100) % 100,
-    ];
+function buildValue(array: ReadonlyArray<number>, scale: number, negative: boolean): string {
+    const length = array.length;
 
-    let result = [...product];
-    for (let i = 0; i < MAX_NUMERIC_PRECISION; ++i) {
-        if (multiplier[i] === 0) {
-            continue;
-        }
-
-        for (let j = 0; j < 3; ++j) {
-            if (number[j] === 0) {
-                continue;
-            }
-            product[i + j] += multiplier[i] * number[j];
-            result = doCarry(product);
-        }
-    }
-    return result;
-}
-
-/**
- * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L128-L142
- */
-function doCarry(product: number[]): number[] {
-    const result = [...product];
-    for (let j = 0; j < MAX_NUMERIC_PRECISION - 1; ++j) {
-        product[j + 1] += Math.floor(product[j] / 10);
-        product[j] = product[j] % 10;
-    }
-    product[MAX_NUMERIC_PRECISION] = product[MAX_NUMERIC_PRECISION] % 10;
-    return result;
-}
-
-function calcValue(
-    product: number[],
-    scale: number,
-    negative: boolean
-): number {
-    let value = 0;
-    for (let i = MAX_NUMERIC_PRECISION; i > 0; --i) {
-        value *= 10;
-        value += product[i];
-    }
-    value /= 10 ^ scale;
-
+    let value = '';
     if (negative) {
-        value *= -1;
+        value += '-';
+    }
+
+    let top: number;
+    for (top = length; (top > 0) && (top - 1 > scale) && !array[top - 1]; top--) { }
+
+    if (top === 0) {
+        value += '0';
+    } else {
+        for (let i = top; i > 0; i--) {
+            if (i === scale) {
+                value += '.'
+            }
+            value += array[i - 1].toString();
+        }
     }
 
     return value;
