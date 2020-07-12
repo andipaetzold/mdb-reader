@@ -214,7 +214,7 @@ export default class Table {
     /**
      * Returns all rows.
      */
-    public getData(): { [column: string]: Value }[] {
+    public getData<TRow extends { [column: string]: Value }>(): TRow[] {
         const columnDefinitions = this.getColumnDefinitions();
 
         const data = [];
@@ -223,7 +223,7 @@ export default class Table {
             data.push(...this.getDataFromPage(dataPage, columnDefinitions));
         }
 
-        return data;
+        return data as TRow[];
     }
 
     private getDataFromPage(

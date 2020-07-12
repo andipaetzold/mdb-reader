@@ -134,9 +134,9 @@ class Table {
     /**
      * Returns all rows.
      */
-    getData(): {
+    getData<TRow extends {
         [column: string]: number | string | Buffer | Date | boolean | null;
-    };
+    }>(): TRow[];
 }
 ```
 
