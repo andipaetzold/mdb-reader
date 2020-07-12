@@ -20,9 +20,9 @@ yarn add mdb-reader
 
 ## Compatibility
 
-### Node / JavaScript
+### Node
 
-TBD
+Node >= v10
 
 ### Access Database versions
 
