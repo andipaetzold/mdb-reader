@@ -133,7 +133,7 @@ const jet4Constants: Constants = {
     },
 };
 
-export function getConstants(buffer: Buffer) {
+export function getConstants(buffer: Buffer): Constants {
     switch (getFormat(buffer)) {
         case "Jet3":
             return jet3Constants;

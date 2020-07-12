@@ -29,6 +29,6 @@ function findMapPages0(buffer: Buffer): number[] {
     return pages;
 }
 
-function findMapPages1(buffer: Buffer): number[] {
+function findMapPages1(_buffer: Buffer): number[] {
     throw new Error("Not implemented yet");
 }

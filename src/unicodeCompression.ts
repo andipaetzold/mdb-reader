@@ -7,7 +7,7 @@ import BufferCursor from "./BufferCursor";
 export function uncompressText(
     buffer: Buffer,
     constants: Pick<Constants, "format">
-) {
+): string {
     if (
         constants.format === "Jet4" &&
         buffer.length > 2 &&
