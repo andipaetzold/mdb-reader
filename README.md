@@ -132,11 +132,17 @@ class Table {
     getColumnNames(): string[];
 
     /**
-     * Returns all rows.
+     * Returns data from the table.
+     *
+     * @param rowOffset Index of the first row to be returned. 0-based. Defaults to 0.
+     * @param rowLimit Maximum number of rows to be returned.
      */
     getData<TRow extends {
         [column: string]: number | string | Buffer | Date | boolean | null;
-    }>(): TRow[];
+    }>(options?: {
+        rowOffset?: number;
+        rowLimit?: number;
+    }): TRow[];
 }
 ```
 

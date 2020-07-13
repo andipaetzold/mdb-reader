@@ -129,30 +129,30 @@ export default class Table {
         let curDefinitionPos =
             this.db.constants.tableDefinitionPage.realIndexStartOffset +
             this.realIndexCount *
-                this.db.constants.tableDefinitionPage.realIndexEntrySize;
+            this.db.constants.tableDefinitionPage.realIndexEntrySize;
 
         const namesCursor = new BufferCursor(
             this.definitionBuffer,
 
             curDefinitionPos +
-                this.columnCount *
-                    this.db.constants.tableDefinitionPage.columnsDefinition
-                        .entrySize
+            this.columnCount *
+            this.db.constants.tableDefinitionPage.columnsDefinition
+                .entrySize
         );
 
         for (let i = 0; i < this.columnCount; ++i) {
             const columnBuffer = this.definitionBuffer.slice(
                 curDefinitionPos,
                 curDefinitionPos +
-                    this.db.constants.tableDefinitionPage.columnsDefinition
-                        .entrySize
+                this.db.constants.tableDefinitionPage.columnsDefinition
+                    .entrySize
             );
 
             const type = getColumnType(
                 this.definitionBuffer.readUInt8(
                     curDefinitionPos +
-                        this.db.constants.tableDefinitionPage.columnsDefinition
-                            .typeOffset
+                    this.db.constants.tableDefinitionPage.columnsDefinition
+                        .typeOffset
                 )
             );
 
@@ -175,9 +175,9 @@ export default class Table {
                     type === "boolean"
                         ? 0
                         : columnBuffer.readUInt16LE(
-                              this.db.constants.tableDefinitionPage
-                                  .columnsDefinition.sizeOffset
-                          ),
+                            this.db.constants.tableDefinitionPage
+                                .columnsDefinition.sizeOffset
+                        ),
                 fixedIndex: columnBuffer.readUInt8(
                     this.db.constants.tableDefinitionPage.columnsDefinition
                         .fixedIndexOffset
@@ -212,15 +212,27 @@ export default class Table {
     }
 
     /**
-     * Returns all rows.
+     * Returns data from the table.
+     *
+     * @param rowOffset Index of the first row to be returned. 0-based. Defaults to 0.
+     * @param rowLimit Maximum number of rows to be returned.
      */
-    public getData<TRow extends { [column: string]: Value }>(): TRow[] {
+    public getData<TRow extends { [column: string]: Value }>(options?: {
+        rowOffset?: number;
+        rowLimit?: number;
+    }): TRow[] {
         const columnDefinitions = this.getColumnDefinitions();
 
         const data = [];
 
+        const rowOffset = options?.rowOffset ?? 0;
+        const rowLimit = options?.rowLimit ?? Infinity;
+
         for (const dataPage of this.dataPages) {
-            data.push(...this.getDataFromPage(dataPage, columnDefinitions));
+            data.push(...this.getDataFromPage(dataPage, columnDefinitions, {
+                rowOffset: Math.max(rowOffset - data.length, 0),
+                rowLimit: rowLimit - data.length,
+            }));
         }
 
         return data as TRow[];
@@ -228,7 +240,8 @@ export default class Table {
 
     private getDataFromPage(
         page: number,
-        columns: ColumnDefinition[]
+        columns: ColumnDefinition[],
+        { rowOffset, rowLimit }: { rowOffset: number, rowLimit: number }
     ): { [column: string]: Value }[] {
         const pageBuffer = this.db.getPage(page);
         assertPageType(pageBuffer, PageType.DataPage);
@@ -244,7 +257,7 @@ export default class Table {
         );
         const recordOffsets: { start: number; end: number }[] = [];
         const offsetMask = 0x1fff; // 13 bits: 1111111111111
-        for (let record = 0; record < recordCount; ++record) {
+        for (let record = rowOffset; record < Math.min(rowOffset + recordCount, rowLimit); ++record) {
             const start = pageBuffer.readUInt16LE(
                 this.db.constants.dataPage.record.countOffset + 2 + record * 2
             );
@@ -252,9 +265,9 @@ export default class Table {
                 record === 0
                     ? this.db.constants.pageSize
                     : pageBuffer.readUInt16LE(
-                          this.db.constants.dataPage.record.countOffset +
-                              record * 2
-                      ) & offsetMask;
+                        this.db.constants.dataPage.record.countOffset +
+                        record * 2
+                    ) & offsetMask;
             const length = nextStart - (start & offsetMask);
             recordOffsets.push({
                 start,
@@ -305,7 +318,7 @@ export default class Table {
                             (columnPointer -
                                 recordStart -
                                 variableColumnCount) /
-                                256 <
+                            256 <
                             jumpCount
                         ) {
                             --jumpCount;
@@ -316,15 +329,15 @@ export default class Table {
                             while (
                                 jumpsUsed < jumpCount &&
                                 i ===
-                                    pageBuffer.readUInt8(
-                                        recordEnd - bitmaskSize - jumpsUsed - 1
-                                    )
+                                pageBuffer.readUInt8(
+                                    recordEnd - bitmaskSize - jumpsUsed - 1
+                                )
                             ) {
                                 ++jumpsUsed;
                             }
                             variableColumnOffsets.push(
                                 pageBuffer.readUInt8(columnPointer - i) +
-                                    jumpsUsed * 256
+                                jumpsUsed * 256
                             );
                         }
                         break;
