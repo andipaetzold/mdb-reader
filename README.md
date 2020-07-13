@@ -197,7 +197,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | byte        | `number`        |
 | integer     | `number`        |
 | long        | `number`        |
-| money       | `number`        |
+| money       | `string`        |
 | float       | `number`        |
 | double      | `number`        |
 | datetime    | `Date`          |
@@ -206,7 +206,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | ole         | TBD             |
 | memo        | TBD             |
 | repid       | `string`        |
-| numeric     | `number`        |
+| numeric     | `string`        |
 | complex     | `number`        |
 
 ## Resources
