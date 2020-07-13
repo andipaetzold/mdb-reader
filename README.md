@@ -134,12 +134,14 @@ class Table {
     /**
      * Returns data from the table.
      *
+     * @param columns Columns to be returned. Defaults to all columns.
      * @param rowOffset Index of the first row to be returned. 0-based. Defaults to 0.
-     * @param rowLimit Maximum number of rows to be returned.
+     * @param rowLimit Maximum number of rows to be returned. Defaults to Infinity.
      */
     getData<TRow extends {
         [column: string]: number | string | Buffer | Date | boolean | null;
     }>(options?: {
+        columns?: string[];
         rowOffset?: number;
         rowLimit?: number;
     }): TRow[];

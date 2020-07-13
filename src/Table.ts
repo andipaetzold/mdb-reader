@@ -214,10 +214,12 @@ export default class Table {
     /**
      * Returns data from the table.
      *
+     * @param columns Columns to be returned. Defaults to all columns.
      * @param rowOffset Index of the first row to be returned. 0-based. Defaults to 0.
-     * @param rowLimit Maximum number of rows to be returned.
+     * @param rowLimit Maximum number of rows to be returned. Defaults to Infinity.
      */
     public getData<TRow extends { [column: string]: Value }>(options?: {
+        columns?: string[];
         rowOffset?: number;
         rowLimit?: number;
     }): TRow[] {
@@ -225,14 +227,17 @@ export default class Table {
 
         const data = [];
 
+        const columns = columnDefinitions.filter(c => options?.columns === undefined || options.columns!.includes(c.name));
         const rowOffset = options?.rowOffset ?? 0;
         const rowLimit = options?.rowLimit ?? Infinity;
 
         for (const dataPage of this.dataPages) {
-            data.push(...this.getDataFromPage(dataPage, columnDefinitions, {
-                rowOffset: Math.max(rowOffset - data.length, 0),
-                rowLimit: rowLimit - data.length,
-            }));
+            data.push(...this.getDataFromPage(
+                dataPage,
+                columns,
+                Math.max(rowOffset - data.length, 0),
+                rowLimit - data.length,
+            ));
         }
 
         return data as TRow[];
@@ -241,7 +246,8 @@ export default class Table {
     private getDataFromPage(
         page: number,
         columns: ColumnDefinition[],
-        { rowOffset, rowLimit }: { rowOffset: number, rowLimit: number }
+        recordOffset: number,
+        recordLimit: number
     ): { [column: string]: Value }[] {
         const pageBuffer = this.db.getPage(page);
         assertPageType(pageBuffer, PageType.DataPage);
@@ -257,7 +263,7 @@ export default class Table {
         );
         const recordOffsets: { start: number; end: number }[] = [];
         const offsetMask = 0x1fff; // 13 bits: 1111111111111
-        for (let record = rowOffset; record < Math.min(rowOffset + recordCount, rowLimit); ++record) {
+        for (let record = recordOffset; record < Math.min(recordOffset + recordCount, recordLimit); ++record) {
             const start = pageBuffer.readUInt16LE(
                 this.db.constants.dataPage.record.countOffset + 2 + record * 2
             );
