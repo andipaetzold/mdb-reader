@@ -93,21 +93,48 @@ function readDateTime(buffer: Buffer): Date {
     return new Date((td - daysDiff) * 86400 * 1000);
 }
 
+/**
+ * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/data.c#L690-L776
+ */
 function readMemo(buffer: Buffer, db: Database): string {
-    const length = buffer.readUIntLE(0, 3);
+    const memoLength = buffer.readUIntLE(0, 3);
 
     const bitmask = buffer.readUInt8(3);
     if (bitmask & 0x80) {
         // inline
-        return uncompressText(buffer.slice(12, 12 + length), db.constants);
+        return uncompressText(buffer.slice(12, 12 + memoLength), db.constants);
     } else if (bitmask & 0x40) {
         // single page
         const pageRow = buffer.readUInt32LE(32);
         const rowBuffer = db.findPageRow(pageRow);
-        return uncompressText(rowBuffer.slice(0, length), db.constants);
+        return uncompressText(rowBuffer.slice(0, memoLength), db.constants);
     } else if (bitmask === 0) {
         // multi page
-        return "record type 2";
+        let pageRow = buffer.readInt32BE(4);
+        let memoDataBuffer = Buffer.alloc(0);
+        do {
+            const rowBuffer = db.findPageRow(pageRow);
+
+            if (memoDataBuffer.length + rowBuffer.length - 4 > length) {
+                break;
+            }
+
+            if (rowBuffer.length === 0) {
+                break;
+            }
+
+            memoDataBuffer = Buffer.concat([
+                memoDataBuffer,
+                rowBuffer.slice(4, buffer.length),
+            ]);
+
+            pageRow = rowBuffer.readInt32BE(4);
+        } while (pageRow !== 0);
+
+        return uncompressText(
+            memoDataBuffer.slice(0, memoLength),
+            db.constants
+        );
     } else {
         throw new Error(`Unknown memo type ${bitmask}`);
     }
