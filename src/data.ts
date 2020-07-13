@@ -102,7 +102,9 @@ function readMemo(buffer: Buffer, db: Database): string {
         return uncompressText(buffer.slice(12, 12 + length), db.constants);
     } else if (bitmask & 0x40) {
         // single page
-        return "record type 1";
+        const pageRow = buffer.readUInt32LE(32);
+        const rowBuffer = db.findPageRow(pageRow);
+        return uncompressText(rowBuffer.slice(0, length), db.constants);
     } else if (bitmask === 0) {
         // multi page
         return "record type 2";
