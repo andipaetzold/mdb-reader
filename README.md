@@ -204,7 +204,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | binary      | `Buffer`        |
 | text        | `string`        |
 | ole         | TBD             |
-| memo        | TBD             |
+| memo        | `string`        |
 | repid       | `string`        |
 | numeric     | `string`        |
 | complex     | `number`        |

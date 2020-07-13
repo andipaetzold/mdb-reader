@@ -2,13 +2,14 @@ import { ColumnDefinition } from "./column";
 import { Constants } from "./constants";
 import { readNumeric, readMoney } from "./money";
 import { uncompressText } from "./unicodeCompression";
+import Database from "./Database";
 
 export type Value = number | string | Buffer | Date | boolean | null;
 
 export function readFieldValue(
     buffer: Buffer,
     column: ColumnDefinition,
-    constants: Pick<Constants, "format">
+    db: Database
 ): Exclude<Value, boolean | null> {
     if (column.type === "boolean") {
         throw new Error("readFieldValue does not handle type boolean");
@@ -29,7 +30,7 @@ export function readFieldValue(
         case "binary":
             return readBinary(buffer);
         case "text":
-            return readText(buffer, constants);
+            return readText(buffer, db.constants);
         case "repid":
             return readRepID(buffer);
         case "datetime":
@@ -38,6 +39,8 @@ export function readFieldValue(
             return readNumeric(buffer, column.precision!, column.scale!);
         case "money":
             return readMoney(buffer);
+        case "memo":
+            return readMemo(buffer, db);
         default:
             return `Column type ${column.type} is currently not supported`;
     }
@@ -88,4 +91,22 @@ function readDateTime(buffer: Buffer): Date {
     const td = buffer.readDoubleLE();
     const daysDiff = 25569; // days between 1899-12-30 and 01-01-19070
     return new Date((td - daysDiff) * 86400 * 1000);
+}
+
+function readMemo(buffer: Buffer, db: Database): string {
+    const length = buffer.readUIntLE(0, 3);
+
+    const bitmask = buffer.readUInt8(3);
+    if (bitmask & 0x80) {
+        // inline
+        return uncompressText(buffer.slice(12, 12 + length), db.constants);
+    } else if (bitmask & 0x40) {
+        // single page
+        return "record type 1";
+    } else if (bitmask === 0) {
+        // multi page
+        return "record type 2";
+    } else {
+        throw new Error(`Unknown memo type ${bitmask}`);
+    }
 }

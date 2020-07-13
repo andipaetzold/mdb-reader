@@ -129,30 +129,30 @@ export default class Table {
         let curDefinitionPos =
             this.db.constants.tableDefinitionPage.realIndexStartOffset +
             this.realIndexCount *
-            this.db.constants.tableDefinitionPage.realIndexEntrySize;
+                this.db.constants.tableDefinitionPage.realIndexEntrySize;
 
         const namesCursor = new BufferCursor(
             this.definitionBuffer,
 
             curDefinitionPos +
-            this.columnCount *
-            this.db.constants.tableDefinitionPage.columnsDefinition
-                .entrySize
+                this.columnCount *
+                    this.db.constants.tableDefinitionPage.columnsDefinition
+                        .entrySize
         );
 
         for (let i = 0; i < this.columnCount; ++i) {
             const columnBuffer = this.definitionBuffer.slice(
                 curDefinitionPos,
                 curDefinitionPos +
-                this.db.constants.tableDefinitionPage.columnsDefinition
-                    .entrySize
+                    this.db.constants.tableDefinitionPage.columnsDefinition
+                        .entrySize
             );
 
             const type = getColumnType(
                 this.definitionBuffer.readUInt8(
                     curDefinitionPos +
-                    this.db.constants.tableDefinitionPage.columnsDefinition
-                        .typeOffset
+                        this.db.constants.tableDefinitionPage.columnsDefinition
+                            .typeOffset
                 )
             );
 
@@ -175,9 +175,9 @@ export default class Table {
                     type === "boolean"
                         ? 0
                         : columnBuffer.readUInt16LE(
-                            this.db.constants.tableDefinitionPage
-                                .columnsDefinition.sizeOffset
-                        ),
+                              this.db.constants.tableDefinitionPage
+                                  .columnsDefinition.sizeOffset
+                          ),
                 fixedIndex: columnBuffer.readUInt8(
                     this.db.constants.tableDefinitionPage.columnsDefinition
                         .fixedIndexOffset
@@ -252,9 +252,9 @@ export default class Table {
                 record === 0
                     ? this.db.constants.pageSize
                     : pageBuffer.readUInt16LE(
-                        this.db.constants.dataPage.record.countOffset +
-                        record * 2
-                    ) & offsetMask;
+                          this.db.constants.dataPage.record.countOffset +
+                              record * 2
+                      ) & offsetMask;
             const length = nextStart - (start & offsetMask);
             recordOffsets.push({
                 start,
@@ -305,7 +305,7 @@ export default class Table {
                             (columnPointer -
                                 recordStart -
                                 variableColumnCount) /
-                            256 <
+                                256 <
                             jumpCount
                         ) {
                             --jumpCount;
@@ -316,15 +316,15 @@ export default class Table {
                             while (
                                 jumpsUsed < jumpCount &&
                                 i ===
-                                pageBuffer.readUInt8(
-                                    recordEnd - bitmaskSize - jumpsUsed - 1
-                                )
+                                    pageBuffer.readUInt8(
+                                        recordEnd - bitmaskSize - jumpsUsed - 1
+                                    )
                             ) {
                                 ++jumpsUsed;
                             }
                             variableColumnOffsets.push(
                                 pageBuffer.readUInt8(columnPointer - i) +
-                                jumpsUsed * 256
+                                    jumpsUsed * 256
                             );
                         }
                         break;
@@ -401,7 +401,7 @@ export default class Table {
                     value = readFieldValue(
                         pageBuffer.slice(start, start + size),
                         column,
-                        this.db.constants
+                        this.db
                     );
                 }
 
