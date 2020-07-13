@@ -9,13 +9,13 @@ Node Library to read data from Access databases.
 ## Installation
 
 ```sh
-npm install mdb-reader
+$ npm install mdb-reader
 ```
 
 or
 
 ```sh
-yarn add mdb-reader
+$ yarn add mdb-reader
 ```
 
 ## Compatibility
@@ -216,6 +216,26 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | repid       | `string`        |
 | numeric     | `string`        |
 | complex     | `number`        |
+
+## Development
+
+### Build
+
+To build the library, first install the dependencies, then run `yarn build` for a single build or `yarn watch` for automatic rebuilds.
+
+```sh
+$ yarn install
+$ yarn build
+```
+
+### Tests
+
+To run the tests, first install the dependencies, then run `yarn test`. Watch mode can be started with `yarn test --watch`.
+
+```sh
+$ yarn install
+$ yarn test
+```
 
 ## Resources
 
