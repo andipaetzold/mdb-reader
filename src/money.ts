@@ -5,7 +5,7 @@ const MAX_NUMERIC_PRECISION = 28;
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L36-L80
  */
-export function readMoney(buffer: Buffer): string {
+export function readCurrency(buffer: Buffer): string {
     const bytesCount = 8;
     const scale = 4;
 
@@ -29,8 +29,14 @@ export function readMoney(buffer: Buffer): string {
 
     for (let i = 0; i < bytesCount; ++i) {
         const byte = bytes[i];
-        product = addArray(product, multiplyArray(multiplier, toArray(byte, MAX_NUMERIC_PRECISION)));
-        multiplier = multiplyArray(multiplier, toArray(256, MAX_NUMERIC_PRECISION));
+        product = addArray(
+            product,
+            multiplyArray(multiplier, toArray(byte, MAX_NUMERIC_PRECISION))
+        );
+        multiplier = multiplyArray(
+            multiplier,
+            toArray(256, MAX_NUMERIC_PRECISION)
+        );
     }
 
     return buildValue(product, scale, negative);
@@ -50,8 +56,14 @@ export function readNumeric(
     const bytes = buffer.slice(1, 17);
     for (let i = 0; i < bytes.length; ++i) {
         const byte = bytes[12 - 4 * Math.floor(i / 4) + (i % 4)];
-        product = addArray(product, multiplyArray(multiplier, toArray(byte, MAX_NUMERIC_PRECISION)));
-        multiplier = multiplyArray(multiplier, toArray(256, MAX_NUMERIC_PRECISION));
+        product = addArray(
+            product,
+            multiplyArray(multiplier, toArray(byte, MAX_NUMERIC_PRECISION))
+        );
+        multiplier = multiplyArray(
+            multiplier,
+            toArray(256, MAX_NUMERIC_PRECISION)
+        );
     }
 
     const negative = !!(buffer[0] & 0x80);
@@ -61,23 +73,27 @@ export function readNumeric(
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L143-L167
  */
-function buildValue(array: ReadonlyArray<number>, scale: number, negative: boolean): string {
+function buildValue(
+    array: ReadonlyArray<number>,
+    scale: number,
+    negative: boolean
+): string {
     const length = array.length;
 
-    let value = '';
+    let value = "";
     if (negative) {
-        value += '-';
+        value += "-";
     }
 
     let top: number;
-    for (top = length; (top > 0) && (top - 1 > scale) && !array[top - 1]; top--) { }
+    for (top = length; top > 0 && top - 1 > scale && !array[top - 1]; top--) {}
 
     if (top === 0) {
-        value += '0';
+        value += "0";
     } else {
         for (let i = top; i > 0; i--) {
             if (i === scale) {
-                value += '.'
+                value += ".";
             }
             value += array[i - 1].toString();
         }

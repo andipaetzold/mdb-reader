@@ -1,6 +1,6 @@
 import { ColumnDefinition } from "./column";
 import { Constants } from "./constants";
-import { readNumeric, readMoney } from "./money";
+import { readNumeric, readCurrency } from "./money";
 import { uncompressText } from "./unicodeCompression";
 import Database from "./Database";
 
@@ -37,8 +37,8 @@ export function readFieldValue(
             return readDateTime(buffer);
         case "numeric":
             return readNumeric(buffer, column.precision!, column.scale!);
-        case "money":
-            return readMoney(buffer);
+        case "currency":
+            return readCurrency(buffer);
         case "memo":
             return readMemo(buffer, db);
         default:

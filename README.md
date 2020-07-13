@@ -157,7 +157,7 @@ interface Column {
         | "byte"
         | "integer"
         | "long"
-        | "money"
+        | "currency"
         | "float"
         | "double"
         | "datetime"
@@ -197,7 +197,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | byte        | `number`        |
 | integer     | `number`        |
 | long        | `number`        |
-| money       | `string`        |
+| currency    | `string`        |
 | float       | `number`        |
 | double      | `number`        |
 | datetime    | `Date`          |

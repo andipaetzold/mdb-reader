@@ -3,11 +3,11 @@ import { readFileSync } from "fs";
 import MDBReader from "../src";
 
 const files = [
-    "empty.mdb",
-    "empty2003.mdb",
-    "empty2007.accdb",
-    "empty2010.accdb",
-    "empty2016.accdb",
+    "V2000/empty.mdb",
+    "V2003/empty.mdb",
+    "V2007/empty.accdb",
+    "V2010/empty.accdb",
+    "V2016/empty.accdb",
 ];
 
 files.forEach((file) => {

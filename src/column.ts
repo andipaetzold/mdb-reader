@@ -40,7 +40,7 @@ export type ColumnType =
     | "byte"
     | "integer"
     | "long"
-    | "money"
+    | "currency"
     | "float"
     | "double"
     | "datetime"
@@ -57,7 +57,7 @@ const columnTypeMap: { [v: number]: ColumnType } = {
     0x02: "byte",
     0x03: "integer",
     0x04: "long",
-    0x05: "money",
+    0x05: "currency",
     0x06: "float",
     0x07: "double",
     0x08: "datetime",
