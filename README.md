@@ -34,8 +34,6 @@ The library is very likely to work in the browser with [buffer](https://www.npmj
 -   Access 2013 (ACE15)
 -   Access 2016 (ACE16)
 
-_Jet 3 databases were not tested during development_
-
 ## Usage
 
 ```javascript
