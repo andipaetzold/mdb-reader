@@ -10,6 +10,7 @@ jobs:
             - checkout
             - node/install-packages:
                   pkg-manager: yarn
+                  override-ci-command: yarn install --immutable
             - run: yarn build
 
     test:
@@ -22,10 +23,11 @@ jobs:
             - checkout
             - node/install:
                   node-version: << parameters.node-version >>
-                  install-yarn: true
+                  install-yarn: false
                   install-npm: false
             - node/install-packages:
                   pkg-manager: yarn
+                  override-ci-command: yarn install --immutable
             - run: yarn test --ci --runInBand
             - store_test_results:
                   path: test-results

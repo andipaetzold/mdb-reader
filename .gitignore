@@ -1,3 +1,11 @@
 /lib/
 /node_modules/
 /test-results/
+
+# Yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
