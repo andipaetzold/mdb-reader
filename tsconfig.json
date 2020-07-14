@@ -5,7 +5,8 @@
         "moduleResolution": "Node",
         "target": "ES2018",
         "lib": ["ES2018"],
-        "strict": true
+        "strict": true,
+        "importHelpers": true
     },
     "include": ["src/**/*"],
     "exclude": ["src/**/*.spec.ts"]
