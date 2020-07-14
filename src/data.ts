@@ -115,7 +115,7 @@ function readMemo(buffer: Buffer, db: Database): string {
         do {
             const rowBuffer = db.findPageRow(pageRow);
 
-            if (memoDataBuffer.length + rowBuffer.length - 4 > length) {
+            if (memoDataBuffer.length + rowBuffer.length - 4 > memoLength) {
                 break;
             }
 
