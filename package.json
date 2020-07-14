@@ -42,13 +42,13 @@
         "ts-jest": "26.1.1",
         "typescript": "3.9.6"
     },
+    "dependencies": {
+        "@types/node": ">=10.0.0"
+    },
     "scripts": {
         "clean": "rimraf lib",
         "build": "yarn clean && rollup -c",
         "watch": "yarn clean && rollup -cw",
         "test": "jest"
-    },
-    "dependencies": {
-        "@types/node": "^14.0.20"
     }
 }
