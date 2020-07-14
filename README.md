@@ -20,9 +20,11 @@ $ yarn add mdb-reader
 
 ## Compatibility
 
-### Node
+### Node / JavaScript
 
-Node >= v10
+Node >= 10
+
+The library is very likely to work in the browser with [buffer](https://www.npmjs.com/package/buffer) for the browser (untested).
 
 ### Access Database versions
 
