@@ -22,7 +22,7 @@ jobs:
             - checkout
             - node/install:
                   node-version: << parameters.node-version >>
-                  install-yarn: true
+                  install-yarn: false
                   install-npm: false
             - node/install-packages:
                   pkg-manager: yarn
