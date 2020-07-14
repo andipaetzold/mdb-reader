@@ -139,9 +139,10 @@ class Table {
      * @param rowLimit Maximum number of rows to be returned. Defaults to Infinity.
      */
     getData<TRow extends {
-        [column: string]: number | string | Buffer | Date | boolean | null;
+        [column in TColumn]: number | string | Buffer | Date | boolean | null;
+        TColumn extends string = string;
     }>(options?: {
-        columns?: string[];
+        columns?: ReadonlyArray<TColumn>;
         rowOffset?: number;
         rowLimit?: number;
     }): TRow[];
