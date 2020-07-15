@@ -1,5 +1,3 @@
-import BufferCursor from "./BufferCursor";
-
 /**
  * Reads a specific bit of a bitmap. Returns true for 1 and false for 0.
  *

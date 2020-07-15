@@ -1,4 +1,3 @@
-import BufferCursor from "./BufferCursor";
 import {
     Column,
     ColumnDefinition,
@@ -8,6 +7,7 @@ import {
 import { readFieldValue, Value } from "./data";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
+import { uncompressText } from "./unicodeCompression";
 import { findMapPages } from "./usage-map";
 import { getBitmapValue, roundToFullByte } from "./util";
 
@@ -126,14 +126,11 @@ export default class Table {
             this.realIndexCount *
                 this.db.constants.tableDefinitionPage.realIndexEntrySize;
 
-        const namesCursor = new BufferCursor(
-            this.definitionBuffer,
+        let namesCursorPos =
             curDefinitionPos +
-                this.columnCount *
-                    this.db.constants.tableDefinitionPage.columnsDefinition
-                        .entrySize,
-            this.db.constants
-        );
+            this.columnCount *
+                this.db.constants.tableDefinitionPage.columnsDefinition
+                    .entrySize;
 
         for (let i = 0; i < this.columnCount; ++i) {
             const columnBuffer = this.definitionBuffer.slice(
@@ -151,13 +148,23 @@ export default class Table {
                 )
             );
 
-            const column: ColumnDefinition = {
-                name: namesCursor.readString(
-                    namesCursor.readUIntLE(
-                        this.db.constants.tableDefinitionPage.columnNames
-                            .nameLengthSize
-                    )
+            const nameLength = this.definitionBuffer.readUIntLE(
+                namesCursorPos,
+                this.db.constants.tableDefinitionPage.columnNames.nameLengthSize
+            );
+            namesCursorPos += this.db.constants.tableDefinitionPage.columnNames
+                .nameLengthSize;
+            const name = uncompressText(
+                this.definitionBuffer.slice(
+                    namesCursorPos,
+                    namesCursorPos + nameLength
                 ),
+                this.db.constants.format
+            );
+            namesCursorPos += nameLength;
+
+            const column: ColumnDefinition = {
+                name,
                 type,
                 index: columnBuffer.readUInt8(
                     this.db.constants.tableDefinitionPage.columnsDefinition
