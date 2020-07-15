@@ -9,12 +9,7 @@ import { readFieldValue, Value } from "./data";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
 import { findMapPages } from "./usage-map";
-import {
-    getBitmapValue,
-    readNextString,
-    readNumber,
-    roundToFullByte,
-} from "./util";
+import { getBitmapValue, readNextString, roundToFullByte } from "./util";
 
 export default class Table {
     private readonly definitionBuffer: Buffer;
@@ -310,8 +305,8 @@ export default class Table {
 
             const recordEnd = recordOffset.end;
 
-            const totalVariableCount = readNumber(
-                new BufferCursor(pageBuffer, recordStart, this.db.constants),
+            const totalVariableCount = pageBuffer.readUIntLE(
+                recordStart,
                 this.db.constants.dataPage.record.columnCountSize
             );
 

@@ -36,16 +36,3 @@ export function readNextString(
 
     return cursor.readString(length);
 }
-
-export function readNumber(cursor: BufferCursor, size: number): number {
-    switch (size) {
-        case 1:
-            return cursor.readUInt8();
-            break;
-        case 2:
-            return cursor.readUInt16LE();
-            break;
-        default:
-            throw new Error(`Size ${size} is not supported`);
-    }
-}
