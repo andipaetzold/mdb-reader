@@ -19,27 +19,27 @@ export default class BufferCursor {
         this.pos = newPos;
     }
 
-    public readUInt8(): number {
-        const result = this.buffer.readUInt8(this.pos);
-        this.pos += 1;
+    public readUIntLE(length: number): number {
+        const result = this.buffer.readUIntLE(this.pos, length);
+        this.pos += length;
         return result;
     }
 
+    public readUInt8(): number {
+        return this.readUIntLE(1);
+    }
+
     public readUInt16LE(): number {
-        const result = this.buffer.readUInt16LE(this.pos);
-        this.pos += 2;
-        return result;
+        return this.readUIntLE(2);
+    }
+
+    public readUInt32LE(): number {
+        return this.readUIntLE(4);
     }
 
     public readInt16LE(): number {
         const result = this.buffer.readInt16LE(this.pos);
         this.pos += 2;
-        return result;
-    }
-
-    public readUInt32LE(): number {
-        const result = this.buffer.readUInt32LE(this.pos);
-        this.pos += 4;
         return result;
     }
 

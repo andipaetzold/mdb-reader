@@ -9,7 +9,7 @@ import { readFieldValue, Value } from "./data";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
 import { findMapPages } from "./usage-map";
-import { getBitmapValue, readNextString, roundToFullByte } from "./util";
+import { getBitmapValue, roundToFullByte } from "./util";
 
 export default class Table {
     private readonly definitionBuffer: Buffer;
@@ -152,10 +152,11 @@ export default class Table {
             );
 
             const column: ColumnDefinition = {
-                name: readNextString(
-                    namesCursor,
-                    this.db.constants.tableDefinitionPage.columnNames
-                        .nameLengthSize
+                name: namesCursor.readString(
+                    namesCursor.readUIntLE(
+                        this.db.constants.tableDefinitionPage.columnNames
+                            .nameLengthSize
+                    )
                 ),
                 type,
                 index: columnBuffer.readUInt8(
