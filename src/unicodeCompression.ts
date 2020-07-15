@@ -8,14 +8,17 @@ export function uncompressText(
     buffer: Buffer,
     constants: Pick<Constants, "format">
 ): string {
+    if (constants.format === "Jet3") {
+        return buffer.toString("utf8");
+    }
+
     if (
-        constants.format === "Jet4" &&
         buffer.length > 2 &&
         (buffer.readUInt8(0) & 0xff) === 0xff &&
         (buffer.readUInt8(1) & 0xff) === 0xfe
     ) {
         let compressedMode = true;
-        const cursor = new BufferCursor(buffer, 2);
+        const cursor = new BufferCursor(buffer, 2, constants);
 
         // maximum possible length
         const uncompressedBuffer = Buffer.alloc(
@@ -40,7 +43,7 @@ export function uncompressText(
         return uncompressedBuffer
             .slice(0, uncompressedBufferPos)
             .toString("ucs-2");
-    } else {
-        return buffer.toString("ucs-2");
     }
+
+    return buffer.toString("ucs-2");
 }

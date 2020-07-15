@@ -5,7 +5,7 @@ const compressionHeader = Buffer.from([0xff, 0xfe]);
 describe("uncompressText", () => {
     it("decodes Jet3 buffer", () => {
         const inputString = "This is a test";
-        const inputBuffer = Buffer.from(inputString, "ucs-2");
+        const inputBuffer = Buffer.from(inputString, "utf8");
 
         const result = uncompressText(inputBuffer, { format: "Jet3" });
         expect(result).toBe(inputString);

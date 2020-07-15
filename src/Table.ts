@@ -133,11 +133,11 @@ export default class Table {
 
         const namesCursor = new BufferCursor(
             this.definitionBuffer,
-
             curDefinitionPos +
                 this.columnCount *
                     this.db.constants.tableDefinitionPage.columnsDefinition
-                        .entrySize
+                        .entrySize,
+            this.db.constants
         );
 
         for (let i = 0; i < this.columnCount; ++i) {
@@ -311,7 +311,7 @@ export default class Table {
             const recordEnd = recordOffset.end;
 
             const totalVariableCount = readNumber(
-                new BufferCursor(pageBuffer, recordStart),
+                new BufferCursor(pageBuffer, recordStart, this.db.constants),
                 this.db.constants.dataPage.record.columnCountSize
             );
 

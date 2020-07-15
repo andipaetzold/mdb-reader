@@ -2,9 +2,9 @@ import { resolve } from "path";
 import { readFileSync } from "fs";
 import MDBReader from "../src";
 
-// TODO: V1997/test.mdb
 describe.each`
     filename              | format
+    ${"V1997/test.mdb"}   | ${"Jet3"}
     ${"V2000/test.mdb"}   | ${"Jet4"}
     ${"V2003/test.mdb"}   | ${"Jet4"}
     ${"V2007/test.accdb"} | ${"Jet4"}
@@ -35,7 +35,7 @@ describe.each`
         });
     });
 
-    it("getTableNames()", () => {
+    fit("getTableNames()", () => {
         const tableNames = reader.getTableNames();
         expect(tableNames).toStrictEqual([
             "Table1",
