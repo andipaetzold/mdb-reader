@@ -35,7 +35,7 @@ describe.each`
         });
     });
 
-    fit("getTableNames()", () => {
+    it("getTableNames()", () => {
         const tableNames = reader.getTableNames();
         expect(tableNames).toStrictEqual([
             "Table1",
