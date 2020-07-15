@@ -108,7 +108,7 @@ function readMemo(buffer: Buffer, db: Database): string {
         );
     } else if (bitmask & 0x40) {
         // single page
-        const pageRow = buffer.readUInt32LE(32);
+        const pageRow = buffer.readUInt32LE(4);
         const rowBuffer = db.findPageRow(pageRow);
         return uncompressText(
             rowBuffer.slice(0, memoLength),
@@ -116,7 +116,7 @@ function readMemo(buffer: Buffer, db: Database): string {
         );
     } else if (bitmask === 0) {
         // multi page
-        let pageRow = buffer.readInt32BE(4);
+        let pageRow = buffer.readInt32LE(4);
         let memoDataBuffer = Buffer.alloc(0);
         do {
             const rowBuffer = db.findPageRow(pageRow);
@@ -134,7 +134,7 @@ function readMemo(buffer: Buffer, db: Database): string {
                 rowBuffer.slice(4, buffer.length),
             ]);
 
-            pageRow = rowBuffer.readInt32BE(4);
+            pageRow = rowBuffer.readInt32LE(0);
         } while (pageRow !== 0);
 
         return uncompressText(
