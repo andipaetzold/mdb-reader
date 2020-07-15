@@ -37,11 +37,6 @@ describe.each`
 
     it("getTableNames()", () => {
         const tableNames = reader.getTableNames();
-        expect(tableNames).toStrictEqual([
-            "Table1",
-            "Table2",
-            "Table3",
-            "Table4",
-        ]);
+        expect(tableNames).toStrictEqual(["Table1", "Table2", "Table3", "Table4"]);
     });
 });

@@ -1,11 +1,7 @@
 import Database from "./Database";
 import { Format } from "./format";
 import PageType, { assertPageType } from "./PageType";
-import SysObject, {
-    isSysObjectType,
-    isSystemObject,
-    SysObjectType,
-} from "./SysObject";
+import SysObject, { isSysObjectType, isSystemObject, SysObjectType } from "./SysObject";
 import Table from "./Table";
 
 const MSYS_OBJECTS_TABLE = "MSysObjects";
@@ -28,11 +24,12 @@ export default class MDBReader {
 
         this.db = new Database(this.buffer);
 
-        const mSysObjectsTable = new Table(
-            MSYS_OBJECTS_TABLE,
-            this.db,
-            MSYS_OBJECTS_PAGE
-        ).getData<{ Id: number; Name: string; Type: number; Flags: number }>({
+        const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.db, MSYS_OBJECTS_PAGE).getData<{
+            Id: number;
+            Name: string;
+            Type: number;
+            Flags: number;
+        }>({
             columns: ["Id", "Name", "Type", "Flags"],
         });
 
@@ -79,10 +76,7 @@ export default class MDBReader {
                 } else if (systemTables) {
                     filteredSysObjects.push(sysObject);
                 }
-            } else if (
-                sysObject.objectType === SysObjectType.LinkedTable &&
-                linkedTables
-            ) {
+            } else if (sysObject.objectType === SysObjectType.LinkedTable && linkedTables) {
                 filteredSysObjects.push(sysObject);
             }
         }

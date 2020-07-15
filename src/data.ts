@@ -6,11 +6,7 @@ import Database from "./Database";
 
 export type Value = number | string | Buffer | Date | boolean | null;
 
-export function readFieldValue(
-    buffer: Buffer,
-    column: ColumnDefinition,
-    db: Database
-): Exclude<Value, boolean | null> {
+export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Database): Exclude<Value, boolean | null> {
     if (column.type === "boolean") {
         throw new Error("readFieldValue does not handle type boolean");
     }
@@ -74,19 +70,13 @@ function readBinary(buffer: Buffer): Buffer {
     return result;
 }
 
-function readText(
-    buffer: Buffer,
-    constants: Pick<Constants, "format">
-): string {
+function readText(buffer: Buffer, constants: Pick<Constants, "format">): string {
     return uncompressText(buffer, constants.format);
 }
 
 function readRepID(buffer: Buffer): string {
     const str = buffer.toString("hex");
-    return `${str.slice(0, 8)}-${str.slice(8, 12)}-${str.slice(
-        12,
-        16
-    )}-${str.slice(16, 20)}-${str.slice(20)}`;
+    return `${str.slice(0, 8)}-${str.slice(8, 12)}-${str.slice(12, 16)}-${str.slice(16, 20)}-${str.slice(20)}`;
 }
 
 function readDateTime(buffer: Buffer): Date {
@@ -104,18 +94,12 @@ function readMemo(buffer: Buffer, db: Database): string {
     const bitmask = buffer.readUInt8(3);
     if (bitmask & 0x80) {
         // inline
-        return uncompressText(
-            buffer.slice(12, 12 + memoLength),
-            db.constants.format
-        );
+        return uncompressText(buffer.slice(12, 12 + memoLength), db.constants.format);
     } else if (bitmask & 0x40) {
         // single page
         const pageRow = buffer.readUInt32LE(4);
         const rowBuffer = db.findPageRow(pageRow);
-        return uncompressText(
-            rowBuffer.slice(0, memoLength),
-            db.constants.format
-        );
+        return uncompressText(rowBuffer.slice(0, memoLength), db.constants.format);
     } else if (bitmask === 0) {
         // multi page
         let pageRow = buffer.readInt32LE(4);
@@ -131,18 +115,12 @@ function readMemo(buffer: Buffer, db: Database): string {
                 break;
             }
 
-            memoDataBuffer = Buffer.concat([
-                memoDataBuffer,
-                rowBuffer.slice(4, buffer.length),
-            ]);
+            memoDataBuffer = Buffer.concat([memoDataBuffer, rowBuffer.slice(4, buffer.length)]);
 
             pageRow = rowBuffer.readInt32LE(0);
         } while (pageRow !== 0);
 
-        return uncompressText(
-            memoDataBuffer.slice(0, memoLength),
-            db.constants.format
-        );
+        return uncompressText(memoDataBuffer.slice(0, memoLength), db.constants.format);
     } else {
         throw new Error(`Unknown memo type ${bitmask}`);
     }
@@ -180,10 +158,7 @@ function readOLE(buffer: Buffer, db: Database): Buffer {
                 break;
             }
 
-            memoDataBuffer = Buffer.concat([
-                memoDataBuffer,
-                rowBuffer.slice(4, buffer.length),
-            ]);
+            memoDataBuffer = Buffer.concat([memoDataBuffer, rowBuffer.slice(4, buffer.length)]);
 
             pageRow = rowBuffer.readUInt32LE(0);
         } while (pageRow !== 0);

@@ -13,7 +13,7 @@ export function doCarry(values: ReadonlyArray<number>): number[] {
 
 export function multiplyArray(a: ReadonlyArray<number>, b: ReadonlyArray<number>): number[] {
     if (a.length !== b.length) {
-        throw new Error('Array a and b must have the same length');
+        throw new Error("Array a and b must have the same length");
     }
 
     const result: number[] = new Array(a.length).fill(0);
@@ -28,7 +28,7 @@ export function multiplyArray(a: ReadonlyArray<number>, b: ReadonlyArray<number>
 
 export function addArray(a: ReadonlyArray<number>, b: ReadonlyArray<number>): number[] {
     if (a.length !== b.length) {
-        throw new Error('Array a and b must have the same length');
+        throw new Error("Array a and b must have the same length");
     }
     const length = a.length;
 

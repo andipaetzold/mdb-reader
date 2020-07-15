@@ -87,9 +87,7 @@ export function getColumnType(typeValue: number): ColumnType {
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/HACKING#L481-L491
  */
-export function parseColumnFlags(
-    flags: number
-): Pick<Column, "fixedLength" | "nullable" | "autoLong" | "autoUUID"> {
+export function parseColumnFlags(flags: number): Pick<Column, "fixedLength" | "nullable" | "autoLong" | "autoUUID"> {
     return {
         fixedLength: !!(flags & 0x01),
         nullable: !!(flags & 0x02),

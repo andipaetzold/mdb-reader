@@ -46,10 +46,7 @@ export default class Database {
         }
 
         const start = pageBuffer.readUInt16LE(rco + 2 + row * 2);
-        const nextStart =
-            row === 0
-                ? this.constants.pageSize
-                : pageBuffer.readUInt16LE(rco + row * 2);
+        const nextStart = row === 0 ? this.constants.pageSize : pageBuffer.readUInt16LE(rco + row * 2);
 
         return pageBuffer.slice(start, nextStart);
     }

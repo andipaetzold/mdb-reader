@@ -14,8 +14,6 @@ export default PageType;
 
 export function assertPageType(buffer: Buffer, pageType: PageType): void {
     if (buffer[0] !== pageType) {
-        throw new Error(
-            `Wrong page type. Expected ${buffer[0]} but received ${pageType}`
-        );
+        throw new Error(`Wrong page type. Expected ${buffer[0]} but received ${pageType}`);
     }
 }

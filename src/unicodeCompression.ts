@@ -8,11 +8,7 @@ export function uncompressText(buffer: Buffer, format: Format): string {
         return buffer.toString("utf8");
     }
 
-    if (
-        buffer.length <= 2 ||
-        (buffer.readUInt8(0) & 0xff) !== 0xff ||
-        (buffer.readUInt8(1) & 0xff) !== 0xfe
-    ) {
+    if (buffer.length <= 2 || (buffer.readUInt8(0) & 0xff) !== 0xff || (buffer.readUInt8(1) & 0xff) !== 0xfe) {
         return buffer.toString("ucs-2");
     }
 
@@ -31,9 +27,7 @@ export function uncompressText(buffer: Buffer, format: Format): string {
             uncompressedBuffer[uncompressedBufferPos++] = 0;
         } else if (buffer.length - curPos >= 2) {
             uncompressedBuffer[uncompressedBufferPos++] = curByte;
-            uncompressedBuffer[uncompressedBufferPos++] = buffer.readUInt8(
-                curPos++
-            );
+            uncompressedBuffer[uncompressedBufferPos++] = buffer.readUInt8(curPos++);
         }
     }
 

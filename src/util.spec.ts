@@ -1,10 +1,7 @@
 import { roundToFullByte, getBitmapValue } from "./util";
 
 it("getBitmapValue", () => {
-    const buffer = Buffer.from([
-        parseInt("10101010", 2),
-        parseInt("01010101", 2),
-    ]);
+    const buffer = Buffer.from([parseInt("10101010", 2), parseInt("01010101", 2)]);
 
     expect(getBitmapValue(buffer, 0)).toBeFalsy();
     expect(getBitmapValue(buffer, 1)).toBeTruthy();
