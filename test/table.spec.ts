@@ -21,16 +21,6 @@ files.forEach((filename) => {
             reader = new MDBReader(buffer);
         });
 
-        it("getTableNames()", () => {
-            const tableNames = reader.getTableNames();
-            expect(tableNames).toStrictEqual([
-                "Table1",
-                "Table2",
-                "Table3",
-                "Table4",
-            ]);
-        });
-
         it("getData()", () => {
             const table = reader.getTable("Table1");
             const rows = table.getData();
