@@ -28,11 +28,13 @@ jobs:
             - node/install-packages:
                   pkg-manager: yarn
                   override-ci-command: yarn install --immutable
-            - run: yarn test --ci --runInBand
+            - run: yarn test --ci --runInBand --coverage
             - store_test_results:
-                  path: test-results
+                  path: test-results/junit
             - store_artifacts:
-                  path: test-results
+                  path: test-results/junit
+            - store_artifacts:
+                  path: test-results/coverage
 
 workflows:
     build-and-test:

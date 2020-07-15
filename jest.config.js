@@ -1,12 +1,12 @@
 module.exports = {
     displayName: "MDB Reader",
     reporters: [
-        'default',
+        "default",
         [
-            'jest-junit',
+            "jest-junit",
             {
-                suiteName: 'MDB Reader',
-                outputDirectory: 'test-results',
+                suiteName: "MDB Reader",
+                outputDirectory: "test-results/junit",
             },
         ],
     ],
@@ -14,6 +14,7 @@ module.exports = {
         "^.+\\.ts$": "ts-jest",
     },
     testRegex: "^.+\\.spec\\.ts$",
+    coverageDirectory: "test-results/coverage",
     globals: {
         "ts-jest": {
             tsConfig: "tsconfig.jest.json",
