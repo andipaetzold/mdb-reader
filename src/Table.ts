@@ -328,7 +328,7 @@ export default class Table {
 
                         // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L125-L147
                         const recordLength = recordEnd - recordStart + 1;
-                        let jumpCount = (recordLength - 1) / 256;
+                        let jumpCount = Math.floor((recordLength - 1) / 256);
                         const columnPointer =
                             recordEnd - bitmaskSize - jumpCount - 1;
 
