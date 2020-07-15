@@ -46,7 +46,7 @@ export default class BufferCursor {
     public readString(length: number): string {
         const result = uncompressText(
             this.buffer.slice(this.pos, this.pos + length),
-            this.constants
+            this.constants.format
         );
         this.pos += length;
         return result;

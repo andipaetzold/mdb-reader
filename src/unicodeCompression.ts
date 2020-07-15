@@ -1,14 +1,10 @@
-import { Constants } from "./constants";
-import BufferCursor from "./BufferCursor";
+import { Format } from "./format";
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/HACKING#L823-L831
  */
-export function uncompressText(
-    buffer: Buffer,
-    constants: Pick<Constants, "format">
-): string {
-    if (constants.format === "Jet3") {
+export function uncompressText(buffer: Buffer, format: Format): string {
+    if (format === "Jet3") {
         return buffer.toString("utf8");
     }
 
@@ -18,25 +14,23 @@ export function uncompressText(
         (buffer.readUInt8(1) & 0xff) === 0xfe
     ) {
         let compressedMode = true;
-        const cursor = new BufferCursor(buffer, 2, constants);
+        let curPos = 2;
 
         // maximum possible length
-        const uncompressedBuffer = Buffer.alloc(
-            (cursor.buffer.length - cursor.pos) * 2
-        );
+        const uncompressedBuffer = Buffer.alloc((buffer.length - curPos) * 2);
         let uncompressedBufferPos = 0;
-        while (cursor.pos < cursor.buffer.length) {
-            const curByte = cursor.readUInt8();
+        while (curPos < buffer.length) {
+            const curByte = buffer.readUInt8(curPos++);
             if (curByte === 0) {
                 compressedMode = !compressedMode;
             } else if (compressedMode) {
                 uncompressedBuffer[uncompressedBufferPos++] = curByte;
                 uncompressedBuffer[uncompressedBufferPos++] = 0;
-            } else if (cursor.buffer.length - cursor.pos >= 2) {
+            } else if (buffer.length - curPos >= 2) {
                 uncompressedBuffer[uncompressedBufferPos++] = curByte;
-                uncompressedBuffer[
-                    uncompressedBufferPos++
-                ] = cursor.readUInt8();
+                uncompressedBuffer[uncompressedBufferPos++] = buffer.readUInt8(
+                    curPos++
+                );
             }
         }
 

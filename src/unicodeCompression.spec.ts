@@ -7,7 +7,7 @@ describe("uncompressText", () => {
         const inputString = "This is a test";
         const inputBuffer = Buffer.from(inputString, "utf8");
 
-        const result = uncompressText(inputBuffer, { format: "Jet3" });
+        const result = uncompressText(inputBuffer, "Jet3");
         expect(result).toBe(inputString);
     });
 
@@ -15,7 +15,7 @@ describe("uncompressText", () => {
         const inputString = "This is a test";
         const inputBuffer = Buffer.from(inputString, "ucs-2");
 
-        const result = uncompressText(inputBuffer, { format: "Jet4" });
+        const result = uncompressText(inputBuffer, "Jet4");
         expect(result).toBe(inputString);
     });
 
@@ -32,7 +32,7 @@ describe("uncompressText", () => {
             compressedInputBuffer,
         ]);
 
-        const result = uncompressText(fullInputBuffer, { format: "Jet4" });
+        const result = uncompressText(fullInputBuffer, "Jet4");
         expect(result).toBe(inputString);
     });
 
@@ -58,7 +58,7 @@ describe("uncompressText", () => {
             asciiCompressedInputBuffer,
         ]);
 
-        const result = uncompressText(fullInputBuffer, { format: "Jet4" });
+        const result = uncompressText(fullInputBuffer, "Jet4");
         expect(result).toBe(
             `${asciiInputString}${unicodeInputString}${asciiInputString}`
         );

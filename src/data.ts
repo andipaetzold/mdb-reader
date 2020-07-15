@@ -76,7 +76,7 @@ function readText(
     buffer: Buffer,
     constants: Pick<Constants, "format">
 ): string {
-    return uncompressText(buffer, constants);
+    return uncompressText(buffer, constants.format);
 }
 
 function readRepID(buffer: Buffer): string {
@@ -102,12 +102,18 @@ function readMemo(buffer: Buffer, db: Database): string {
     const bitmask = buffer.readUInt8(3);
     if (bitmask & 0x80) {
         // inline
-        return uncompressText(buffer.slice(12, 12 + memoLength), db.constants);
+        return uncompressText(
+            buffer.slice(12, 12 + memoLength),
+            db.constants.format
+        );
     } else if (bitmask & 0x40) {
         // single page
         const pageRow = buffer.readUInt32LE(32);
         const rowBuffer = db.findPageRow(pageRow);
-        return uncompressText(rowBuffer.slice(0, memoLength), db.constants);
+        return uncompressText(
+            rowBuffer.slice(0, memoLength),
+            db.constants.format
+        );
     } else if (bitmask === 0) {
         // multi page
         let pageRow = buffer.readInt32BE(4);
@@ -133,7 +139,7 @@ function readMemo(buffer: Buffer, db: Database): string {
 
         return uncompressText(
             memoDataBuffer.slice(0, memoLength),
-            db.constants
+            db.constants.format
         );
     } else {
         throw new Error(`Unknown memo type ${bitmask}`);
