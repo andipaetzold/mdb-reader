@@ -32,7 +32,9 @@ export default class MDBReader {
             MSYS_OBJECTS_TABLE,
             this.db,
             MSYS_OBJECTS_PAGE
-        ).getData();
+        ).getData<{ Id: number; Name: string; Type: number; Flags: number }>({
+            columns: ["Id", "Name", "Type", "Flags"],
+        });
 
         this.sysObjects = mSysObjectsTable.map((mSysObject: any) => {
             const objectType = mSysObject.Type & 0x7f;
