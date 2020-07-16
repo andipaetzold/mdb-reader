@@ -212,7 +212,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | datetime    | `Date`          |
 | binary      | `Buffer`        |
 | text        | `string`        |
-| ole         | TBD             |
+| ole         | `Buffer`        |
 | memo        | `string`        |
 | repid       | `string`        |
 | numeric     | `string`        |
