@@ -217,34 +217,32 @@ export default class Table {
 
         const recordCount = pageBuffer.readUInt16LE(this.db.constants.dataPage.recordCountOffset);
         const recordOffsets: { start: number; end: number }[] = [];
-        const offsetMask = 0x1fff; // 13 bits: 1111111111111
         for (let record = recordOffset; record < Math.min(recordOffset + recordCount, recordLimit); ++record) {
-            const start = pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + 2 + record * 2);
+            const offsetMask = 0x1fff;
+
+            let recordStart = pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + 2 + record * 2);
+            if (recordStart & 0x4000) {
+                // deleted record
+                continue;
+            }
+            recordStart &= offsetMask; // remove flags
+
             const nextStart =
                 record === 0
                     ? this.db.constants.pageSize
                     : pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + record * 2) & offsetMask;
-            const length = nextStart - (start & offsetMask);
+            const recordLength = nextStart - recordStart;
+            const recordEnd = recordStart + recordLength - 1;
             recordOffsets.push({
-                start,
-                end: start + length - 1,
+                start: recordStart,
+                end: recordEnd,
             });
         }
 
         const data: { [column: string]: Value }[] = [];
 
         for (const recordOffset of recordOffsets) {
-            let recordStart = recordOffset.start;
-            if (recordStart & 0x4000) {
-                // deleted record
-                continue;
-            }
-            if (recordStart & 0x8000) {
-                // lookup record
-                continue;
-            }
-            recordStart &= offsetMask; // remove flags
-
+            const recordStart = recordOffset.start;
             const recordEnd = recordOffset.end;
 
             const totalVariableCount = pageBuffer.readUIntLE(recordStart, this.db.constants.dataPage.record.columnCountSize);
