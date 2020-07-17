@@ -51,6 +51,7 @@
         "clean": "rimraf lib",
         "build": "yarn clean && rollup -c",
         "watch": "yarn clean && rollup -cw",
-        "test": "jest"
+        "test": "jest",
+        "semantic-release": "semantic-release"
     }
 }
