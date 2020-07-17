@@ -32,6 +32,7 @@
     },
     "homepage": "https://github.com/andipaetzold/mdb-reader#readme",
     "devDependencies": {
+        "@semantic-release/git": "9.0.0",
         "@types/jest": "26.0.4",
         "jest": "26.1.0",
         "jest-junit": "11.0.1",
