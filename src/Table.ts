@@ -74,7 +74,7 @@ export default class Table {
         const usageMapBuffer = this.db.findPageRow(
             this.definitionBuffer.readUInt32LE(this.db.constants.tableDefinitionPage.usageMapOffset)
         );
-        this.dataPages = findMapPages(usageMapBuffer);
+        this.dataPages = findMapPages(usageMapBuffer, this.db);
     }
 
     /**
