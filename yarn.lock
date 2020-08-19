@@ -1022,13 +1022,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:26.0.4, @types/jest@npm:26.x":
-  version: 26.0.4
-  resolution: "@types/jest@npm:26.0.4"
+"@types/jest@npm:26.0.10, @types/jest@npm:26.x":
+  version: 26.0.10
+  resolution: "@types/jest@npm:26.0.10"
   dependencies:
     jest-diff: ^25.2.1
     pretty-format: ^25.2.1
-  checksum: f815792ecc2191410bf541740b834bafb608b9a5be0b77b21770d8728e87b2bdd55843999bc9236ebd027e11a4cabbec90da7612fb9a620cf8bd858ae3774bd2
+  checksum: bb9f6b06c8c22b05d139b0193110a56cf47f1a912e2ab65ef501ba1888d948660be774204f183bf7ab4c94d59fc3ba8e20f4795dce5f637553bf7750f27a2a4f
   languageName: node
   linkType: hard
 
@@ -5784,7 +5784,7 @@ __metadata:
   dependencies:
     "@semantic-release/changelog": 5.0.1
     "@semantic-release/git": 9.0.0
-    "@types/jest": 26.0.4
+    "@types/jest": 26.0.10
     "@types/node": ">=10.0.0"
     jest: 26.4.2
     jest-junit: 11.1.0
