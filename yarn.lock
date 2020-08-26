@@ -5764,7 +5764,7 @@ __metadata:
     semantic-release: 17.1.1
     ts-jest: 26.1.1
     tslib: ^2.0.0
-    typescript: 3.9.6
+    typescript: 4.0.2
   languageName: unknown
   linkType: soft
 
@@ -9005,23 +9005,23 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-typescript@3.9.6:
-  version: 3.9.6
-  resolution: "typescript@npm:3.9.6"
+typescript@4.0.2:
+  version: 4.0.2
+  resolution: "typescript@npm:4.0.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 75d8e3610ca435b0feaa3eb714ef3aa9060ec72621da3c62c45ceee1d8d0ddcbd8ff2a816de2d24ab28dcd2249953edb640d34595d59e491656156da4c2903fc
+  checksum: cc0e7806eee7997a1b4b2990badacc4a8d089893ed0a377f35c9658e2ac392503cb340d0187203ed82e36e427dda94b0fb7107e44a71cca99efac86be26e16ee
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@3.9.6#builtin<compat/typescript>":
-  version: 3.9.6
-  resolution: "typescript@patch:typescript@npm%3A3.9.6#builtin<compat/typescript>::version=3.9.6&hash=5b02a2"
+"typescript@patch:typescript@4.0.2#builtin<compat/typescript>":
+  version: 4.0.2
+  resolution: "typescript@patch:typescript@npm%3A4.0.2#builtin<compat/typescript>::version=4.0.2&hash=5b02a2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: de0b64b2df571ddb6a87e058605b011b1d7e2ed5e1bb27ba658251a380041abbbdf5bdf8da25d5605ac84e7fb3882a816b9a283ffaddedebfde1a57db4c18c30
+  checksum: b8b689ef994cce4fe59950d56ddfffce3c4bdda8edb85b72e752d4a6d27bf7df8a318e76ccde25cbe6e642058f2f4ccf47187db4b243bbc98278a2844db9461b
   languageName: node
   linkType: hard
 
