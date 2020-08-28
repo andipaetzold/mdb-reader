@@ -39,7 +39,7 @@
         "jest-junit": "11.0.1",
         "rimraf": "3.0.2",
         "rollup": "2.21.0",
-        "rollup-plugin-terser": "6.1.0",
+        "rollup-plugin-terser": "7.0.1",
         "rollup-plugin-typescript2": "0.27.1",
         "semantic-release": "17.1.1",
         "ts-jest": "26.1.1",
