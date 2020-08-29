@@ -5769,7 +5769,7 @@ __metadata:
     jest: 26.1.0
     jest-junit: 11.1.0
     rimraf: 3.0.2
-    rollup: 2.21.0
+    rollup: 2.26.7
     rollup-plugin-terser: 7.0.1
     rollup-plugin-typescript2: 0.27.1
     semantic-release: 17.1.1
@@ -7807,9 +7807,9 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"rollup@npm:2.21.0":
-  version: 2.21.0
-  resolution: "rollup@npm:2.21.0"
+"rollup@npm:2.26.7":
+  version: 2.26.7
+  resolution: "rollup@npm:2.26.7"
   dependencies:
     fsevents: ~2.1.2
   dependenciesMeta:
@@ -7817,7 +7817,7 @@ resolve@1.15.1:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 09412c93f79d409c2376575749e6c0caa84c14df4939084590ca431b7aec9a48e0bad5199368587fe37191c96cf77c4b3d7d60065ab7228461c915104ad71980
+  checksum: 40e65d4a8143c9c1b4cc06df2038a2f37d833cdc04b167df243f1ce08d50481b7b2ee8c66389f70f69d5aa9a2e8f5fb2e656fc20e0bfbeaac3649b181661fcd0
   languageName: node
   linkType: hard
 
