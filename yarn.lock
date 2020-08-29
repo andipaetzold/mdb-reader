@@ -1048,14 +1048,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 14.0.22
-  resolution: "@types/node@npm:14.0.22"
-  checksum: 3b3f6cbd442504f5e921931281b77c3fc436365cf1e2af1432a47b9e96dbe9ce2fec9a128da33eabe23fdd2c2a71b1fbdaef80988dbf7935188a45e91f74f8e2
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:>= 8, @types/node@npm:>=10.0.0":
+"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:>=10.0.0":
   version: 14.0.23
   resolution: "@types/node@npm:14.0.23"
   checksum: 35415a294f536c2b14d29ec02a733af23405f4e7e87dace5b4392a69358aae7a14d28805a528b6e9a5f55cfbd9e035bd817e4db0325945fe0332db40ecabdf84
@@ -2461,7 +2454,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:^4.0.0":
+"debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.1.0, debug@npm:^4.1.1":
   version: 4.2.0
   resolution: "debug@npm:4.2.0"
   dependencies:
@@ -2490,15 +2483,6 @@ __metadata:
   dependencies:
     ms: ^2.1.1
   checksum: 619feb53b115f1a8341365b8aa58a8757e6632738587d4b61b25627b74891211cb20e31fdbea37fec766e575a60cf456f7a02d6f9eddfdcef80caa6a4b0fc042
-  languageName: node
-  linkType: hard
-
-"debug@npm:^4.1.0, debug@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "debug@npm:4.1.1"
-  dependencies:
-    ms: ^2.1.1
-  checksum: 3601a6ce96e4698ed3edf0ee6e67ef0317adfcdae2f66a43b23d1b14e8888b422337429b16dbbcba6801e7bfa6cbb8de3128fbacfb8ae1cd9bd7615ea6baf970
   languageName: node
   linkType: hard
 
@@ -8441,7 +8425,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width@npm:^1.0.1, string-width@npm:^1.0.2 || 2":
+"string-width@npm:^1.0.1":
   version: 1.0.2
   resolution: "string-width@npm:1.0.2"
   dependencies:
@@ -8452,7 +8436,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width@npm:^2.0.0, string-width@npm:^2.1.1":
+"string-width@npm:^1.0.2 || 2, string-width@npm:^2.0.0, string-width@npm:^2.1.1":
   version: 2.1.1
   resolution: "string-width@npm:2.1.1"
   dependencies:
@@ -8922,17 +8906,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.0.1":
+"tslib@npm:2.0.1, tslib@npm:^2.0.0":
   version: 2.0.1
   resolution: "tslib@npm:2.0.1"
   checksum: 7b42337a07f536c9650c72471cdf51317f07eb981692e91b8979fee3f6e20136a8f047e6ecdc5f2f3201132a6cc4e0096fa3c58655eba3803bf7fe739ccd088e
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "tslib@npm:2.0.0"
-  checksum: a7369a224f12e223fb42f2a720389601a24a1e1c96c55bf0d8d4b60c131e574c175ae23578b8d1bd3f4ec790c7e0a82b43733f022f866d48a23aeadd3910755d
   languageName: node
   linkType: hard
 
