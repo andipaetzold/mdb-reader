@@ -5776,7 +5776,7 @@ __metadata:
     rollup: 2.26.7
     rollup-plugin-terser: 7.0.1
     rollup-plugin-typescript2: 0.27.2
-    semantic-release: 17.1.1
+    semantic-release: 17.2.3
     ts-jest: 26.3.0
     tslib: ^2.0.0
     typescript: 4.0.2
@@ -7888,9 +7888,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semantic-release@npm:17.1.1":
-  version: 17.1.1
-  resolution: "semantic-release@npm:17.1.1"
+"semantic-release@npm:17.2.3":
+  version: 17.2.3
+  resolution: "semantic-release@npm:17.2.3"
   dependencies:
     "@semantic-release/commit-analyzer": ^8.0.0
     "@semantic-release/error": ^2.2.0
@@ -7922,7 +7922,7 @@ __metadata:
     yargs: ^15.0.1
   bin:
     semantic-release: bin/semantic-release.js
-  checksum: 991b468ef8d602f1635512d9b4ea2bf8614da2f5fcd0b88158d191107be2661c8d8ff014fececb354c238e32939847ab4f1e7597f0c2c8a254ba6081d11da3f6
+  checksum: 9a7d1b2803fdebfea95d85a5378739220b5b262a1fffe809266f8aa1751292038a01233453a627349c522063602d441d7f81d6b5fec4a333eb84e1a5103b3ea9
   languageName: node
   linkType: hard
 
