@@ -1,6 +1,9 @@
-[![CircleCI](https://circleci.com/gh/andipaetzold/mdb-reader/tree/main.svg?style=svg)](https://circleci.com/gh/andipaetzold/mdb-reader/tree/main)
-[![Downloads](https://img.shields.io/npm/dm/mdb-reader)](https://www.npmjs.com/package/mdb-reader)
-[![Version](https://img.shields.io/npm/v/mdb-reader.svg)](https://www.npmjs.com/package/mdb-reader)
+![version](https://img.shields.io/npm/v/mdb-reader)
+![node](https://img.shields.io/node/v/mdb-reader)
+![CircleCI](https://img.shields.io/circleci/build/github/andipaetzold/mdb-reader/main)
+![downloads](https://img.shields.io/npm/dm/mdb-reader)
+![license](https://img.shields.io/github/license/andipaetzold/mdb-reader)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 # MDB Reader
 
