@@ -1,8 +1,8 @@
-![version](https://img.shields.io/npm/v/mdb-reader)
-![node](https://img.shields.io/node/v/mdb-reader)
-![CircleCI](https://img.shields.io/circleci/build/github/andipaetzold/mdb-reader/main)
-![downloads](https://img.shields.io/npm/dm/mdb-reader)
-![license](https://img.shields.io/github/license/andipaetzold/mdb-reader)
+[![npm](https://img.shields.io/npm/v/mdb-reader)](https://www.npmjs.com/package/mdb-reader)
+[![node](https://img.shields.io/node/v/mdb-reader)](https://nodejs.org/)
+[![tests](https://img.shields.io/circleci/build/github/andipaetzold/mdb-reader/main)](https://app.circleci.com/pipelines/github/andipaetzold/mdb-reader?branch=main)
+[![downloads](https://img.shields.io/npm/dm/mdb-reader)](https://www.npmjs.com/package/mdb-reader)
+[![license](https://img.shields.io/github/license/andipaetzold/mdb-reader)](https://github.com/andipaetzold/mdb-reader/blob/main/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 # MDB Reader
