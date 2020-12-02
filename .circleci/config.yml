@@ -44,6 +44,7 @@ workflows:
                   matrix:
                       parameters:
                           node-version:
+                              - 15.3.0
                               - 14.9.0
                               - 12.18.3
                               - 10.22.0
