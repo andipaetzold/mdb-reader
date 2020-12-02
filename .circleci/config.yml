@@ -3,16 +3,6 @@ orbs:
     node: circleci/node@4.0.0
 
 jobs:
-    build:
-        executor:
-            name: node/default
-        steps:
-            - checkout
-            - node/install-packages:
-                  pkg-manager: yarn
-                  override-ci-command: yarn install --immutable
-            - run: yarn build
-
     test:
         parameters:
             node-version:
@@ -36,10 +26,20 @@ jobs:
             - store_artifacts:
                   path: test-results/coverage
 
+    release:
+        executor:
+            name: node/default
+        steps:
+            - checkout
+            - node/install-packages:
+                  pkg-manager: yarn
+                  override-ci-command: yarn install --immutable
+            - run: yarn build
+            - run: yarn semantic-release
+
 workflows:
     build-and-test:
         jobs:
-            - build
             - test:
                   matrix:
                       parameters:
@@ -48,3 +48,7 @@ workflows:
                               - 14.15.1
                               - 12.20.0
                               - 10.23.0
+
+            - release:
+                  requires:
+                      - test
