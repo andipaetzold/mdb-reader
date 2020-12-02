@@ -2233,7 +2233,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-conventionalcommits@npm:^4.5.0":
+"conventional-changelog-conventionalcommits@npm:4.5.0":
   version: 4.5.0
   resolution: "conventional-changelog-conventionalcommits@npm:4.5.0"
   dependencies:
@@ -5781,7 +5781,7 @@ __metadata:
     "@semantic-release/git": 9.0.0
     "@types/jest": 26.0.10
     "@types/node": ">=10.0.0"
-    conventional-changelog-conventionalcommits: ^4.5.0
+    conventional-changelog-conventionalcommits: 4.5.0
     jest: 26.4.2
     jest-junit: 11.1.0
     rimraf: 3.0.2
