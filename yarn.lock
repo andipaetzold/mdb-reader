@@ -2233,6 +2233,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"conventional-changelog-conventionalcommits@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "conventional-changelog-conventionalcommits@npm:4.5.0"
+  dependencies:
+    compare-func: ^2.0.0
+    lodash: ^4.17.15
+    q: ^1.5.1
+  checksum: 0e57187fc7b25160401aa1bb165b2de56c57c7d9b92ac79e46ee96cd8f08982e08fd13d45a60bcb36e950a2bfcc1fc6d51f255d5c60312933a130328f0b4a6d6
+  languageName: node
+  linkType: hard
+
 "conventional-changelog-writer@npm:^4.0.0":
   version: 4.0.17
   resolution: "conventional-changelog-writer@npm:4.0.17"
@@ -5770,6 +5781,7 @@ __metadata:
     "@semantic-release/git": 9.0.0
     "@types/jest": 26.0.10
     "@types/node": ">=10.0.0"
+    conventional-changelog-conventionalcommits: ^4.5.0
     jest: 26.4.2
     jest-junit: 11.1.0
     rimraf: 3.0.2
