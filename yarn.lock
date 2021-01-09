@@ -4748,15 +4748,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-junit@npm:11.1.0":
-  version: 11.1.0
-  resolution: "jest-junit@npm:11.1.0"
+"jest-junit@npm:12.0.0":
+  version: 12.0.0
+  resolution: "jest-junit@npm:12.0.0"
   dependencies:
     mkdirp: ^1.0.4
     strip-ansi: ^5.2.0
     uuid: ^3.3.3
     xml: ^1.0.1
-  checksum: 1166ceac6f77cd7c16fb1efb16f649bc1b7eed02ddb90e6009c376e4598641e07a0071adeec8c60f3d651f7cc67fef27ad419e6c151926c188624027d9c7a6be
+  checksum: 2cdd446aeab75e4e87e3c168bc72b281a5f036b31f04a36795e9f1509afa85ef4bf6609c2f2504dd221bbaedc1181d57d49728655dca828a3e1033f446715d8e
   languageName: node
   linkType: hard
 
@@ -5843,7 +5843,7 @@ __metadata:
     "@types/node": ">=10.0.0"
     conventional-changelog-conventionalcommits: 4.5.0
     jest: 26.4.2
-    jest-junit: 11.1.0
+    jest-junit: 12.0.0
     rimraf: 3.0.2
     rollup: 2.36.0
     rollup-plugin-terser: 7.0.1
