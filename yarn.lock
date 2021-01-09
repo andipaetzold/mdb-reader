@@ -5861,7 +5861,7 @@ __metadata:
     rimraf: 3.0.2
     rollup: 2.36.0
     rollup-plugin-terser: 7.0.2
-    rollup-plugin-typescript2: 0.27.2
+    rollup-plugin-typescript2: 0.29.0
     semantic-release: 17.3.1
     ts-jest: 26.4.4
     tslib: ^2.0.0
@@ -7882,9 +7882,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup-plugin-typescript2@npm:0.27.2":
-  version: 0.27.2
-  resolution: "rollup-plugin-typescript2@npm:0.27.2"
+"rollup-plugin-typescript2@npm:0.29.0":
+  version: 0.29.0
+  resolution: "rollup-plugin-typescript2@npm:0.29.0"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     find-cache-dir: ^3.3.1
@@ -7894,7 +7894,7 @@ __metadata:
   peerDependencies:
     rollup: ">=1.26.3"
     typescript: ">=2.4.0"
-  checksum: ff62b82640b17cb26aa3cbd2bd6f403413cad9f2e60e9450f1ffc6676c2064fc38256d8ae6c8174253d284dffb8abdf0509c2be623e06ad3be71a87c79f2fab5
+  checksum: 6ca2dfc4b41e4e3d2baef2b33b3744f2aad619407f2571e8c831ce60ffc9b91b2e660f7d10f9c8474b8503fc628eb430309d25e4c0bcee51f84f62e45ce54174
   languageName: node
   linkType: hard
 
