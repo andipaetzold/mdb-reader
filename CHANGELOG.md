@@ -1,3 +1,10 @@
+## [0.1.4](https://github.com/andipaetzold/mdb-reader/compare/v0.1.3...v0.1.4) (2021-03-12)
+
+
+### Bug Fixes
+
+* read byte as unsigned number ([#41](https://github.com/andipaetzold/mdb-reader/issues/41)) ([8795dd0](https://github.com/andipaetzold/mdb-reader/commit/8795dd02608cf15e808590ac12b7c95df9a85323))
+
 ## [0.1.3](https://github.com/andipaetzold/mdb-reader/compare/v0.1.2...v0.1.3) (2020-12-02)
 
 
