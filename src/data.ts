@@ -45,7 +45,7 @@ export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Dat
 }
 
 function readByte(buffer: Buffer): number {
-    return buffer.readInt8();
+    return buffer.readUInt8();
 }
 
 function readInteger(buffer: Buffer): number {
