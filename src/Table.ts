@@ -205,7 +205,7 @@ export default class Table {
     private getDataFromPage(
         page: number,
         columns: ReadonlyArray<ColumnDefinition>,
-        recordOffset: number,
+        recordIndexOffset: number,
         recordLimit: number
     ): { [column: string]: Value }[] {
         const pageBuffer = this.db.getPage(page);
@@ -217,10 +217,14 @@ export default class Table {
 
         const recordCount = pageBuffer.readUInt16LE(this.db.constants.dataPage.recordCountOffset);
         const recordOffsets: { start: number; end: number }[] = [];
-        for (let record = recordOffset; record < Math.min(recordOffset + recordCount, recordLimit); ++record) {
+        for (
+            let recordIndex = recordIndexOffset;
+            recordIndex < Math.min(recordIndexOffset + recordCount, recordLimit);
+            ++recordIndex
+        ) {
             const offsetMask = 0x1fff;
 
-            let recordStart = pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + 2 + record * 2);
+            let recordStart = pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + 2 + recordIndex * 2);
             if (recordStart & 0x4000) {
                 // deleted record
                 continue;
@@ -228,9 +232,9 @@ export default class Table {
             recordStart &= offsetMask; // remove flags
 
             const nextStart =
-                record === 0
+                recordIndex === 0
                     ? this.db.constants.pageSize
-                    : pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + record * 2) & offsetMask;
+                    : pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + recordIndex * 2) & offsetMask;
             const recordLength = nextStart - recordStart;
             const recordEnd = recordStart + recordLength - 1;
             recordOffsets.push({
