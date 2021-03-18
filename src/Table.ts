@@ -194,20 +194,17 @@ export default class Table {
         const rowLimit = options?.rowLimit ?? Infinity;
 
         for (const dataPage of this.dataPages) {
-            data.push(
-                ...this.getDataFromPage(dataPage, columns, Math.max(rowOffset - data.length, 0), rowLimit - data.length)
-            );
+            if (data.length >= rowOffset + rowLimit) {
+                continue;
+            }
+
+            data.push(...this.getDataFromPage(dataPage, columns));
         }
 
-        return data as TRow[];
+        return data.slice(rowOffset, rowOffset + rowLimit) as TRow[];
     }
 
-    private getDataFromPage(
-        page: number,
-        columns: ReadonlyArray<ColumnDefinition>,
-        recordOffset: number,
-        recordLimit: number
-    ): { [column: string]: Value }[] {
+    private getDataFromPage(page: number, columns: ReadonlyArray<ColumnDefinition>): { [column: string]: Value }[] {
         const pageBuffer = this.db.getPage(page);
         assertPageType(pageBuffer, PageType.DataPage);
 
@@ -217,7 +214,7 @@ export default class Table {
 
         const recordCount = pageBuffer.readUInt16LE(this.db.constants.dataPage.recordCountOffset);
         const recordOffsets: { start: number; end: number }[] = [];
-        for (let record = recordOffset; record < Math.min(recordOffset + recordCount, recordLimit); ++record) {
+        for (let record = 0; record < recordCount; ++record) {
             const offsetMask = 0x1fff;
 
             let recordStart = pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + 2 + record * 2);
@@ -240,7 +237,6 @@ export default class Table {
         }
 
         const data: { [column: string]: Value }[] = [];
-
         for (const recordOffset of recordOffsets) {
             const recordStart = recordOffset.start;
             const recordEnd = recordOffset.end;
