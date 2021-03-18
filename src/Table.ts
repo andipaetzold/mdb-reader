@@ -214,10 +214,10 @@ export default class Table {
 
         const recordCount = pageBuffer.readUInt16LE(this.db.constants.dataPage.recordCountOffset);
         const recordOffsets: { start: number; end: number }[] = [];
-        for (let recordIndex = 0; recordIndex < recordCount; ++recordIndex) {
+        for (let record = 0; record < recordCount; ++record) {
             const offsetMask = 0x1fff;
 
-            let recordStart = pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + 2 + recordIndex * 2);
+            let recordStart = pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + 2 + record * 2);
             if (recordStart & 0x4000) {
                 // deleted record
                 continue;
@@ -225,9 +225,9 @@ export default class Table {
             recordStart &= offsetMask; // remove flags
 
             const nextStart =
-                recordIndex === 0
+                record === 0
                     ? this.db.constants.pageSize
-                    : pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + recordIndex * 2) & offsetMask;
+                    : pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + record * 2) & offsetMask;
             const recordLength = nextStart - recordStart;
             const recordEnd = recordStart + recordLength - 1;
             recordOffsets.push({
