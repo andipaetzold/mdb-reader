@@ -1,5 +1,4 @@
 module.exports = {
-    displayName: "MDB Reader",
     reporters: [
         "default",
         [
@@ -17,7 +16,7 @@ module.exports = {
     coverageDirectory: "test-results/coverage",
     globals: {
         "ts-jest": {
-            tsConfig: "tsconfig.jest.json",
+            tsconfig: "tsconfig.jest.json",
         },
     },
 };
