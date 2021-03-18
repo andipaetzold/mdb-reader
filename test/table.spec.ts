@@ -105,11 +105,11 @@ describe.each`
     });
 });
 
-describe.only("getData()", () => {
+describe("getData()", () => {
     const path = resolve(__dirname, "data/real/ASampleDatabase.accdb");
     let table: Table;
 
-    beforeEach(() => {
+    beforeAll(() => {
         const buffer = readFileSync(path);
         const reader = new MDBReader(buffer);
         table = reader.getTable("Asset Items");
