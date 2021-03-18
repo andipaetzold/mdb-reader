@@ -1,5 +1,4 @@
 module.exports = {
-    displayName: "MDB Reader",
     reporters: [
         "default",
         [
