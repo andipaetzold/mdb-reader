@@ -1,3 +1,10 @@
+## [0.1.5](https://github.com/andipaetzold/mdb-reader/compare/v0.1.4...v0.1.5) (2021-03-18)
+
+
+### Bug Fixes
+
+* RangeError & empty array when using getData with rowOffset ([#46](https://github.com/andipaetzold/mdb-reader/issues/46)) ([82fd481](https://github.com/andipaetzold/mdb-reader/commit/82fd4811b983bbd902f2fc215c5a614cd57ca828))
+
 ## [0.1.4](https://github.com/andipaetzold/mdb-reader/compare/v0.1.3...v0.1.4) (2021-03-12)
 
 
