@@ -13,12 +13,9 @@ jobs:
             - checkout
             - node/install:
                   node-version: << parameters.node-version >>
-                  install-yarn: false
                   install-npm: false
-            - node/install-packages:
-                  pkg-manager: yarn
-                  override-ci-command: yarn install --immutable
-            - run: yarn test --ci --runInBand --coverage
+            - node/install-packages
+            - run: npm test -- --ci --runInBand --coverage
             - store_test_results:
                   path: test-results/junit
             - store_artifacts:
@@ -31,11 +28,9 @@ jobs:
             name: node/default
         steps:
             - checkout
-            - node/install-packages:
-                  pkg-manager: yarn
-                  override-ci-command: yarn install --immutable
-            - run: yarn build
-            - run: yarn semantic-release
+            - node/install-packages
+            - run: npm run build
+            - run: npm run semantic-release
 
 workflows:
     build-and-test:
