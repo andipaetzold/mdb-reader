@@ -225,20 +225,20 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 
 ### Build
 
-To build the library, first install the dependencies, then run `yarn build` for a single build or `yarn watch` for automatic rebuilds.
+To build the library, first install the dependencies, then run `npm run build` for a single build or `npm run watch` for automatic rebuilds.
 
 ```sh
-$ yarn install
-$ yarn build
+$ npm install
+$ npm run build
 ```
 
 ### Tests
 
-To run the tests, first install the dependencies, then run `yarn test`. Watch mode can be started with `yarn test --watch`.
+To run the tests, first install the dependencies, then run `npm test`. Watch mode can be started with `npm test -- --watch`.
 
 ```sh
-$ yarn install
-$ yarn test
+$ npm install
+$ npm test
 ```
 
 ## Resources
