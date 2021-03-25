@@ -1,3 +1,10 @@
+## [0.1.6](https://github.com/andipaetzold/mdb-reader/compare/v0.1.5...v0.1.6) (2021-03-25)
+
+
+### Bug Fixes
+
+* move @types/node to dev dependencies ([#49](https://github.com/andipaetzold/mdb-reader/issues/49)) ([a70ea2c](https://github.com/andipaetzold/mdb-reader/commit/a70ea2ca14d31b3ed09b69fe23c903a236deca92))
+
 ## [0.1.5](https://github.com/andipaetzold/mdb-reader/compare/v0.1.4...v0.1.5) (2021-03-18)
 
 
