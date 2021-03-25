@@ -1,3 +1,10 @@
+## [0.1.7](https://github.com/andipaetzold/mdb-reader/compare/v0.1.6...v0.1.7) (2021-03-25)
+
+
+### Bug Fixes
+
+* move tslib to dev dependencies ([#50](https://github.com/andipaetzold/mdb-reader/issues/50)) ([0bcf82a](https://github.com/andipaetzold/mdb-reader/commit/0bcf82afda2764fdcdb5ea1bebd1605df488890a))
+
 ## [0.1.6](https://github.com/andipaetzold/mdb-reader/compare/v0.1.5...v0.1.6) (2021-03-25)
 
 
