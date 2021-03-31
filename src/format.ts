@@ -5,7 +5,7 @@ export type Format = "Jet3" | "Jet4";
  *
  * @param buffer Full buffer or buffer of first page
  *
- * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/HACKING#L83-L85
+ * @see https://github.com/mdbtools/mdbtools/blob/master/HACKING.md#database-definition-page
  * @see https://github.com/cyberemissary/mdbtools/blob/a6c3fa26b8408d459966465077c5bd71072739e8/include/mdbtools.h#L67-L74
  * @see https://github.com/cyberemissary/mdbtools/blob/a6c3fa26b8408d459966465077c5bd71072739e8/src/libmdb/file.c#L224-L240
  */
@@ -18,6 +18,7 @@ export function getFormat(buffer: Buffer): Format {
         case 0x03: // ACCESS 2010
         case 0x04: // ACCESS 2013
         case 0x05: // ACCESS 2016
+        case 0x06: // ACCESS 2019
             return "Jet4";
         default:
             throw new Error("Unsupported database format");
