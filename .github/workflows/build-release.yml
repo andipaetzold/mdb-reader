@@ -45,5 +45,7 @@ jobs:
             - name: Node version
               run: node --version
 
+            - name: Install dependencies
+              run: npm ci
             - name: Release
               run: npm run semantic-release
