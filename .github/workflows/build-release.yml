@@ -4,7 +4,7 @@ on:
     - push
 
 jobs:
-    test:
+    build-test:
         runs-on: ubuntu-20.04
         strategy:
             matrix:
@@ -18,5 +18,24 @@ jobs:
                   node-version: ${{ matrix.node }}
             - name: Install dependencies
               run: npm ci
+            - name: Build
+              run: npm run build
             - name: Test
               run: npm test -- --ci --runInBand --coverage
+
+    release:
+        runs-on: ubuntu-20.04
+        needs: build-test
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - name: Get node version
+              id: node-version
+              run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+            - name: Use node ${{ matrix.node }}
+              uses: actions/setup-node@v2.1.5
+              with:
+                  node-version: ${{ steps.node-version.outputs.NODE_VERSION }}
+            - name: Release
+              run: npm run semantic-release

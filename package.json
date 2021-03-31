@@ -49,6 +49,7 @@
         "typescript": "4.2.3"
     },
     "scripts": {
+        "prepublishOnly": "npm run build",
         "clean": "rimraf lib",
         "build": "npm run clean && rollup -c",
         "watch": "npm run clean && rollup -cw",
