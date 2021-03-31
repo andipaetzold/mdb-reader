@@ -1,14 +1,4 @@
 module.exports = {
-    reporters: [
-        "default",
-        [
-            "jest-junit",
-            {
-                suiteName: "MDB Reader",
-                outputDirectory: "test-results/junit",
-            },
-        ],
-    ],
     transform: {
         "^.+\\.ts$": "ts-jest",
     },
