@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/andipaetzold/mdb-reader/compare/v0.1.7...v0.2.0) (2021-03-31)
+
+
+### Features
+
+* support Access 2019 ([#54](https://github.com/andipaetzold/mdb-reader/issues/54)) ([1b9a3f0](https://github.com/andipaetzold/mdb-reader/commit/1b9a3f09c77e46a5dac2d03dd2d957e01c9e4415))
+
 ## [0.1.7](https://github.com/andipaetzold/mdb-reader/compare/v0.1.6...v0.1.7) (2021-03-25)
 
 
