@@ -6,8 +6,8 @@ export type Format = "Jet3" | "Jet4";
  * @param buffer Full buffer or buffer of first page
  *
  * @see https://github.com/mdbtools/mdbtools/blob/master/HACKING.md#database-definition-page
- * @see https://github.com/cyberemissary/mdbtools/blob/a6c3fa26b8408d459966465077c5bd71072739e8/include/mdbtools.h#L67-L74
- * @see https://github.com/cyberemissary/mdbtools/blob/a6c3fa26b8408d459966465077c5bd71072739e8/src/libmdb/file.c#L224-L240
+ * @see https://github.com/mdbtools/mdbtools/blob/7d10a50faf3ff89fbb09252c218eb3ca92f5b19c/include/mdbtools.h#L78-L86
+ * @see https://github.com/mdbtools/mdbtools/blob/7d10a50faf3ff89fbb09252c218eb3ca92f5b19c/src/libmdb/file.c#L215-L232
  */
 export function getFormat(buffer: Buffer): Format {
     switch (buffer[0x14]) {
