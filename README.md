@@ -36,6 +36,7 @@ The library is very likely to work in the browser with [buffer](https://www.npmj
 -   Access 2010 (ACE14)
 -   Access 2013 (ACE15)
 -   Access 2016 (ACE16)
+-   Access 2019 (ACE17)
 
 ## Usage
 
