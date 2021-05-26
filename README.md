@@ -25,7 +25,7 @@ $ yarn add mdb-reader
 
 ### Node / JavaScript
 
-Node 10, 12, 14, 15, and 16
+Node 12, 14, and 16
 
 The library is very likely to work in the browser with [buffer](https://www.npmjs.com/package/buffer) for the browser (untested).
 
