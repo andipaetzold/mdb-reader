@@ -1,3 +1,16 @@
+# [1.0.0](https://github.com/andipaetzold/mdb-reader/compare/v0.2.0...v1.0.0) (2021-06-02)
+
+
+* feat!: drop node 10 & 15; support node 16 (#75) ([6f894b6](https://github.com/andipaetzold/mdb-reader/commit/6f894b6b944411c7f207fdac0eb61917d6ac30d7)), closes [#75](https://github.com/andipaetzold/mdb-reader/issues/75)
+
+
+### BREAKING CHANGES
+
+* drop v10 & 15; add v16
+* node 10 (LTS) is EOL
+* node 15 is EOL
+* node 16 is current
+
 # [0.2.0](https://github.com/andipaetzold/mdb-reader/compare/v0.1.7...v0.2.0) (2021-03-31)
 
 
