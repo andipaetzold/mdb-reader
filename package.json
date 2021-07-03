@@ -1,16 +1,13 @@
 {
     "name": "mdb-reader",
     "version": "1.0.0",
-    "description": "Node Library to read data from Access databases",
+    "description": "JavaScript library to read data from Access databases",
     "main": "lib/index.js",
     "module": "lib/index.es.js",
     "files": [
         "lib"
     ],
     "types": "lib/index.d.ts",
-    "engines": {
-        "node": "^12.0.0 || ^14.0.0 || ^16.0.0"
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/andipaetzold/mdb-reader.git"
