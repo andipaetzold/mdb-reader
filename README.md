@@ -1,5 +1,4 @@
 [![npm](https://img.shields.io/npm/v/mdb-reader)](https://www.npmjs.com/package/mdb-reader)
-[![node](https://img.shields.io/node/v/mdb-reader)](https://nodejs.org/)
 [![tests](https://github.com/andipaetzold/mdb-reader/actions/workflows/build-release.yml/badge.svg?branch=main)](https://github.com/andipaetzold/mdb-reader/actions/workflows/build-release.yml?query=branch%3Amain)
 [![downloads](https://img.shields.io/npm/dm/mdb-reader)](https://www.npmjs.com/package/mdb-reader)
 [![license](https://img.shields.io/github/license/andipaetzold/mdb-reader)](https://github.com/andipaetzold/mdb-reader/blob/main/LICENSE)
@@ -7,7 +6,7 @@
 
 # MDB Reader
 
-Node Library to read data from Access databases.
+JavaScript library to read data from Access databases.
 
 ## Installation
 
@@ -25,9 +24,8 @@ $ yarn add mdb-reader
 
 ### Node / JavaScript
 
-Node 12, 14, and 16
-
-The library is very likely to work in the browser with [buffer](https://www.npmjs.com/package/buffer) for the browser (untested).
+-   Node 12, 14, and 16
+-   Works in the browser with [buffer](https://www.npmjs.com/package/buffer) ([Example](https://github.com/andipaetzold/mdb-reader/tree/main/examples/browser))
 
 ### Access Database versions
 
