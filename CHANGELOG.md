@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/andipaetzold/mdb-reader/compare/v1.0.0...v1.0.1) (2021-07-03)
+
+
+### Bug Fixes
+
+* remove engines.node ([4f22a35](https://github.com/andipaetzold/mdb-reader/commit/4f22a357f0f3cfad71d68b66dc42ef312d92bd80))
+
 # [1.0.0](https://github.com/andipaetzold/mdb-reader/compare/v0.2.0...v1.0.0) (2021-06-02)
 
 
