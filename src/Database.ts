@@ -1,13 +1,61 @@
 import { Constants, getConstants } from "./constants";
+import { readDateTime } from "./data";
+import { decrypt } from "./decrypt";
 import PageType, { assertPageType } from "./PageType";
+import { numberToBuffer, xor } from "./util";
+
+const ENCRYPTION_START = 0x18;
+const ENCRYPTION_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]); // or reverse?
+
+const SYSTEM_CODE_PAGE_OFFSET = 0x3c;
+
+const KEY_OFFSET = 0x3e;
+const KEY_SIZE = 4;
+
+/**
+ * Jet 3 only
+ */
+const PASSWORD_OFFSET = 0x42;
+
+const CREATION_DATE_OFFSET = 0x72;
 
 export default class Database {
     public readonly constants: Constants;
 
-    public constructor(private readonly buffer: Buffer) {
-        assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
+    private readonly key: Buffer;
+    private readonly password: Buffer;
 
+    private readonly defaultCollation: number;
+    private readonly systemCodePage: number;
+
+    private readonly creationDate: Date;
+
+    public constructor(private readonly buffer: Buffer, password?: string) {
+        assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
         this.constants = getConstants(this.buffer);
+
+        // decrypt page
+        const decryptedBuffer = decrypt(
+            this.buffer.slice(ENCRYPTION_START, ENCRYPTION_START + this.constants.databaseDefinitionPage.decryptedSize),
+            ENCRYPTION_KEY
+        );
+        decryptedBuffer.copy(this.buffer, ENCRYPTION_START);
+
+        // read data from decrypted page
+        this.defaultCollation = this.buffer.readUIntLE(
+            this.constants.databaseDefinitionPage.defaultCollation.offset,
+            this.constants.databaseDefinitionPage.defaultCollation.size
+        );
+        this.systemCodePage = this.buffer.readUInt16LE(SYSTEM_CODE_PAGE_OFFSET);
+
+        this.key = this.buffer.slice(KEY_OFFSET, KEY_OFFSET + KEY_SIZE);
+
+        this.creationDate = readDateTime(this.buffer.slice(CREATION_DATE_OFFSET));
+
+        this.password = this.buffer.slice(PASSWORD_OFFSET, PASSWORD_OFFSET + 14);
+        if (this.constants.format === "Jet4") {
+            this.password = xor(this.password, this.buffer.slice(CREATION_DATE_OFFSET, CREATION_DATE_OFFSET + 8));
+        }
     }
 
     public getPage(page: number): Buffer {
@@ -17,7 +65,18 @@ export default class Database {
             throw new Error(`Page ${page} does not exist`);
         }
 
-        return this.buffer.slice(offset, offset + this.constants.pageSize);
+        const pageBuffer = this.buffer.slice(offset, offset + this.constants.pageSize);
+
+        if (page === 0 || this.key.every((v) => v === 0)) {
+            // no encryption
+            return pageBuffer;
+        }
+
+        const pageIndexBuffer = Buffer.alloc(4);
+        pageIndexBuffer.writeUInt32LE(page);
+
+        const pagekey = xor(pageIndexBuffer, this.key);
+        return decrypt(pageBuffer, pagekey);
     }
 
     /**

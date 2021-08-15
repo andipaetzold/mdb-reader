@@ -4,6 +4,16 @@ export interface Constants {
     format: Format;
     pageSize: number;
 
+    databaseDefinitionPage: {
+        passwordSize: number;
+        decryptedSize: number;
+
+        defaultCollation: {
+            offset: number;
+            size: number;
+        };
+    };
+
     dataPage: {
         recordCountOffset: number;
 
@@ -52,6 +62,15 @@ const jet3Constants: Constants = {
     format: "Jet3",
     pageSize: 2048,
 
+    databaseDefinitionPage: {
+        passwordSize: 20,
+        decryptedSize: 126,
+        defaultCollation: {
+            offset: 0x3a,
+            size: 2,
+        },
+    },
+
     dataPage: {
         recordCountOffset: 8,
 
@@ -94,6 +113,16 @@ const jet3Constants: Constants = {
 const jet4Constants: Constants = {
     format: "Jet4",
     pageSize: 4096,
+
+    databaseDefinitionPage: {
+        passwordSize: 40,
+        decryptedSize: 128,
+        defaultCollation: {
+            offset: 0x6e,
+            size: 4,
+        },
+    },
+
     dataPage: {
         recordCountOffset: 12,
 

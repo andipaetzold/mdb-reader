@@ -7,6 +7,10 @@ import Table from "./Table";
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
 
+export interface Options {
+    password?: string;
+}
+
 export default class MDBReader {
     private readonly sysObjects: SysObject[];
     private readonly db: Database;
@@ -18,11 +22,12 @@ export default class MDBReader {
         /**
          * Buffer of the database.
          */
-        public readonly buffer: Buffer
+        public readonly buffer: Buffer,
+        private readonly options: Options = {}
     ) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
-        this.db = new Database(this.buffer);
+        this.db = new Database(this.buffer, options.password);
 
         const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.db, MSYS_OBJECTS_PAGE).getData<{
             Id: number;
