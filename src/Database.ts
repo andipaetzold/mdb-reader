@@ -2,7 +2,7 @@ import { Constants, getConstants } from "./constants";
 import { readDateTime } from "./data";
 import { decrypt } from "./decrypt";
 import PageType, { assertPageType } from "./PageType";
-import { numberToBuffer, xor } from "./util";
+import { xor } from "./util";
 
 const ENCRYPTION_START = 0x18;
 const ENCRYPTION_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]); // or reverse?
