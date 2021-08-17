@@ -1,6 +1,6 @@
-import { Constants, getConstants } from "./constants";
 import { readDateTime } from "./data";
 import { decrypt } from "./decrypt";
+import { getJetFormat, JetFormat } from "./JetFormat";
 import PageType, { assertPageType } from "./PageType";
 import { xor } from "./util";
 
@@ -20,7 +20,7 @@ const PASSWORD_OFFSET = 0x42;
 const CREATION_DATE_OFFSET = 0x72;
 
 export default class Database {
-    public readonly constants: Constants;
+    public readonly format: JetFormat;
 
     private readonly key: Buffer;
     private readonly password: Buffer;
@@ -32,19 +32,19 @@ export default class Database {
 
     public constructor(private readonly buffer: Buffer, password?: string) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
-        this.constants = getConstants(this.buffer);
+        this.format = getJetFormat(this.buffer);
 
         // decrypt page
         const decryptedBuffer = decrypt(
-            this.buffer.slice(ENCRYPTION_START, ENCRYPTION_START + this.constants.databaseDefinitionPage.decryptedSize),
+            this.buffer.slice(ENCRYPTION_START, ENCRYPTION_START + this.format.databaseDefinitionPage.decryptedSize),
             ENCRYPTION_KEY
         );
         decryptedBuffer.copy(this.buffer, ENCRYPTION_START);
 
         // read data from decrypted page
         this.defaultCollation = this.buffer.readUIntLE(
-            this.constants.databaseDefinitionPage.defaultCollation.offset,
-            this.constants.databaseDefinitionPage.defaultCollation.size
+            this.format.databaseDefinitionPage.defaultCollation.offset,
+            this.format.databaseDefinitionPage.defaultCollation.size
         );
         this.systemCodePage = this.buffer.readUInt16LE(SYSTEM_CODE_PAGE_OFFSET);
 
@@ -53,19 +53,19 @@ export default class Database {
         this.creationDate = readDateTime(this.buffer.slice(CREATION_DATE_OFFSET));
 
         this.password = this.buffer.slice(PASSWORD_OFFSET, PASSWORD_OFFSET + 14);
-        if (this.constants.format === "Jet4") {
+        if (this.format.legacyFormat === "Jet4") {
             this.password = xor(this.password, this.buffer.slice(CREATION_DATE_OFFSET, CREATION_DATE_OFFSET + 8));
         }
     }
 
     public getPage(page: number): Buffer {
-        const offset = page * this.constants.pageSize;
+        const offset = page * this.format.pageSize;
 
         if (this.buffer.length < offset) {
             throw new Error(`Page ${page} does not exist`);
         }
 
-        const pageBuffer = this.buffer.slice(offset, offset + this.constants.pageSize);
+        const pageBuffer = this.buffer.slice(offset, offset + this.format.pageSize);
 
         if (page === 0 || this.key.every((v) => v === 0)) {
             // no encryption
@@ -98,14 +98,14 @@ export default class Database {
      * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/data.c#L126-L138
      */
     public findRow(pageBuffer: Buffer, row: number): Buffer {
-        const rco = this.constants.dataPage.recordCountOffset;
+        const rco = this.format.dataPage.recordCountOffset;
 
         if (row > 1000) {
             throw new Error("Cannot read rows > 1000"); // TODO: why?
         }
 
         const start = pageBuffer.readUInt16LE(rco + 2 + row * 2);
-        const nextStart = row === 0 ? this.constants.pageSize : pageBuffer.readUInt16LE(rco + row * 2);
+        const nextStart = row === 0 ? this.format.pageSize : pageBuffer.readUInt16LE(rco + row * 2);
 
         return pageBuffer.slice(start, nextStart);
     }

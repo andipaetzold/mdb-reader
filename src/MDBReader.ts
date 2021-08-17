@@ -1,5 +1,5 @@
 import Database from "./Database";
-import { Format } from "./format";
+import { LegacyFormat } from "./JetFormat";
 import PageType, { assertPageType } from "./PageType";
 import SysObject, { isSysObjectType, isSystemObject, SysObjectType } from "./SysObject";
 import Table from "./Table";
@@ -49,8 +49,11 @@ export default class MDBReader {
         });
     }
 
-    public getFormat(): Format {
-        return this.db.constants.format;
+    /**
+     * @deprecated
+     */
+    public getFormat(): LegacyFormat {
+        return this.db.format.legacyFormat;
     }
 
     /**

@@ -57,22 +57,22 @@ export default class Table {
         this.definitionBuffer = buffer!;
 
         // Read row, column, and index counts
-        this.rowCount = this.definitionBuffer.readUInt32LE(this.db.constants.tableDefinitionPage.rowCountOffset);
+        this.rowCount = this.definitionBuffer.readUInt32LE(this.db.format.tableDefinitionPage.rowCountOffset);
 
-        this.columnCount = this.definitionBuffer.readUInt16LE(this.db.constants.tableDefinitionPage.columnCountOffset);
+        this.columnCount = this.definitionBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnCountOffset);
         this.variableColumnCount = this.definitionBuffer.readUInt16LE(
-            this.db.constants.tableDefinitionPage.variableColumnCountOffset
+            this.db.format.tableDefinitionPage.variableColumnCountOffset
         );
         this.fixedColumnCount = this.columnCount - this.variableColumnCount;
 
         this.logicalIndexCount = this.definitionBuffer.readInt32LE(
-            this.db.constants.tableDefinitionPage.logicalIndexCountOffset
+            this.db.format.tableDefinitionPage.logicalIndexCountOffset
         );
-        this.realIndexCount = this.definitionBuffer.readInt32LE(this.db.constants.tableDefinitionPage.realIndexCountOffset);
+        this.realIndexCount = this.definitionBuffer.readInt32LE(this.db.format.tableDefinitionPage.realIndexCountOffset);
 
         // Usage Map
         const usageMapBuffer = this.db.findPageRow(
-            this.definitionBuffer.readUInt32LE(this.db.constants.tableDefinitionPage.usageMapOffset)
+            this.definitionBuffer.readUInt32LE(this.db.format.tableDefinitionPage.usageMapOffset)
         );
         this.dataPages = findMapPages(usageMapBuffer, this.db);
     }
@@ -107,49 +107,49 @@ export default class Table {
         const columns: ColumnDefinition[] = [];
 
         let curDefinitionPos =
-            this.db.constants.tableDefinitionPage.realIndexStartOffset +
-            this.realIndexCount * this.db.constants.tableDefinitionPage.realIndexEntrySize;
+            this.db.format.tableDefinitionPage.realIndexStartOffset +
+            this.realIndexCount * this.db.format.tableDefinitionPage.realIndexEntrySize;
 
         let namesCursorPos =
-            curDefinitionPos + this.columnCount * this.db.constants.tableDefinitionPage.columnsDefinition.entrySize;
+            curDefinitionPos + this.columnCount * this.db.format.tableDefinitionPage.columnsDefinition.entrySize;
 
         for (let i = 0; i < this.columnCount; ++i) {
             const columnBuffer = this.definitionBuffer.slice(
                 curDefinitionPos,
-                curDefinitionPos + this.db.constants.tableDefinitionPage.columnsDefinition.entrySize
+                curDefinitionPos + this.db.format.tableDefinitionPage.columnsDefinition.entrySize
             );
 
             const type = getColumnType(
                 this.definitionBuffer.readUInt8(
-                    curDefinitionPos + this.db.constants.tableDefinitionPage.columnsDefinition.typeOffset
+                    curDefinitionPos + this.db.format.tableDefinitionPage.columnsDefinition.typeOffset
                 )
             );
 
             const nameLength = this.definitionBuffer.readUIntLE(
                 namesCursorPos,
-                this.db.constants.tableDefinitionPage.columnNames.nameLengthSize
+                this.db.format.tableDefinitionPage.columnNames.nameLengthSize
             );
-            namesCursorPos += this.db.constants.tableDefinitionPage.columnNames.nameLengthSize;
+            namesCursorPos += this.db.format.tableDefinitionPage.columnNames.nameLengthSize;
             const name = uncompressText(
                 this.definitionBuffer.slice(namesCursorPos, namesCursorPos + nameLength),
-                this.db.constants.format
+                this.db.format
             );
             namesCursorPos += nameLength;
 
             const column: ColumnDefinition = {
                 name,
                 type,
-                index: columnBuffer.readUInt8(this.db.constants.tableDefinitionPage.columnsDefinition.indexOffset),
+                index: columnBuffer.readUInt8(this.db.format.tableDefinitionPage.columnsDefinition.indexOffset),
                 variableIndex: columnBuffer.readUInt8(
-                    this.db.constants.tableDefinitionPage.columnsDefinition.variableIndexOffset
+                    this.db.format.tableDefinitionPage.columnsDefinition.variableIndexOffset
                 ),
                 size:
                     type === "boolean"
                         ? 0
-                        : columnBuffer.readUInt16LE(this.db.constants.tableDefinitionPage.columnsDefinition.sizeOffset),
-                fixedIndex: columnBuffer.readUInt8(this.db.constants.tableDefinitionPage.columnsDefinition.fixedIndexOffset),
+                        : columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.sizeOffset),
+                fixedIndex: columnBuffer.readUInt8(this.db.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset),
                 ...parseColumnFlags(
-                    columnBuffer.readUInt8(this.db.constants.tableDefinitionPage.columnsDefinition.flagsOffset)
+                    columnBuffer.readUInt8(this.db.format.tableDefinitionPage.columnsDefinition.flagsOffset)
                 ),
             };
 
@@ -160,7 +160,7 @@ export default class Table {
 
             columns.push(column);
 
-            curDefinitionPos += this.db.constants.tableDefinitionPage.columnsDefinition.entrySize;
+            curDefinitionPos += this.db.format.tableDefinitionPage.columnsDefinition.entrySize;
         }
 
         return columns;
@@ -212,12 +212,12 @@ export default class Table {
             throw new Error(`Data page ${page} does not belong to table ${this.name}`);
         }
 
-        const recordCount = pageBuffer.readUInt16LE(this.db.constants.dataPage.recordCountOffset);
+        const recordCount = pageBuffer.readUInt16LE(this.db.format.dataPage.recordCountOffset);
         const recordOffsets: { start: number; end: number }[] = [];
         for (let record = 0; record < recordCount; ++record) {
             const offsetMask = 0x1fff;
 
-            let recordStart = pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + 2 + record * 2);
+            let recordStart = pageBuffer.readUInt16LE(this.db.format.dataPage.record.countOffset + 2 + record * 2);
             if (recordStart & 0x4000) {
                 // deleted record
                 continue;
@@ -226,8 +226,8 @@ export default class Table {
 
             const nextStart =
                 record === 0
-                    ? this.db.constants.pageSize
-                    : pageBuffer.readUInt16LE(this.db.constants.dataPage.record.countOffset + record * 2) & offsetMask;
+                    ? this.db.format.pageSize
+                    : pageBuffer.readUInt16LE(this.db.format.dataPage.record.countOffset + record * 2) & offsetMask;
             const recordLength = nextStart - recordStart;
             const recordEnd = recordStart + recordLength - 1;
             recordOffsets.push({
@@ -241,14 +241,14 @@ export default class Table {
             const recordStart = recordOffset.start;
             const recordEnd = recordOffset.end;
 
-            const totalVariableCount = pageBuffer.readUIntLE(recordStart, this.db.constants.dataPage.record.columnCountSize);
+            const totalVariableCount = pageBuffer.readUIntLE(recordStart, this.db.format.dataPage.record.columnCountSize);
 
             const bitmaskSize = roundToFullByte(totalVariableCount);
 
             let variableColumnCount = 0;
             const variableColumnOffsets: number[] = [];
             if (this.variableColumnCount > 0) {
-                switch (this.db.constants.format) {
+                switch (this.db.format.legacyFormat) {
                     case "Jet3": {
                         variableColumnCount = pageBuffer.readUInt8(recordEnd - bitmaskSize);
 
@@ -309,7 +309,7 @@ export default class Table {
                 }
 
                 if (column.fixedLength && fixedColumnsFound < fixedColumnCount) {
-                    const colStart = column.fixedIndex + this.db.constants.dataPage.record.columnCountSize;
+                    const colStart = column.fixedIndex + this.db.format.dataPage.record.columnCountSize;
                     start = recordStart + colStart;
                     size = column.size;
                     ++fixedColumnsFound;

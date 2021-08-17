@@ -68,6 +68,9 @@ class MDBReader {
      */
     readonly buffer: Buffer;
 
+    /**
+     * @deprecated
+     */
     getFormat(): "Jet3" | "Jet4";
 
     /**

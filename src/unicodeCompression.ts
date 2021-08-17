@@ -1,10 +1,10 @@
-import { Format } from "./format";
+import { JetFormat } from "./JetFormat";
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/HACKING#L823-L831
  */
-export function uncompressText(buffer: Buffer, format: Format): string {
-    if (format === "Jet3") {
+export function uncompressText(buffer: Buffer, format: Pick<JetFormat, 'textEncoding'>): string {
+    if (format.textEncoding === "utf8") {
         return buffer.toString("utf8");
     }
 
