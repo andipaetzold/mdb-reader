@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/andipaetzold/mdb-reader/compare/v1.0.1...v1.0.2) (2021-08-17)
+
+
+### Bug Fixes
+
+* error message when page has unexpected type ([5d753e6](https://github.com/andipaetzold/mdb-reader/commit/5d753e69c0e462f77925165ef1d4982c0a289863))
+
 ## [1.0.1](https://github.com/andipaetzold/mdb-reader/compare/v1.0.0...v1.0.1) (2021-07-03)
 
 
