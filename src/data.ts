@@ -1,8 +1,8 @@
 import { ColumnDefinition } from "./column";
-import { Constants } from "./constants";
 import { readNumeric, readCurrency } from "./money";
 import { uncompressText } from "./unicodeCompression";
 import Database from "./Database";
+import { JetFormat } from "./JetFormat";
 
 export type Value = number | string | Buffer | Date | boolean | null;
 
@@ -26,7 +26,7 @@ export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Dat
         case "binary":
             return readBinary(buffer);
         case "text":
-            return readText(buffer, db.constants);
+            return readText(buffer, db.format);
         case "repid":
             return readRepID(buffer);
         case "datetime":
@@ -70,8 +70,8 @@ function readBinary(buffer: Buffer): Buffer {
     return result;
 }
 
-function readText(buffer: Buffer, constants: Pick<Constants, "format">): string {
-    return uncompressText(buffer, constants.format);
+function readText(buffer: Buffer, format: Pick<JetFormat, "textEncoding">): string {
+    return uncompressText(buffer, format);
 }
 
 function readRepID(buffer: Buffer): string {
@@ -94,12 +94,12 @@ function readMemo(buffer: Buffer, db: Database): string {
     const bitmask = buffer.readUInt8(3);
     if (bitmask & 0x80) {
         // inline
-        return uncompressText(buffer.slice(12, 12 + memoLength), db.constants.format);
+        return uncompressText(buffer.slice(12, 12 + memoLength), db.format);
     } else if (bitmask & 0x40) {
         // single page
         const pageRow = buffer.readUInt32LE(4);
         const rowBuffer = db.findPageRow(pageRow);
-        return uncompressText(rowBuffer.slice(0, memoLength), db.constants.format);
+        return uncompressText(rowBuffer.slice(0, memoLength), db.format);
     } else if (bitmask === 0) {
         // multi page
         let pageRow = buffer.readInt32LE(4);
@@ -120,7 +120,7 @@ function readMemo(buffer: Buffer, db: Database): string {
             pageRow = rowBuffer.readInt32LE(0);
         } while (pageRow !== 0);
 
-        return uncompressText(memoDataBuffer.slice(0, memoLength), db.constants.format);
+        return uncompressText(memoDataBuffer.slice(0, memoLength), db.format);
     } else {
         throw new Error(`Unknown memo type ${bitmask}`);
     }

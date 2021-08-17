@@ -29,7 +29,7 @@ function findMapPages0(buffer: Buffer): number[] {
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/map.c#L44-L84
  */
 function findMapPages1(buffer: Buffer, db: Database): number[] {
-    const bitmapLength = (db.constants.pageSize - 4) * 8;
+    const bitmapLength = (db.format.pageSize - 4) * 8;
     const mapCount = Math.floor((buffer.length - 1) / 4);
 
     const pages: number[] = [];
