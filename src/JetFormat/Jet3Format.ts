@@ -1,10 +1,12 @@
-import { JetFormat } from "./types";
+import { CodecType, JetFormat } from "./types";
 
 export const jet3Format: JetFormat = {
-    legacyFormat: 'Jet3',
+    legacyFormat: "Jet3",
+    codecType: CodecType.JET,
+
     pageSize: 2048,
 
-    textEncoding: 'utf8',
+    textEncoding: "utf8",
 
     databaseDefinitionPage: {
         passwordSize: 20,

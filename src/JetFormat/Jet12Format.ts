@@ -1,4 +1,7 @@
 import { jet4Format } from "./Jet4Format";
-import { JetFormat } from "./types";
+import { CodecType, JetFormat } from "./types";
 
-export const jet12Format: JetFormat = jet4Format;
+export const jet12Format: JetFormat = {
+    ...jet4Format,
+    codecType: CodecType.OFFICE,
+};

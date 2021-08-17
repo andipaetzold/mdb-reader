@@ -1,7 +1,9 @@
-import { JetFormat } from "./types";
+import { CodecType, JetFormat } from "./types";
 
 export const jet4Format: JetFormat = {
     legacyFormat: "Jet4",
+    codecType: CodecType.JET,
+
     pageSize: 4096,
 
     textEncoding: "ucs-2",

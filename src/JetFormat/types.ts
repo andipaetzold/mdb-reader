@@ -3,8 +3,15 @@
  */
 export type LegacyFormat = "Jet3" | "Jet4";
 
+export const enum CodecType {
+    JET,
+    MSISAM,
+    OFFICE,
+}
+
 export interface JetFormat {
     legacyFormat: LegacyFormat;
+    codecType: CodecType;
 
     pageSize: number;
 
