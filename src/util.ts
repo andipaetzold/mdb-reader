@@ -29,3 +29,7 @@ export function xor(a: Buffer, b: Buffer) {
 
     return buffer;
 }
+
+export function isEmptyBuffer(buffer: Buffer): boolean {
+    return buffer.every((v) => v === 0);
+}

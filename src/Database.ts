@@ -1,82 +1,44 @@
-import { readDateTime } from "./data";
 import { decrypt } from "./decrypt";
 import { getJetFormat, JetFormat } from "./JetFormat";
+import { createPageDecoder } from "./PageDecoder";
+import { PageDecoder } from "./PageDecoder/types";
 import PageType, { assertPageType } from "./PageType";
-import { xor } from "./util";
 
-const ENCRYPTION_START = 0x18;
-const ENCRYPTION_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]); // or reverse?
-
-const SYSTEM_CODE_PAGE_OFFSET = 0x3c;
-
-const KEY_OFFSET = 0x3e;
-const KEY_SIZE = 4;
-
-/**
- * Jet 3 only
- */
-const PASSWORD_OFFSET = 0x42;
-
-const CREATION_DATE_OFFSET = 0x72;
+const ENCODING_OFFSET = 0x18;
+const ENCODING_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]); // or reverse?
 
 export default class Database {
     public readonly format: JetFormat;
 
-    private readonly key: Buffer;
-    private readonly password: Buffer;
-
-    private readonly defaultCollation: number;
-    private readonly systemCodePage: number;
-
-    private readonly creationDate: Date;
+    private readonly pageDecoder: PageDecoder;
 
     public constructor(private readonly buffer: Buffer, password?: string) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
         this.format = getJetFormat(this.buffer);
 
-        // decrypt page
-        const decryptedBuffer = decrypt(
-            this.buffer.slice(ENCRYPTION_START, ENCRYPTION_START + this.format.databaseDefinitionPage.decryptedSize),
-            ENCRYPTION_KEY
+        // decode database definition page
+        const decodedBuffer = decrypt(
+            this.buffer.slice(ENCODING_OFFSET, ENCODING_OFFSET + this.format.databaseDefinitionPage.decryptedSize),
+            ENCODING_KEY
         );
-        decryptedBuffer.copy(this.buffer, ENCRYPTION_START);
+        decodedBuffer.copy(this.buffer, ENCODING_OFFSET);
 
-        // read data from decrypted page
-        this.defaultCollation = this.buffer.readUIntLE(
-            this.format.databaseDefinitionPage.defaultCollation.offset,
-            this.format.databaseDefinitionPage.defaultCollation.size
-        );
-        this.systemCodePage = this.buffer.readUInt16LE(SYSTEM_CODE_PAGE_OFFSET);
-
-        this.key = this.buffer.slice(KEY_OFFSET, KEY_OFFSET + KEY_SIZE);
-
-        this.creationDate = readDateTime(this.buffer.slice(CREATION_DATE_OFFSET));
-
-        this.password = this.buffer.slice(PASSWORD_OFFSET, PASSWORD_OFFSET + 14);
-        if (this.format.legacyFormat === "Jet4") {
-            this.password = xor(this.password, this.buffer.slice(CREATION_DATE_OFFSET, CREATION_DATE_OFFSET + 8));
-        }
+        this.pageDecoder = createPageDecoder(buffer);
     }
 
-    public getPage(page: number): Buffer {
-        const offset = page * this.format.pageSize;
+    public getPage(pageIndex: number): Buffer {
+        const offset = pageIndex * this.format.pageSize;
 
         if (this.buffer.length < offset) {
-            throw new Error(`Page ${page} does not exist`);
+            throw new Error(`Page ${pageIndex} does not exist`);
         }
 
         const pageBuffer = this.buffer.slice(offset, offset + this.format.pageSize);
-
-        if (page === 0 || this.key.every((v) => v === 0)) {
-            // no encryption
+        if (pageIndex === 0) {
             return pageBuffer;
         }
 
-        const pageIndexBuffer = Buffer.alloc(4);
-        pageIndexBuffer.writeUInt32LE(page);
-
-        const pagekey = xor(pageIndexBuffer, this.key);
-        return decrypt(pageBuffer, pagekey);
+        return this.pageDecoder(pageBuffer, pageIndex);
     }
 
     /**
