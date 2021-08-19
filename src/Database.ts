@@ -1,7 +1,7 @@
 import { decrypt } from "./decrypt";
 import { getJetFormat, JetFormat } from "./JetFormat";
-import { createPageDecoder } from "./PageDecoder";
-import { PageDecoder } from "./PageDecoder/types";
+import { createPageDecrypter } from "./PageDecrypter";
+import { PageDecrypter } from "./PageDecrypter/types";
 import PageType, { assertPageType } from "./PageType";
 
 const ENCODING_OFFSET = 0x18;
@@ -10,7 +10,7 @@ const ENCODING_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]); // or reverse?
 export default class Database {
     public readonly format: JetFormat;
 
-    private readonly pageDecoder: PageDecoder;
+    private readonly pageDecrypter: PageDecrypter;
 
     public constructor(private readonly buffer: Buffer, password?: string) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
@@ -23,7 +23,7 @@ export default class Database {
         );
         decodedBuffer.copy(this.buffer, ENCODING_OFFSET);
 
-        this.pageDecoder = createPageDecoder(buffer);
+        this.pageDecrypter = createPageDecrypter(buffer, password);
     }
 
     public getPage(pageIndex: number): Buffer {
@@ -38,7 +38,7 @@ export default class Database {
             return pageBuffer;
         }
 
-        return this.pageDecoder(pageBuffer, pageIndex);
+        return this.pageDecrypter(pageBuffer, pageIndex);
     }
 
     /**

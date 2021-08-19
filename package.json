@@ -50,5 +50,8 @@
         "watch": "npm run clean && rollup -cw",
         "test": "jest",
         "semantic-release": "semantic-release"
+    },
+    "dependencies": {
+        "fast-xml-parser": "^3.19.0"
     }
 }

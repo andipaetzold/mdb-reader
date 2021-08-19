@@ -33,3 +33,22 @@ export function xor(a: Buffer, b: Buffer) {
 export function isEmptyBuffer(buffer: Buffer): boolean {
     return buffer.every((v) => v === 0);
 }
+
+export function intToBuffer(n: number): Buffer {
+    const buffer = Buffer.allocUnsafe(4);
+    buffer.writeUInt32BE(n);
+    return buffer;
+}
+
+export function fixBufferLength(buffer: Buffer, length: number, padByte: number = 0): Buffer {
+    if (buffer.length > length) {
+        return buffer.slice(0, length);
+    }
+
+    if (buffer.length < length) {
+        return Buffer.from(buffer).fill(padByte, buffer.length, length);
+    }
+
+    // buffer already has correct length
+    return buffer;
+}
