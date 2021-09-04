@@ -288,9 +288,10 @@ export default class Table {
 
             const fixedColumnCount = totalVariableCount - variableColumnCount;
 
+            const lastColumnIndex = (columns as ColumnDefinition[]).sort((a, b) => b.index - a.index)[0]?.index ?? 0;
             const nullMask = pageBuffer.slice(
                 recordEnd - bitmaskSize + 1,
-                recordEnd - bitmaskSize + 1 + roundToFullByte(this.columnCount)
+                recordEnd - bitmaskSize + 1 + roundToFullByte(lastColumnIndex + 1)
             );
             let fixedColumnsFound = 0;
 
