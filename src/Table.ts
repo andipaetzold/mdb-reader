@@ -236,6 +236,7 @@ export default class Table {
             });
         }
 
+        const lastColumnIndex = (columns as ColumnDefinition[]).sort((a, b) => b.index - a.index)[0]?.index ?? 0;
         const data: { [column: string]: Value }[] = [];
         for (const recordOffset of recordOffsets) {
             const recordStart = recordOffset.start;
@@ -288,7 +289,6 @@ export default class Table {
 
             const fixedColumnCount = totalVariableCount - variableColumnCount;
 
-            const lastColumnIndex = (columns as ColumnDefinition[]).sort((a, b) => b.index - a.index)[0]?.index ?? 0;
             const nullMask = pageBuffer.slice(
                 recordEnd - bitmaskSize + 1,
                 recordEnd - bitmaskSize + 1 + roundToFullByte(lastColumnIndex + 1)
