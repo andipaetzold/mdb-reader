@@ -109,6 +109,8 @@ describe("getData()", () => {
     const path = resolve(__dirname, "data/real/ASampleDatabase.accdb");
     let table: Table;
 
+    const withDeletedColPath = resolve(__dirname, "data/V2016/withdeletedcol.accdb");
+
     beforeAll(() => {
         const buffer = readFileSync(path);
         const reader = new MDBReader(buffer);
@@ -161,5 +163,12 @@ describe("getData()", () => {
 
         const assetNumbers = rows.map((row) => row["Asset No"]);
         expect(new Set(assetNumbers).size).toBe(15);
+    });
+
+    it("with offset column indices due to a deletion", () => {
+        const buffer = readFileSync(withDeletedColPath);
+        const reader = new MDBReader(buffer);
+        table = reader.getTable("Table1");
+        expect(table.getData()).toStrictEqual([{ col1: 0, col2: 1, col3: 2, col5: 4, col6: 5, col7: 6, col8: 7 }]);
     });
 });
