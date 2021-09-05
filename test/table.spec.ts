@@ -168,7 +168,9 @@ describe("getData()", () => {
     it("with offset column indices due to a deletion", () => {
         const buffer = readFileSync(withDeletedColPath);
         const reader = new MDBReader(buffer);
-        table = reader.getTable("Table1");
-        expect(table.getData()).toStrictEqual([{ col1: 0, col2: 1, col3: 2, col5: 4, col6: 5, col7: 6, col8: 7 }]);
+        const withDeletedColTable = reader.getTable("Table1");
+        expect(withDeletedColTable.getData()).toStrictEqual([
+            { col1: 0, col2: 1, col3: 2, col5: 4, col6: 5, col7: 6, col8: 7 },
+        ]);
     });
 });
