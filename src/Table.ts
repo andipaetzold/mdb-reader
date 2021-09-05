@@ -236,7 +236,7 @@ export default class Table {
             });
         }
 
-        const lastColumnIndex = (columns as ColumnDefinition[]).sort((a, b) => b.index - a.index)[0]?.index ?? 0;
+        const lastColumnIndex = Math.max(...columns.map((c) => c.index), 0);
         const data: { [column: string]: Value }[] = [];
         for (const recordOffset of recordOffsets) {
             const recordStart = recordOffset.start;
