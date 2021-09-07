@@ -106,60 +106,75 @@ describe.each`
 });
 
 describe("getData()", () => {
-    const path = resolve(__dirname, "data/real/ASampleDatabase.accdb");
-    let table: Table;
+    describe("real/ASampleDatabase.accdb", () => {
+        const path = resolve(__dirname, "data/real/ASampleDatabase.accdb");
+        let table: Table;
 
-    beforeAll(() => {
-        const buffer = readFileSync(path);
-        const reader = new MDBReader(buffer);
-        table = reader.getTable("Asset Items");
+        beforeAll(() => {
+            const buffer = readFileSync(path);
+            const reader = new MDBReader(buffer);
+            table = reader.getTable("Asset Items");
+        });
+
+        it("no options", () => {
+            const rows = table.getData();
+            expect(rows.length).toBe(65);
+
+            const assetNumbers = rows.map((row) => row["Asset No"]);
+            expect(new Set(assetNumbers).size).toBe(65);
+        });
+
+        it("with rowOffset", () => {
+            const rows = table.getData({ rowOffset: 30 });
+            expect(rows.length).toBe(35);
+
+            const assetNumbers = rows.map((row) => row["Asset No"]);
+            expect(new Set(assetNumbers).size).toBe(35);
+        });
+
+        it("with rowOffset > rowCount", () => {
+            const rows = table.getData({ rowOffset: 100 });
+            expect(rows.length).toBe(0);
+
+            const assetNumbers = rows.map((row) => row["Asset No"]);
+            expect(new Set(assetNumbers).size).toBe(0);
+        });
+
+        it("with rowLimit", () => {
+            const rows = table.getData({ rowLimit: 40 });
+            expect(rows.length).toBe(40);
+
+            const assetNumbers = rows.map((row) => row["Asset No"]);
+            expect(new Set(assetNumbers).size).toBe(40);
+        });
+
+        it("with rowLimit > rowCount", () => {
+            const rows = table.getData({ rowLimit: 100 });
+            expect(rows.length).toBe(65);
+
+            const assetNumbers = rows.map((row) => row["Asset No"]);
+            expect(new Set(assetNumbers).size).toBe(65);
+        });
+
+        it("with rowOffset & rowLimit", () => {
+            const rows = table.getData({ rowOffset: 30, rowLimit: 15 });
+            expect(rows.length).toBe(15);
+
+            const assetNumbers = rows.map((row) => row["Asset No"]);
+            expect(new Set(assetNumbers).size).toBe(15);
+        });
     });
 
-    it("no options", () => {
-        const rows = table.getData();
-        expect(rows.length).toBe(65);
+    describe("V2016/withdeletedcol.accdb", () => {
+        it("with offset column indices due to a column deletion", () => {
+            const withDeletedColPath = resolve(__dirname, "data/V2016/withdeletedcol.accdb");
+            const buffer = readFileSync(withDeletedColPath);
+            const reader = new MDBReader(buffer);
+            const withDeletedColTable = reader.getTable("Table1");
 
-        const assetNumbers = rows.map((row) => row["Asset No"]);
-        expect(new Set(assetNumbers).size).toBe(65);
-    });
-
-    it("with rowOffset", () => {
-        const rows = table.getData({ rowOffset: 30 });
-        expect(rows.length).toBe(35);
-
-        const assetNumbers = rows.map((row) => row["Asset No"]);
-        expect(new Set(assetNumbers).size).toBe(35);
-    });
-
-    it("with rowOffset > rowCount", () => {
-        const rows = table.getData({ rowOffset: 100 });
-        expect(rows.length).toBe(0);
-
-        const assetNumbers = rows.map((row) => row["Asset No"]);
-        expect(new Set(assetNumbers).size).toBe(0);
-    });
-
-    it("with rowLimit", () => {
-        const rows = table.getData({ rowLimit: 40 });
-        expect(rows.length).toBe(40);
-
-        const assetNumbers = rows.map((row) => row["Asset No"]);
-        expect(new Set(assetNumbers).size).toBe(40);
-    });
-
-    it("with rowLimit > rowCount", () => {
-        const rows = table.getData({ rowLimit: 100 });
-        expect(rows.length).toBe(65);
-
-        const assetNumbers = rows.map((row) => row["Asset No"]);
-        expect(new Set(assetNumbers).size).toBe(65);
-    });
-
-    it("with rowOffset & rowLimit", () => {
-        const rows = table.getData({ rowOffset: 30, rowLimit: 15 });
-        expect(rows.length).toBe(15);
-
-        const assetNumbers = rows.map((row) => row["Asset No"]);
-        expect(new Set(assetNumbers).size).toBe(15);
+            expect(withDeletedColTable.getData()).toStrictEqual([
+                { col1: 0, col2: 1, col3: 2, col5: 4, col6: 5, col7: 6, col8: 7 },
+            ]);
+        });
     });
 });

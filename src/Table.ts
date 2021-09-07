@@ -236,6 +236,7 @@ export default class Table {
             });
         }
 
+        const lastColumnIndex = Math.max(...columns.map((c) => c.index), 0);
         const data: { [column: string]: Value }[] = [];
         for (const recordOffset of recordOffsets) {
             const recordStart = recordOffset.start;
@@ -290,7 +291,7 @@ export default class Table {
 
             const nullMask = pageBuffer.slice(
                 recordEnd - bitmaskSize + 1,
-                recordEnd - bitmaskSize + 1 + roundToFullByte(this.columnCount)
+                recordEnd - bitmaskSize + 1 + roundToFullByte(lastColumnIndex + 1)
             );
             let fixedColumnsFound = 0;
 
