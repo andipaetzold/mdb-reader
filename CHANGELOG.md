@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/andipaetzold/mdb-reader/compare/v1.0.2...v1.0.3) (2021-09-07)
+
+
+### Bug Fixes
+
+* null values in tables with deleted columns ([#97](https://github.com/andipaetzold/mdb-reader/issues/97)) ([cb95282](https://github.com/andipaetzold/mdb-reader/commit/cb9528200b8d7fb9d3cceee59881391e2a1b74e9))
+
 ## [1.0.2](https://github.com/andipaetzold/mdb-reader/compare/v1.0.1...v1.0.2) (2021-08-17)
 
 
