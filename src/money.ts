@@ -27,8 +27,7 @@ export function readCurrency(buffer: Buffer): string {
         }
     }
 
-    for (let i = 0; i < bytesCount; ++i) {
-        const byte = bytes[i];
+    for (const byte of bytes) {
         product = addArray(product, multiplyArray(multiplier, toArray(byte, MAX_NUMERIC_PRECISION)));
         multiplier = multiplyArray(multiplier, toArray(256, MAX_NUMERIC_PRECISION));
     }
