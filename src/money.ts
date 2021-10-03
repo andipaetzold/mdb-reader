@@ -4,7 +4,7 @@ const MAX_MONEY_PRECISION = 20;
 const MAX_NUMERIC_PRECISION = 40;
 
 /**
- * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L36-L80
+ * @see https://github.com/mdbtools/mdbtools/blob/c3df30837ec2439d18c5515906072dc3306c0795/src/libmdb/money.c#L33-L75
  */
 export function readCurrency(buffer: Buffer): string {
     const bytesCount = 8;
@@ -37,7 +37,7 @@ export function readCurrency(buffer: Buffer): string {
 }
 
 /**
- * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L82-L107
+ * @see https://github.com/mdbtools/mdbtools/blob/c3df30837ec2439d18c5515906072dc3306c0795/src/libmdb/money.c#L77-L100
  */
 export function readNumeric(buffer: Buffer, _precision: number, scale: number): string {
     let product: ReadonlyArray<number> = toArray(0, MAX_NUMERIC_PRECISION);
@@ -55,7 +55,7 @@ export function readNumeric(buffer: Buffer, _precision: number, scale: number): 
 }
 
 /**
- * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L143-L167
+ * @see https://github.com/mdbtools/mdbtools/blob/c3df30837ec2439d18c5515906072dc3306c0795/src/libmdb/money.c#L132-L156
  */
 function buildValue(array: ReadonlyArray<number>, scale: number, negative: boolean): string {
     const length = array.length;
