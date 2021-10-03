@@ -1,6 +1,7 @@
 import { addArray, multiplyArray, toArray } from "./array";
 
-const MAX_NUMERIC_PRECISION = 28;
+const MAX_MONEY_PRECISION = 20;
+const MAX_NUMERIC_PRECISION = 40;
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/money.c#L36-L80
@@ -9,8 +10,8 @@ export function readCurrency(buffer: Buffer): string {
     const bytesCount = 8;
     const scale = 4;
 
-    let product: ReadonlyArray<number> = toArray(0, MAX_NUMERIC_PRECISION);
-    let multiplier: ReadonlyArray<number> = toArray(1, MAX_NUMERIC_PRECISION);
+    let product: ReadonlyArray<number> = toArray(0, MAX_MONEY_PRECISION);
+    let multiplier: ReadonlyArray<number> = toArray(1, MAX_MONEY_PRECISION);
     const bytes = buffer.slice(0, bytesCount);
 
     let negative = false;
@@ -29,8 +30,8 @@ export function readCurrency(buffer: Buffer): string {
 
     for (let i = 0; i < bytesCount; ++i) {
         const byte = bytes[i];
-        product = addArray(product, multiplyArray(multiplier, toArray(byte, MAX_NUMERIC_PRECISION)));
-        multiplier = multiplyArray(multiplier, toArray(256, MAX_NUMERIC_PRECISION));
+        product = addArray(product, multiplyArray(multiplier, toArray(byte, MAX_MONEY_PRECISION)));
+        multiplier = multiplyArray(multiplier, toArray(256, MAX_MONEY_PRECISION));
     }
 
     return buildValue(product, scale, negative);
