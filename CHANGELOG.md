@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/andipaetzold/mdb-reader/compare/v1.0.3...v1.0.4) (2021-10-04)
+
+
+### Bug Fixes
+
+* max precision for money & numeric data ([9744b6c](https://github.com/andipaetzold/mdb-reader/commit/9744b6cd256edb8a27a26670deb2f2e27c2702cb))
+
 ## [1.0.3](https://github.com/andipaetzold/mdb-reader/compare/v1.0.2...v1.0.3) (2021-09-07)
 
 
