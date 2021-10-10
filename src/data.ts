@@ -4,7 +4,7 @@ import { uncompressText } from "./unicodeCompression";
 import Database from "./Database";
 import { JetFormat } from "./JetFormat";
 
-export type Value = number | string | Buffer | Date | boolean | null;
+export type Value = number | BigInt | string | Buffer | Date | boolean | null;
 
 export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Database): Exclude<Value, boolean | null> {
     if (column.type === "boolean") {
@@ -39,6 +39,8 @@ export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Dat
             return readMemo(buffer, db);
         case "ole":
             return readOLE(buffer, db);
+        case "bigint":
+            return readBigInt(buffer);
         default:
             return `Column type ${column.type} is currently not supported`;
     }
@@ -167,4 +169,8 @@ function readOLE(buffer: Buffer, db: Database): Buffer {
     } else {
         throw new Error(`Unknown memo type ${bitmask}`);
     }
+}
+
+function readBigInt(buffer: Buffer): BigInt {
+    return buffer.readBigInt64LE();
 }

@@ -222,6 +222,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | repid       | `string`        |
 | numeric     | `string`        |
 | complex     | `number`        |
+| bigint      | `BigInt`        |
 
 ## Development
 
