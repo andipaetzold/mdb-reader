@@ -1,3 +1,15 @@
+# [2.0.0-next.1](https://github.com/andipaetzold/mdb-reader/compare/v1.0.4...v2.0.0-next.1) (2021-10-10)
+
+
+### Features
+
+* drop node 12 support ([#110](https://github.com/andipaetzold/mdb-reader/issues/110)) ([05e7952](https://github.com/andipaetzold/mdb-reader/commit/05e795272972b6217f98d27397c56b51b01ec877))
+
+
+### BREAKING CHANGES
+
+* drop node 12 support
+
 ## [1.0.4](https://github.com/andipaetzold/mdb-reader/compare/v1.0.3...v1.0.4) (2021-10-04)
 
 
