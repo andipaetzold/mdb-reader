@@ -1,3 +1,10 @@
+# [2.0.0-next.2](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.1...v2.0.0-next.2) (2021-10-10)
+
+
+### Features
+
+* support BigInt ([#109](https://github.com/andipaetzold/mdb-reader/issues/109)) ([7f78777](https://github.com/andipaetzold/mdb-reader/commit/7f78777b568c57f18832f0a6a84b4e347fc28777))
+
 # [2.0.0-next.1](https://github.com/andipaetzold/mdb-reader/compare/v1.0.4...v2.0.0-next.1) (2021-10-10)
 
 
