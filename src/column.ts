@@ -51,7 +51,8 @@ export type ColumnType =
     | "repid"
     | "numeric"
     | "complex"
-    | "bigint";
+    | "bigint"
+    | "datetimextended";
 
 const columnTypeMap: { [v: number]: ColumnType } = {
     0x01: "boolean",
@@ -70,6 +71,7 @@ const columnTypeMap: { [v: number]: ColumnType } = {
     0x10: "numeric",
     0x12: "complex",
     0x13: "bigint",
+    0x14: "datetimextended",
 };
 
 /**

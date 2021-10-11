@@ -181,7 +181,9 @@ interface Column {
         | "memo"
         | "repid"
         | "numeric"
-        | "complex";
+        | "complex"
+        | "bigint"
+        | "datetimeextended";
     size: number;
 
     fixedLength: boolean;
@@ -205,24 +207,25 @@ interface Column {
 
 The data types returned by `Table.getData()` depends on the column type. Null values are always returned as `null`.
 
-| Column Type | JavaScript Type |
-| ----------- | --------------- |
-| boolean     | `boolean`       |
-| byte        | `number`        |
-| integer     | `number`        |
-| long        | `number`        |
-| currency    | `string`        |
-| float       | `number`        |
-| double      | `number`        |
-| datetime    | `Date`          |
-| binary      | `Buffer`        |
-| text        | `string`        |
-| ole         | `Buffer`        |
-| memo        | `string`        |
-| repid       | `string`        |
-| numeric     | `string`        |
-| complex     | `number`        |
-| bigint      | `BigInt`        |
+| Column Type      | JavaScript Type |
+| ---------------- | --------------- |
+| boolean          | `boolean`       |
+| byte             | `number`        |
+| integer          | `number`        |
+| long             | `number`        |
+| currency         | `string`        |
+| float            | `number`        |
+| double           | `number`        |
+| datetime         | `Date`          |
+| binary           | `Buffer`        |
+| text             | `string`        |
+| ole              | `Buffer`        |
+| memo             | `string`        |
+| repid            | `string`        |
+| numeric          | `string`        |
+| complex          | `number`        |
+| bigint           | `BigInt`        |
+| datetimeextended | Not supported   |
 
 ## Development
 
@@ -231,8 +234,8 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 To build the library, first install the dependencies, then run `npm run build` for a single build or `npm run watch` for automatic rebuilds.
 
 ```sh
-$ npm install
-$ npm run build
+npm install
+npm run build
 ```
 
 ### Tests
@@ -240,8 +243,8 @@ $ npm run build
 To run the tests, first install the dependencies, then run `npm test`. Watch mode can be started with `npm test -- --watch`.
 
 ```sh
-$ npm install
-$ npm test
+npm install
+npm test
 ```
 
 ## Resources
