@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/andipaetzold/mdb-reader/compare/v1.0.4...v1.0.5) (2021-10-11)
+
+
+### Bug Fixes
+
+* don't throw for BigInt and Date/Time Extended ([e02ef3a](https://github.com/andipaetzold/mdb-reader/commit/e02ef3a2f1be14c8333798848fed4118303929bc))
+
 ## [1.0.4](https://github.com/andipaetzold/mdb-reader/compare/v1.0.3...v1.0.4) (2021-10-04)
 
 
