@@ -147,7 +147,7 @@ export default class Table {
                     type === "boolean"
                         ? 0
                         : columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.sizeOffset),
-                fixedIndex: columnBuffer.readUInt8(this.db.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset),
+                fixedIndex: columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset),
                 ...parseColumnFlags(
                     columnBuffer.readUInt8(this.db.format.tableDefinitionPage.columnsDefinition.flagsOffset)
                 ),
