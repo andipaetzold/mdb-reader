@@ -1,3 +1,13 @@
+# [2.0.0-next.4](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.3...v2.0.0-next.4) (2021-10-11)
+
+
+* feat!: remove MDBReader.getFormat() (#112) ([7600737](https://github.com/andipaetzold/mdb-reader/commit/76007376b63382af9f3bf64cc1125867a429b35f)), closes [#112](https://github.com/andipaetzold/mdb-reader/issues/112)
+
+
+### BREAKING CHANGES
+
+* remove MDBReader.getFormat()
+
 # [2.0.0-next.3](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.2...v2.0.0-next.3) (2021-10-11)
 
 
