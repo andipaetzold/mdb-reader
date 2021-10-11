@@ -1,7 +1,6 @@
 import { JetFormat } from "./types";
 
 export const jet4Format: JetFormat = {
-    legacyFormat: "Jet4",
     pageSize: 4096,
 
     textEncoding: "ucs-2",
@@ -13,6 +12,7 @@ export const jet4Format: JetFormat = {
             countOffset: 12,
 
             columnCountSize: 2,
+            variableColumnCountSize: 2,
         },
     },
     tableDefinitionPage: {

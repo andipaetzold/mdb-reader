@@ -1,11 +1,4 @@
-/**
- * @deprecated
- */
-export type LegacyFormat = "Jet3" | "Jet4";
-
 export interface JetFormat {
-    legacyFormat: LegacyFormat;
-
     pageSize: number;
 
     textEncoding: "utf8" | "ucs-2";
@@ -17,6 +10,7 @@ export interface JetFormat {
             countOffset: number;
 
             columnCountSize: number;
+            variableColumnCountSize: 1 | 2;
         };
     };
 

@@ -1,7 +1,6 @@
 import { JetFormat } from "./types";
 
 export const jet3Format: JetFormat = {
-    legacyFormat: 'Jet3',
     pageSize: 2048,
 
     textEncoding: 'utf8',
@@ -13,6 +12,7 @@ export const jet3Format: JetFormat = {
             countOffset: 8,
 
             columnCountSize: 1,
+            variableColumnCountSize: 1,
         },
     },
     tableDefinitionPage: {

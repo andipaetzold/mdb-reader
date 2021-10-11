@@ -249,8 +249,8 @@ export default class Table {
             let variableColumnCount = 0;
             const variableColumnOffsets: number[] = [];
             if (this.variableColumnCount > 0) {
-                switch (this.db.format.legacyFormat) {
-                    case "Jet3": {
+                switch (this.db.format.dataPage.record.variableColumnCountSize) {
+                    case 1: {
                         variableColumnCount = pageBuffer.readUInt8(recordEnd - bitmaskSize);
 
                         // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L125-L147
@@ -275,7 +275,7 @@ export default class Table {
                         }
                         break;
                     }
-                    case "Jet4": {
+                    case 2: {
                         variableColumnCount = pageBuffer.readUInt16LE(recordEnd - bitmaskSize - 1);
 
                         // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L115-L124
