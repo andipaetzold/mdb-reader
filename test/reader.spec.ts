@@ -3,13 +3,13 @@ import { readFileSync } from "fs";
 import MDBReader from "../src";
 
 describe.each`
-    filename              | format
-    ${"V1997/test.mdb"}   | ${"Jet3"}
-    ${"V2000/test.mdb"}   | ${"Jet4"}
-    ${"V2003/test.mdb"}   | ${"Jet4"}
-    ${"V2007/test.accdb"} | ${"Jet4"}
-    ${"V2010/test.accdb"} | ${"Jet4"}
-`("$filename", ({ filename, format }) => {
+    filename
+    ${"V1997/test.mdb"}
+    ${"V2000/test.mdb"}
+    ${"V2003/test.mdb"}
+    ${"V2007/test.accdb"}
+    ${"V2010/test.accdb"}
+`("$filename", ({ filename }) => {
     const path = resolve(__dirname, "data", filename);
 
     let reader: MDBReader;
@@ -17,10 +17,6 @@ describe.each`
     beforeEach(() => {
         const buffer = readFileSync(path);
         reader = new MDBReader(buffer);
-    });
-
-    it("getFormat()", () => {
-        expect(reader.getFormat()).toBe(format);
     });
 
     describe("getTable()", () => {

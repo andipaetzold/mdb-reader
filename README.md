@@ -69,11 +69,6 @@ class MDBReader {
     readonly buffer: Buffer;
 
     /**
-     * @deprecated
-     */
-    getFormat(): "Jet3" | "Jet4";
-
-    /**
      * Returns an array of table names.
      *
      * @param normalTables Includes user tables.

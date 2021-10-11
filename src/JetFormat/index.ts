@@ -8,7 +8,7 @@ import { jet4Format } from "./Jet4Format";
 import { msisamFormat } from "./MSISAMFormat";
 import { JetFormat } from "./types";
 
-export type { JetFormat, LegacyFormat } from "./types";
+export type { JetFormat } from "./types";
 
 const OFFSET_VERSION = 0x14;
 const OFFSET_ENGINE_NAME = 0x4;
