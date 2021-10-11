@@ -181,7 +181,9 @@ interface Column {
         | "memo"
         | "repid"
         | "numeric"
-        | "complex";
+        | "complex"
+        | "bigint"
+        | "datetimeextended";
     size: number;
 
     fixedLength: boolean;
@@ -205,23 +207,25 @@ interface Column {
 
 The data types returned by `Table.getData()` depends on the column type. Null values are always returned as `null`.
 
-| Column Type | JavaScript Type |
-| ----------- | --------------- |
-| boolean     | `boolean`       |
-| byte        | `number`        |
-| integer     | `number`        |
-| long        | `number`        |
-| currency    | `string`        |
-| float       | `number`        |
-| double      | `number`        |
-| datetime    | `Date`          |
-| binary      | `Buffer`        |
-| text        | `string`        |
-| ole         | `Buffer`        |
-| memo        | `string`        |
-| repid       | `string`        |
-| numeric     | `string`        |
-| complex     | `number`        |
+| Column Type      | JavaScript Type                           |
+| ---------------- | ----------------------------------------- |
+| boolean          | `boolean`                                 |
+| byte             | `number`                                  |
+| integer          | `number`                                  |
+| long             | `number`                                  |
+| currency         | `string`                                  |
+| float            | `number`                                  |
+| double           | `number`                                  |
+| datetime         | `Date`                                    |
+| binary           | `Buffer`                                  |
+| text             | `string`                                  |
+| ole              | `Buffer`                                  |
+| memo             | `string`                                  |
+| repid            | `string`                                  |
+| numeric          | `string`                                  |
+| complex          | `number`                                  |
+| bigint           | Not supported. Coming in `mdb-reader` v2. |
+| datetimeextended | Not supported                             |
 
 ## Development
 
