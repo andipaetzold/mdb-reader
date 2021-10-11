@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/andipaetzold/mdb-reader/compare/v1.0.5...v1.0.6) (2021-10-11)
+
+
+### Bug Fixes
+
+* handle tables with over 256 cols (incl. deleted) ([#111](https://github.com/andipaetzold/mdb-reader/issues/111)) ([e5f0d19](https://github.com/andipaetzold/mdb-reader/commit/e5f0d1911df6917a86fe0daa5047a8284ba9fe4a))
+
 ## [1.0.5](https://github.com/andipaetzold/mdb-reader/compare/v1.0.4...v1.0.5) (2021-10-11)
 
 
