@@ -234,8 +234,8 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 To build the library, first install the dependencies, then run `npm run build` for a single build or `npm run watch` for automatic rebuilds.
 
 ```sh
-$ npm install
-$ npm run build
+npm install
+npm run build
 ```
 
 ### Tests
@@ -243,8 +243,8 @@ $ npm run build
 To run the tests, first install the dependencies, then run `npm test`. Watch mode can be started with `npm test -- --watch`.
 
 ```sh
-$ npm install
-$ npm test
+npm install
+npm test
 ```
 
 ## Resources
