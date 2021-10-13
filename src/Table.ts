@@ -32,9 +32,6 @@ export default class Table {
      * @param firstDefinitionPage The first page of the table definition referenced in the corresponding MSysObject
      */
     public constructor(
-        /**
-         * Table of the table.
-         */
         public readonly name: string,
         private readonly db: Database,
         private readonly firstDefinitionPage: number
