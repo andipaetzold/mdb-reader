@@ -1,3 +1,13 @@
+# [2.0.0-next.5](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.4...v2.0.0-next.5) (2021-10-16)
+
+
+* feat!: do not publish bundled version (#114) ([7d3fd1b](https://github.com/andipaetzold/mdb-reader/commit/7d3fd1b96b76e2dd80ab22cc3d0f0a7370c503a1)), closes [#114](https://github.com/andipaetzold/mdb-reader/issues/114)
+
+
+### BREAKING CHANGES
+
+* The package doesn't include a bundled version anymore
+
 # [2.0.0-next.4](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.3...v2.0.0-next.4) (2021-10-11)
 
 
