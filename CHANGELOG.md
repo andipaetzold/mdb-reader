@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/andipaetzold/mdb-reader/compare/v1.0.6...v1.0.7) (2021-10-22)
+
+
+### Bug Fixes
+
+* mixed endianness of guids ([#118](https://github.com/andipaetzold/mdb-reader/issues/118)) ([ac7790c](https://github.com/andipaetzold/mdb-reader/commit/ac7790c3888156f68a8503b94f647ad447d4fef2))
+
 ## [1.0.6](https://github.com/andipaetzold/mdb-reader/compare/v1.0.5...v1.0.6) (2021-10-11)
 
 
