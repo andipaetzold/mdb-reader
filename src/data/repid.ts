@@ -1,4 +1,18 @@
+/**
+ * Read replication ID
+ *
+ * @see https://github.com/mdbtools/mdbtools/blob/c3df30837ec2439d18c5515906072dc3306c0795/src/libmdb/data.c#L958-L972
+ */
 export function readRepID(buffer: Buffer): string {
-    const str = buffer.toString("hex");
-    return `${str.slice(0, 8)}-${str.slice(8, 12)}-${str.slice(12, 16)}-${str.slice(16, 20)}-${str.slice(20)}`;
+    return (
+        buffer.slice(0, 4).swap32().toString("hex") + // swap for little-endian
+        "-" +
+        buffer.slice(4, 6).swap16().toString("hex") + // swap for little-endian
+        "-" +
+        buffer.slice(6, 8).swap16().toString("hex") + // swap for little-endian
+        "-" +
+        buffer.slice(8, 10).toString("hex") + // big-endian
+        "-" +
+        buffer.slice(10, 16).toString("hex") // big-endian
+    );
 }
