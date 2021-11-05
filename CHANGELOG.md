@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/andipaetzold/mdb-reader/compare/v1.0.7...v1.0.8) (2021-11-05)
+
+
+### Bug Fixes
+
+* round milliseconds in datetime parser ([#123](https://github.com/andipaetzold/mdb-reader/issues/123)) ([b1b4379](https://github.com/andipaetzold/mdb-reader/commit/b1b4379b830041c6a725b67d165d0811e98d8a67))
+
 ## [1.0.7](https://github.com/andipaetzold/mdb-reader/compare/v1.0.6...v1.0.7) (2021-10-22)
 
 
