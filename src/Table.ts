@@ -95,8 +95,6 @@ export default class Table {
     public getColumns(): Column[] {
         const columnDefinitions = this.getColumnDefinitions();
 
-        columnDefinitions.sort((a, b) => a.index - b.index);
-
         return columnDefinitions.map(({ index, variableIndex, fixedIndex, ...rest }) => rest);
     }
 
@@ -160,7 +158,7 @@ export default class Table {
             curDefinitionPos += this.db.format.tableDefinitionPage.columnsDefinition.entrySize;
         }
 
-        return columns;
+        return columns.sort((a, b) => a.index - b.index);
     }
 
     /**
