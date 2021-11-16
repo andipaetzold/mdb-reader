@@ -1,3 +1,13 @@
+# [2.0.0-next.6](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.5...v2.0.0-next.6) (2021-11-16)
+
+
+### Bug Fixes
+
+* handle tables with over 256 cols (incl. deleted) ([#111](https://github.com/andipaetzold/mdb-reader/issues/111)) ([e5f0d19](https://github.com/andipaetzold/mdb-reader/commit/e5f0d1911df6917a86fe0daa5047a8284ba9fe4a))
+* incorrect boolean values in tables with inserted columns ([#124](https://github.com/andipaetzold/mdb-reader/issues/124)) ([0d4b78c](https://github.com/andipaetzold/mdb-reader/commit/0d4b78cc14b26ea0fcfbbe6768dae5ed3a418936))
+* mixed endianness of guids ([#118](https://github.com/andipaetzold/mdb-reader/issues/118)) ([ac7790c](https://github.com/andipaetzold/mdb-reader/commit/ac7790c3888156f68a8503b94f647ad447d4fef2))
+* round milliseconds in datetime parser ([#123](https://github.com/andipaetzold/mdb-reader/issues/123)) ([b1b4379](https://github.com/andipaetzold/mdb-reader/commit/b1b4379b830041c6a725b67d165d0811e98d8a67))
+
 # [2.0.0-next.5](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.4...v2.0.0-next.5) (2021-10-16)
 
 

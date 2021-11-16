@@ -1,6 +1,6 @@
 {
     "name": "mdb-reader",
-    "version": "2.0.0-next.5",
+    "version": "2.0.0-next.6",
     "description": "JavaScript library to read data from Access databases",
     "main": "lib/cjs/index.js",
     "module": "lib/esm/index.js",
