@@ -95,6 +95,8 @@ export default class Table {
     public getColumns(): Column[] {
         const columnDefinitions = this.getColumnDefinitions();
 
+        columnDefinitions.sort((a, b) => a.index - b.index);
+
         return columnDefinitions.map(({ index, variableIndex, fixedIndex, ...rest }) => rest);
     }
 
@@ -158,7 +160,7 @@ export default class Table {
             curDefinitionPos += this.db.format.tableDefinitionPage.columnsDefinition.entrySize;
         }
 
-        return columns.sort((a, b) => a.index - b.index);
+        return columns;
     }
 
     /**
@@ -291,7 +293,7 @@ export default class Table {
             let fixedColumnsFound = 0;
 
             const recordValues: { [column: string]: Value } = {};
-            for (const column of columns) {
+            for (const column of [...columns].sort((a, b) => a.index - b.index)) {
                 /**
                  * undefined = will be set later. Undefined will never be returned to the user.
                  * null = actually null
