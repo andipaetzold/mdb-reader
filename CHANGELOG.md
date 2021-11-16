@@ -40,9 +40,34 @@
 * drop node 12 support ([#110](https://github.com/andipaetzold/mdb-reader/issues/110)) ([05e7952](https://github.com/andipaetzold/mdb-reader/commit/05e795272972b6217f98d27397c56b51b01ec877))
 
 
-### BREAKING CHANGES
 
-* drop node 12 support
+## [1.0.9](https://github.com/andipaetzold/mdb-reader/compare/v1.0.8...v1.0.9) (2021-11-16)
+
+
+### Bug Fixes
+
+* incorrect boolean values in tables with inserted columns ([#124](https://github.com/andipaetzold/mdb-reader/issues/124)) ([0d4b78c](https://github.com/andipaetzold/mdb-reader/commit/0d4b78cc14b26ea0fcfbbe6768dae5ed3a418936))
+
+## [1.0.8](https://github.com/andipaetzold/mdb-reader/compare/v1.0.7...v1.0.8) (2021-11-05)
+
+
+### Bug Fixes
+
+* round milliseconds in datetime parser ([#123](https://github.com/andipaetzold/mdb-reader/issues/123)) ([b1b4379](https://github.com/andipaetzold/mdb-reader/commit/b1b4379b830041c6a725b67d165d0811e98d8a67))
+
+## [1.0.7](https://github.com/andipaetzold/mdb-reader/compare/v1.0.6...v1.0.7) (2021-10-22)
+
+
+### Bug Fixes
+
+* mixed endianness of guids ([#118](https://github.com/andipaetzold/mdb-reader/issues/118)) ([ac7790c](https://github.com/andipaetzold/mdb-reader/commit/ac7790c3888156f68a8503b94f647ad447d4fef2))
+
+## [1.0.6](https://github.com/andipaetzold/mdb-reader/compare/v1.0.5...v1.0.6) (2021-10-11)
+
+
+### Bug Fixes
+
+* handle tables with over 256 cols (incl. deleted) ([#111](https://github.com/andipaetzold/mdb-reader/issues/111)) ([e5f0d19](https://github.com/andipaetzold/mdb-reader/commit/e5f0d1911df6917a86fe0daa5047a8284ba9fe4a))
 
 ## [1.0.5](https://github.com/andipaetzold/mdb-reader/compare/v1.0.4...v1.0.5) (2021-10-11)
 

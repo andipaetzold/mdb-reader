@@ -32,9 +32,6 @@ export default class Table {
      * @param firstDefinitionPage The first page of the table definition referenced in the corresponding MSysObject
      */
     public constructor(
-        /**
-         * Table of the table.
-         */
         public readonly name: string,
         private readonly db: Database,
         private readonly firstDefinitionPage: number
@@ -147,7 +144,7 @@ export default class Table {
                     type === "boolean"
                         ? 0
                         : columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.sizeOffset),
-                fixedIndex: columnBuffer.readUInt8(this.db.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset),
+                fixedIndex: columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset),
                 ...parseColumnFlags(
                     columnBuffer.readUInt8(this.db.format.tableDefinitionPage.columnsDefinition.flagsOffset)
                 ),
@@ -296,7 +293,7 @@ export default class Table {
             let fixedColumnsFound = 0;
 
             const recordValues: { [column: string]: Value } = {};
-            for (const column of columns) {
+            for (const column of [...columns].sort((a, b) => a.index - b.index)) {
                 /**
                  * undefined = will be set later. Undefined will never be returned to the user.
                  * null = actually null

@@ -177,4 +177,15 @@ describe("getData()", () => {
             ]);
         });
     });
+
+    describe("V2016/withinsertedcol.accdb", () => {
+        it("with offset column indices due to a column insertion", () => {
+            const withInsertedColPath = resolve(__dirname, "data/V2016/withinsertedcol.accdb");
+            const buffer = readFileSync(withInsertedColPath);
+            const reader = new MDBReader(buffer);
+            const withInsertedColTable = reader.getTable("Table1");
+
+            expect(withInsertedColTable.getData()).toStrictEqual([{ col1: true, col2: true, col3: false }]);
+        });
+    });
 });
