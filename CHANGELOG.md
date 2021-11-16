@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/andipaetzold/mdb-reader/compare/v1.0.8...v1.0.9) (2021-11-16)
+
+
+### Bug Fixes
+
+* incorrect boolean values in tables with inserted columns ([#124](https://github.com/andipaetzold/mdb-reader/issues/124)) ([0d4b78c](https://github.com/andipaetzold/mdb-reader/commit/0d4b78cc14b26ea0fcfbbe6768dae5ed3a418936))
+
 ## [1.0.8](https://github.com/andipaetzold/mdb-reader/compare/v1.0.7...v1.0.8) (2021-11-05)
 
 
