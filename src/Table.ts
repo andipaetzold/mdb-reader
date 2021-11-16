@@ -293,7 +293,7 @@ export default class Table {
             let fixedColumnsFound = 0;
 
             const recordValues: { [column: string]: Value } = {};
-            for (const column of columns) {
+            for (const column of [...columns].sort((a, b) => a.index - b.index)) {
                 /**
                  * undefined = will be set later. Undefined will never be returned to the user.
                  * null = actually null
