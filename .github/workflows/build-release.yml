@@ -38,14 +38,11 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Get node version
-              id: node-version
-              run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
             - name: Use node ${{ matrix.node }}
-              uses: actions/setup-node@v2.4.1
+              uses: actions/setup-node@v2.5.0
               with:
-                  node-version: ${{ steps.node-version.outputs.NODE_VERSION }}
                   cache: 'npm'
+                  node-version-file: '.nvmrc'
             - name: Node version
               run: node --version
 
