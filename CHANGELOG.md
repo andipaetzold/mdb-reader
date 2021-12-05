@@ -1,3 +1,10 @@
+## [1.0.10](https://github.com/andipaetzold/mdb-reader/compare/v1.0.9...v1.0.10) (2021-12-05)
+
+
+### Bug Fixes
+
+* export `Value` type ([61d1b02](https://github.com/andipaetzold/mdb-reader/commit/61d1b028acf8c131889ddb40cdb6185dcd374c93))
+
 ## [1.0.9](https://github.com/andipaetzold/mdb-reader/compare/v1.0.8...v1.0.9) (2021-11-16)
 
 
