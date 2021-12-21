@@ -2,16 +2,10 @@
     "name": "mdb-reader",
     "version": "2.0.0-next.6",
     "description": "JavaScript library to read data from Access databases",
-    "main": "lib/cjs/index.js",
-    "module": "lib/esm/index.js",
-    "types": "lib/types/index.d.ts",
-    "exports": {
-        ".": {
-            "require": "./lib/cjs/index.js",
-            "default": "./lib/esm/index.js"
-        }
-    },
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
     "sideEffects": false,
+    "type": "module",
     "files": [
         "lib"
     ],
@@ -38,6 +32,7 @@
     "devDependencies": {
         "@semantic-release/changelog": "6.0.1",
         "@semantic-release/git": "10.0.1",
+        "@tsconfig/node14": "1.0.1",
         "@types/jest": "27.0.2",
         "@types/node": "14.17.33",
         "jest": "27.3.1",
@@ -49,9 +44,7 @@
     },
     "scripts": {
         "prepublishOnly": "npm run build",
-        "build": "rimraf lib && npm run build:cjs && npm run build:esm",
-        "build:cjs": "rimraf lib/cjs && tsc --module commonjs --outDir lib/cjs",
-        "build:esm": "rimraf lib/esm && tsc --module ES2015 --outDir lib/esm",
+        "build": "rimraf lib && tsc",
         "test": "jest",
         "semantic-release": "semantic-release"
     }
