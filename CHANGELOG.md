@@ -1,3 +1,20 @@
+# [2.0.0-next.7](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.6...v2.0.0-next.7) (2021-12-21)
+
+
+### Bug Fixes
+
+* export `Value` type ([61d1b02](https://github.com/andipaetzold/mdb-reader/commit/61d1b028acf8c131889ddb40cdb6185dcd374c93))
+
+
+### Features
+
+* make package ESM only ([b207dbe](https://github.com/andipaetzold/mdb-reader/commit/b207dbe8c8b3fb7eb1aee8d23bb68c7977137a6d))
+
+
+### BREAKING CHANGES
+
+* make package ESM only
+
 # [2.0.0-next.6](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.5...v2.0.0-next.6) (2021-11-16)
 
 
