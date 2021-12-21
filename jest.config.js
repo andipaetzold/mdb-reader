@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     transform: {
         "^.+\\.ts$": "ts-jest",
     },
@@ -8,5 +8,5 @@ module.exports = {
         "ts-jest": {
             tsconfig: "tsconfig.jest.json",
         },
-    },
+    }
 };
