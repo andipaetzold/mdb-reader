@@ -39,7 +39,7 @@ jobs:
                   fetch-depth: 0
 
             - name: Use node ${{ matrix.node }}
-              uses: actions/setup-node@v2.5.0
+              uses: actions/setup-node@v2.5.1
               with:
                   cache: 'npm'
                   node-version-file: '.nvmrc'
