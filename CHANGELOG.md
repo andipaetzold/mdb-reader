@@ -1,3 +1,10 @@
+# [2.0.0-next.9](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.8...v2.0.0-next.9) (2021-12-30)
+
+
+### Features
+
+* support DateTimeExtended ([#145](https://github.com/andipaetzold/mdb-reader/issues/145)) ([001045e](https://github.com/andipaetzold/mdb-reader/commit/001045eb3c416828f422fe58664b10b615ff2e3c))
+
 # [2.0.0-next.8](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.7...v2.0.0-next.8) (2021-12-30)
 
 
