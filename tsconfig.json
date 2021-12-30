@@ -8,7 +8,9 @@
         "importHelpers": true,
 
         "declaration": true,
-        "declarationDir": "lib"
+        "declarationDir": "lib",
+
+        "plugins": [{ "transform": "typescript-transform-extensions", "extensions": { ".ts": ".js" } }]
     },
     "include": ["src/**/*"],
     "exclude": ["src/**/*.spec.ts"]
