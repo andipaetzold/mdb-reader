@@ -206,6 +206,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | ---------------- | --------------- |
 | boolean          | `boolean`       |
 | byte             | `number`        |
+| datetimeextended | `string`        |
 | integer          | `number`        |
 | long             | `number`        |
 | currency         | `string`        |
@@ -220,7 +221,6 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | numeric          | `string`        |
 | complex          | `number`        |
 | bigint           | `BigInt`        |
-| datetimeextended | Not supported   |
 
 ## Development
 
