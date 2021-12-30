@@ -7,6 +7,7 @@ import { readByte } from "./byte";
 import { readComplexOrLong } from "./complexOrLong";
 import { readCurrency } from "./currency";
 import { readDateTime } from "./datetime";
+import { readDateTimeExtended } from "./datetimextended";
 import { readDouble } from "./double";
 import { readFloat } from "./float";
 import { readInteger } from "./integer";
@@ -29,6 +30,7 @@ const readFnByColType: {
     complex: readComplexOrLong,
     currency: readCurrency,
     datetime: readDateTime,
+    datetimextended: readDateTimeExtended,
     double: readDouble,
     float: readFloat,
     integer: readInteger,
@@ -38,9 +40,6 @@ const readFnByColType: {
     numeric: readNumeric,
     ole: readOLE,
     repid: readRepID,
-
-    // not supported
-    datetimextended: undefined,
 };
 
 export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Database): Exclude<Value, boolean | null> {
