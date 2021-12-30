@@ -1,3 +1,10 @@
+# [2.0.0-next.8](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.7...v2.0.0-next.8) (2021-12-30)
+
+
+### Bug Fixes
+
+* fully specify file paths in imports ([c9ce276](https://github.com/andipaetzold/mdb-reader/commit/c9ce276c207d3d7aabd3fa13c1beb9c8fdf1e14f))
+
 # [2.0.0-next.7](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.6...v2.0.0-next.7) (2021-12-21)
 
 
