@@ -1,8 +1,8 @@
 const DAYS_START = 0;
 const DAYS_LENGTH = 19;
 const SECONDS_START = DAYS_START + DAYS_LENGTH + 1;
-const SECONDS_LENGTH = 19;
-const NANOS_START = SECONDS_START + SECONDS_LENGTH + 1;
+const SECONDS_LENGTH = 12;
+const NANOS_START = SECONDS_START + SECONDS_LENGTH;
 const NANOS_LENGTH = 7;
 
 export function readDateTimeExtended(buffer: Buffer): string {
@@ -18,7 +18,7 @@ function parseBigInt(buffer: Buffer): bigint {
 }
 
 function format(days: bigint, seconds: bigint, nanos: bigint) {
-    // NOTE: replace with TemporalAPI once its available
+    // NOTE: replace with Temporal API once its available
     const date = new Date(0);
     date.setUTCFullYear(1);
 
