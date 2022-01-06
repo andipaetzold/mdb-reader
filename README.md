@@ -74,6 +74,11 @@ class MDBReader {
     getFormat(): "Jet3" | "Jet4";
 
     /**
+     * Date when the database was created
+     */
+    getCreationDate(): Date;
+
+    /**
      * Returns an array of table names.
      *
      * @param normalTables Includes user tables.

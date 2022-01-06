@@ -10,6 +10,10 @@ export interface JetFormat {
 
     textEncoding: "utf8" | "ucs-2";
 
+    databaseDefinitionPage: {
+        encryptedSize: number;
+    };
+
     dataPage: {
         recordCountOffset: number;
 

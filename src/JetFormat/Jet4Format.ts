@@ -6,6 +6,10 @@ export const jet4Format: JetFormat = {
 
     textEncoding: "ucs-2",
 
+    databaseDefinitionPage: {
+        encryptedSize: 128,
+    },
+
     dataPage: {
         recordCountOffset: 12,
 
@@ -15,6 +19,7 @@ export const jet4Format: JetFormat = {
             columnCountSize: 2,
         },
     },
+
     tableDefinitionPage: {
         rowCountOffset: 16,
 

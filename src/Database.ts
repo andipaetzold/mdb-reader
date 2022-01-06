@@ -1,13 +1,23 @@
+import { readDateTime } from "./data/datetime";
+import { decrypt } from "./decrypt";
 import { getJetFormat, JetFormat } from "./JetFormat";
 import PageType, { assertPageType } from "./PageType";
 
+const CREATION_DATE_OFFSET = 0x72; // 114
+
 export default class Database {
     public readonly format: JetFormat;
+
+    public readonly creationDate: Date;
 
     public constructor(private readonly buffer: Buffer) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
         this.format = getJetFormat(this.buffer);
+        decryptHeader(this.buffer, this.format);
+
+        const creationDateBuffer = this.buffer.slice(CREATION_DATE_OFFSET, CREATION_DATE_OFFSET + 8);
+        this.creationDate = readDateTime(creationDateBuffer);
     }
 
     public getPage(page: number): Buffer {
@@ -50,4 +60,14 @@ export default class Database {
 
         return pageBuffer.slice(start, nextStart);
     }
+}
+
+const ENCRYPTION_START = 0x18;
+const ENCRYPTION_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]);
+function decryptHeader(buffer: Buffer, format: JetFormat): void {
+    const decryptedBuffer = decrypt(
+        buffer.slice(ENCRYPTION_START, ENCRYPTION_START + format.databaseDefinitionPage.encryptedSize),
+        ENCRYPTION_KEY
+    );
+    decryptedBuffer.copy(buffer, ENCRYPTION_START);
 }
