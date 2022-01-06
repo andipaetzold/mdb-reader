@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/andipaetzold/mdb-reader/compare/v1.0.10...v1.1.0) (2022-01-06)
+
+
+### Features
+
+* add `getCreationDate` ([dbd4a25](https://github.com/andipaetzold/mdb-reader/commit/dbd4a257290c4007d39ed6092da683e6e8e51863))
+* decrypt "protected" mdb files ([ad17ae3](https://github.com/andipaetzold/mdb-reader/commit/ad17ae3c62e94e2ada69d00a439c38d9e488836c)), closes [#90](https://github.com/andipaetzold/mdb-reader/issues/90)
+
 ## [1.0.10](https://github.com/andipaetzold/mdb-reader/compare/v1.0.9...v1.0.10) (2021-12-05)
 
 
