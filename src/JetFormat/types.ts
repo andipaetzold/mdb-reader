@@ -12,6 +12,12 @@ export interface JetFormat {
 
     databaseDefinitionPage: {
         encryptedSize: number;
+        passwordSize: number;
+
+        defaultSortOrder: {
+            offset: number;
+            size: number;
+        };
     };
 
     dataPage: {

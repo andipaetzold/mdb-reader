@@ -15,3 +15,17 @@ export function getBitmapValue(bitmap: Buffer, pos: number): boolean {
 export function roundToFullByte(bits: number): number {
     return Math.floor((bits + 7) / 8);
 }
+
+/**
+ * @see https://github.com/crypto-browserify/buffer-xor
+ */
+export function xor(a: Buffer, b: Buffer) {
+    const length = Math.max(a.length, b.length);
+    const buffer = Buffer.allocUnsafe(length);
+
+    for (let i = 0; i < length; i++) {
+        buffer[i] = a[i] ^ b[i];
+    }
+
+    return buffer;
+}

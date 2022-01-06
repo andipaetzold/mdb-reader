@@ -8,6 +8,11 @@ export const jet4Format: JetFormat = {
 
     databaseDefinitionPage: {
         encryptedSize: 128,
+        passwordSize: 40,
+        defaultSortOrder: {
+            offset: 0x6e, // 110
+            size: 4,
+        },
     },
 
     dataPage: {
