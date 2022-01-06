@@ -29,6 +29,13 @@ jobs:
             - name: Test
               run: npm test -- --ci --runInBand --coverage
 
+            - name: Install dependencies (examples/browser)
+              run: npm ci
+              working-directory: examples/browser
+            - name: Build (examples/browser)
+              run: npm run build
+              working-directory: examples/browser
+
     release:
         name: Release
         runs-on: ubuntu-20.04
