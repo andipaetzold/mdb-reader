@@ -144,7 +144,7 @@ class Table {
      * @param rowLimit Maximum number of rows to be returned. Defaults to Infinity.
      */
     getData<TRow extends {
-        [column in TColumn]: number | string | Buffer | Date | boolean | null;
+        [column in TColumn]: Value;
         TColumn extends string = string;
     }>(options?: {
         columns?: ReadonlyArray<TColumn>;
@@ -166,24 +166,7 @@ interface Column {
     /**
      * Type of the table
      */
-    type:
-        | "boolean"
-        | "byte"
-        | "integer"
-        | "long"
-        | "currency"
-        | "float"
-        | "double"
-        | "datetime"
-        | "binary"
-        | "text"
-        | "ole"
-        | "memo"
-        | "repid"
-        | "numeric"
-        | "complex"
-        | "bigint"
-        | "datetimeextended";
+    type: ColumnType;
     size: number;
 
     fixedLength: boolean;
