@@ -204,23 +204,23 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 
 | Column Type      | JavaScript Type |
 | ---------------- | --------------- |
+| bigint           | `BigInt`        |
+| binary           | `Buffer`        |
 | boolean          | `boolean`       |
 | byte             | `number`        |
+| complex          | `number`        |
+| currency         | `string`        |
+| datetime         | `Date`          |
 | datetimeextended | `string`        |
+| double           | `number`        |
+| float            | `number`        |
 | integer          | `number`        |
 | long             | `number`        |
-| currency         | `string`        |
-| float            | `number`        |
-| double           | `number`        |
-| datetime         | `Date`          |
-| binary           | `Buffer`        |
-| text             | `string`        |
-| ole              | `Buffer`        |
 | memo             | `string`        |
-| repid            | `string`        |
 | numeric          | `string`        |
-| complex          | `number`        |
-| bigint           | `BigInt`        |
+| ole              | `Buffer`        |
+| repid            | `string`        |
+| text             | `string`        |
 
 ## Development
 

@@ -1,3 +1,5 @@
+import { ColumnType } from "./types";
+
 export interface Column {
     /**
      * Name of the table
@@ -35,43 +37,24 @@ export interface ColumnDefinition extends Column {
     fixedIndex: number;
 }
 
-export type ColumnType =
-    | "boolean"
-    | "byte"
-    | "integer"
-    | "long"
-    | "currency"
-    | "float"
-    | "double"
-    | "datetime"
-    | "binary"
-    | "text"
-    | "ole"
-    | "memo"
-    | "repid"
-    | "numeric"
-    | "complex"
-    | "bigint"
-    | "datetimextended";
-
 const columnTypeMap: { [v: number]: ColumnType } = {
-    0x01: "boolean",
-    0x02: "byte",
-    0x03: "integer",
-    0x04: "long",
-    0x05: "currency",
-    0x06: "float",
-    0x07: "double",
-    0x08: "datetime",
-    0x09: "binary",
-    0x0a: "text",
-    0x0b: "ole",
-    0x0c: "memo",
-    0x0f: "repid",
-    0x10: "numeric",
-    0x12: "complex",
-    0x13: "bigint",
-    0x14: "datetimextended",
+    0x01: ColumnType.Boolean,
+    0x02: ColumnType.Byte,
+    0x03: ColumnType.Integer,
+    0x04: ColumnType.Long,
+    0x05: ColumnType.Currency,
+    0x06: ColumnType.Float,
+    0x07: ColumnType.Double,
+    0x08: ColumnType.DateTime,
+    0x09: ColumnType.Binary,
+    0x0a: ColumnType.Text,
+    0x0b: ColumnType.Long,
+    0x0c: ColumnType.Memo,
+    0x0f: ColumnType.RepID,
+    0x10: ColumnType.Numeric,
+    0x12: ColumnType.Complex,
+    0x13: ColumnType.BigInt,
+    0x14: ColumnType.DateTimeExtended,
 };
 
 /**
