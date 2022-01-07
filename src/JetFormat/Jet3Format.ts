@@ -3,7 +3,16 @@ import { JetFormat } from "./types";
 export const jet3Format: JetFormat = {
     pageSize: 2048,
 
-    textEncoding: 'utf8',
+    textEncoding: "utf8",
+
+    databaseDefinitionPage: {
+        encryptedSize: 126,
+        passwordSize: 20,
+        defaultSortOrder: {
+            offset: 0x3a, // 58
+            size: 2,
+        },
+    },
 
     dataPage: {
         recordCountOffset: 8,
@@ -15,6 +24,7 @@ export const jet3Format: JetFormat = {
             variableColumnCountSize: 1,
         },
     },
+
     tableDefinitionPage: {
         rowCountOffset: 12,
 

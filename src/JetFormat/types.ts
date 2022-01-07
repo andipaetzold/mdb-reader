@@ -3,6 +3,16 @@ export interface JetFormat {
 
     textEncoding: "utf8" | "ucs-2";
 
+    databaseDefinitionPage: {
+        encryptedSize: number;
+        passwordSize: number;
+
+        defaultSortOrder: {
+            offset: number;
+            size: number;
+        };
+    };
+
     dataPage: {
         recordCountOffset: number;
 

@@ -69,6 +69,11 @@ class MDBReader {
     readonly buffer: Buffer;
 
     /**
+     * Date when the database was created
+     */
+    getCreationDate(): Date;
+
+    /**
      * Returns an array of table names.
      *
      * @param normalTables Includes user tables.
@@ -255,6 +260,10 @@ Set of applications to read and write Access files, written in C. Main source of
 [Jackcess](https://jackcess.sourceforge.io)
 
 Java library to read and write Access files. It inspired the interface of this library. The databases used for testing are copied from the [repository](https://github.com/jahlborn/jackcess).
+
+## The unofficial MDB Guide
+
+[Tech Specs for the JET format used by Access 1997-2010](http://jabakobob.net/mdb/)
 
 ## License
 

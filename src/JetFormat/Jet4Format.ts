@@ -5,6 +5,15 @@ export const jet4Format: JetFormat = {
 
     textEncoding: "ucs-2",
 
+    databaseDefinitionPage: {
+        encryptedSize: 128,
+        passwordSize: 40,
+        defaultSortOrder: {
+            offset: 0x6e, // 110
+            size: 4,
+        },
+    },
+
     dataPage: {
         recordCountOffset: 12,
 
@@ -15,6 +24,7 @@ export const jet4Format: JetFormat = {
             variableColumnCountSize: 2,
         },
     },
+
     tableDefinitionPage: {
         rowCountOffset: 16,
 

@@ -44,6 +44,13 @@ export default class MDBReader {
     }
 
     /**
+     * Date when the database was created
+     */
+    public getCreationDate(): Date {
+        return this.db.creationDate;
+    }
+
+    /**
      * Returns an array of table names.
      *
      * @param normalTables Includes user tables. Default true.
