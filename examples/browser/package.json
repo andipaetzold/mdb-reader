@@ -1,11 +1,16 @@
 {
-  "name": "mdb-reader-browser",
-  "version": "0.0.0",
-  "scripts": {
-    "build": "browserify main.js > bundle.js"
-  },
-  "dependencies": {
-    "browserify": "17.0.0",
-    "buffer": "6.0.3"
-  }
+    "name": "mdb-reader-browser",
+    "version": "0.0.0",
+    "source": "src/index.html",
+    "scripts": {
+        "dev": "rimraf dist && parcel",
+        "build": "rimraf dist && parcel build"
+    },
+    "dependencies": {
+        "buffer": "6.0.3"
+    },
+    "devDependencies": {
+        "parcel": "2.1.1",
+        "rimraf": "3.0.2"
+    }
 }
