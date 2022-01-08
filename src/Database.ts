@@ -1,23 +1,19 @@
 import { readDateTime } from "./data/datetime";
 import { decrypt } from "./decrypt";
 import { getJetFormat, JetFormat } from "./JetFormat";
+import { createPageDecrypter } from "./PageDecrypter";
+import { PageDecrypter } from "./PageDecrypter/types";
 import PageType, { assertPageType } from "./PageType";
 import { SortOrder } from "./SortOrder";
 import { uncompressText } from "./unicodeCompression";
-import { xor } from "./util";
+import { isEmptyBuffer, xor } from "./util";
 
 const PASSWORD_OFFSET = 0x42;
-
-const ENCODING_KEY_OFFSET = 0x3e; // 62
-const ENCODING_KEY_SIZE = 4;
 
 export default class Database {
     public readonly format: JetFormat;
 
-    /**
-     * All 0 if the database is not encrypted
-     */
-    private readonly encodingKey: Buffer;
+    private readonly pageDecrypter: PageDecrypter;
 
     public constructor(private readonly buffer: Buffer) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
@@ -25,8 +21,7 @@ export default class Database {
         this.format = getJetFormat(this.buffer);
         decryptHeader(this.buffer, this.format);
 
-        // read data from decrypted page
-        this.encodingKey = this.buffer.slice(ENCODING_KEY_OFFSET, ENCODING_KEY_OFFSET + ENCODING_KEY_SIZE);
+        this.pageDecrypter = createPageDecrypter(this.buffer, "");
     }
 
     public getPassword(): string | null {
@@ -40,7 +35,7 @@ export default class Database {
             passwordBuffer = xor(passwordBuffer, mask);
         }
 
-        if (passwordBuffer.every((b) => b === 0)) {
+        if (isEmptyBuffer(passwordBuffer)) {
             return null;
         }
 
@@ -102,16 +97,12 @@ export default class Database {
 
         const pageBuffer = this.buffer.slice(offset, offset + this.format.pageSize);
 
-        if (page === 0 || this.encodingKey.every((v) => v === 0)) {
+        if (page === 0) {
             // no encryption
             return pageBuffer;
         }
 
-        const pageIndexBuffer = Buffer.alloc(4);
-        pageIndexBuffer.writeUInt32LE(page);
-
-        const pagekey = xor(pageIndexBuffer, this.encodingKey);
-        return decrypt(pageBuffer, pagekey);
+        return this.pageDecrypter(pageBuffer, page);
     }
 
     /**

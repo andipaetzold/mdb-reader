@@ -29,3 +29,10 @@ export function xor(a: Buffer, b: Buffer) {
 
     return buffer;
 }
+
+/**
+ * Returns true if buffer only contains zeros.
+ */
+export function isEmptyBuffer(buffer: Buffer): boolean {
+    return buffer.every((v) => v === 0);
+}

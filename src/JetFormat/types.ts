@@ -7,6 +7,7 @@ export type LegacyFormat = "Jet3" | "Jet4";
 
 export interface JetFormat {
     legacyFormat: LegacyFormat;
+    codecType: CodecType;
 
     pageSize: number;
 
@@ -68,4 +69,10 @@ export interface JetFormat {
 
         usageMapOffset: number;
     };
+}
+
+export const enum CodecType {
+    JET,
+    MSISAM,
+    OFFICE,
 }

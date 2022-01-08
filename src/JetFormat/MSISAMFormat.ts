@@ -1,4 +1,7 @@
 import { jet4Format } from "./Jet4Format";
-import { JetFormat } from "./types";
+import { CodecType, JetFormat } from "./types";
 
-export const msisamFormat: JetFormat = jet4Format;
+export const msisamFormat: JetFormat = {
+    ...jet4Format,
+    codecType: CodecType.MSISAM,
+};
