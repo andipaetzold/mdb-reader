@@ -1,3 +1,5 @@
+import { SortOrder } from "../SortOrder";
+
 /**
  * @deprecated
  */
@@ -9,6 +11,8 @@ export interface JetFormat {
     pageSize: number;
 
     textEncoding: "utf8" | "ucs-2";
+
+    defaultSortOrder: Readonly<SortOrder>;
 
     databaseDefinitionPage: {
         encryptedSize: number;

@@ -2,6 +2,7 @@ import { readDateTime } from "./data/datetime";
 import { decrypt } from "./decrypt";
 import { getJetFormat, JetFormat } from "./JetFormat";
 import PageType, { assertPageType } from "./PageType";
+import { SortOrder } from "./SortOrder";
 import { uncompressText } from "./unicodeCompression";
 import { xor } from "./util";
 
@@ -75,6 +76,21 @@ export default class Database {
             this.format.databaseDefinitionPage.creationDateOffset + 8
         );
         return readDateTime(creationDateBuffer);
+    }
+
+    public getDefaultSortOrder(): Readonly<SortOrder> {
+        const value = this.buffer.readUInt16LE(this.format.databaseDefinitionPage.defaultSortOrder.offset + 3);
+
+        if (value === 0) {
+            return this.format.defaultSortOrder;
+        }
+
+        let version = this.format.defaultSortOrder.version;
+        if (this.format.databaseDefinitionPage.defaultSortOrder.size == 4) {
+            version = this.buffer.readUInt8(this.format.databaseDefinitionPage.defaultSortOrder.offset + 3);
+        }
+
+        return Object.freeze({ value, version });
     }
 
     public getPage(page: number): Buffer {

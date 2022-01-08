@@ -84,6 +84,11 @@ class MDBReader {
     getPassword(): string | null;
 
     /**
+     * Default sort order
+     */
+    getDefaultSortOrder(): Readonly<SortOrder>
+
+    /**
      * Returns an array of table names.
      *
      * @param normalTables Includes user tables.

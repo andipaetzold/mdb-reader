@@ -1,3 +1,4 @@
+import { SortOrder } from ".";
 import Database from "./Database";
 import { LegacyFormat } from "./JetFormat";
 import PageType, { assertPageType } from "./PageType";
@@ -63,6 +64,13 @@ export default class MDBReader {
      */
     public getPassword(): string | null {
         return this.db.getPassword();
+    }
+
+    /**
+     * Default sort order
+     */
+    public getDefaultSortOrder(): Readonly<SortOrder> {
+        return this.db.getDefaultSortOrder();
     }
 
     /**
