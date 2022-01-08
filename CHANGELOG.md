@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/andipaetzold/mdb-reader/compare/v1.1.0...v1.2.0) (2022-01-08)
+
+
+### Features
+
+* add `getDefaultSortOrder` ([3a1d879](https://github.com/andipaetzold/mdb-reader/commit/3a1d879af4180813bfbf3b29953475a163763e2b))
+* add `getPassword` ([8500f18](https://github.com/andipaetzold/mdb-reader/commit/8500f18cace8c4de8c974d75a552654787d18429))
+
 # [1.1.0](https://github.com/andipaetzold/mdb-reader/compare/v1.0.10...v1.1.0) (2022-01-06)
 
 
