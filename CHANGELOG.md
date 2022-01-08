@@ -1,3 +1,14 @@
+# [2.0.0-next.10](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.9...v2.0.0-next.10) (2022-01-08)
+
+
+### Features
+
+* add `getCreationDate` ([dbd4a25](https://github.com/andipaetzold/mdb-reader/commit/dbd4a257290c4007d39ed6092da683e6e8e51863))
+* add `getDefaultSortOrder` ([3a1d879](https://github.com/andipaetzold/mdb-reader/commit/3a1d879af4180813bfbf3b29953475a163763e2b))
+* add `getPassword` ([8500f18](https://github.com/andipaetzold/mdb-reader/commit/8500f18cace8c4de8c974d75a552654787d18429))
+* decrypt "protected" mdb files ([ad17ae3](https://github.com/andipaetzold/mdb-reader/commit/ad17ae3c62e94e2ada69d00a439c38d9e488836c)), closes [#90](https://github.com/andipaetzold/mdb-reader/issues/90)
+* make ColumnType an enum & export ValueMap ([332fa99](https://github.com/andipaetzold/mdb-reader/commit/332fa9956fcb0cc0b6d36040c9090bdaf617be99))
+
 # [2.0.0-next.9](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.8...v2.0.0-next.9) (2021-12-30)
 
 
