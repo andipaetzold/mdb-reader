@@ -86,7 +86,7 @@ class MDBReader {
     /**
      * Default sort order
      */
-    getDefaultSortOrder(): Readonly<SortOrder>
+    getDefaultSortOrder(): Readonly<SortOrder>;
 
     /**
      * Returns an array of table names.
@@ -240,7 +240,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | numeric          | `string`                                  |
 | complex          | `number`                                  |
 | bigint           | Not supported. Coming in `mdb-reader` v2. |
-| datetimeextended | Not supported                             |
+| datetimeextended | Not supported. Coming in `mdb-reader` v2. |
 
 ## Development
 
