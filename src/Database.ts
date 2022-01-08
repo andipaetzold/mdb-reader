@@ -2,12 +2,13 @@ import { readDateTime } from "./data/datetime";
 import { decrypt } from "./decrypt";
 import { getJetFormat, JetFormat } from "./JetFormat";
 import PageType, { assertPageType } from "./PageType";
+import { uncompressText } from "./unicodeCompression";
 import { xor } from "./util";
+
+const PASSWORD_OFFSET = 0x42;
 
 const ENCODING_KEY_OFFSET = 0x3e; // 62
 const ENCODING_KEY_SIZE = 4;
-
-const CREATION_DATE_OFFSET = 0x72; // 114
 
 export default class Database {
     public readonly format: JetFormat;
@@ -17,8 +18,6 @@ export default class Database {
      */
     private readonly encodingKey: Buffer;
 
-    public readonly creationDate: Date;
-
     public constructor(private readonly buffer: Buffer) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
@@ -27,9 +26,55 @@ export default class Database {
 
         // read data from decrypted page
         this.encodingKey = this.buffer.slice(ENCODING_KEY_OFFSET, ENCODING_KEY_OFFSET + ENCODING_KEY_SIZE);
+    }
 
-        const creationDateBuffer = this.buffer.slice(CREATION_DATE_OFFSET, CREATION_DATE_OFFSET + 8);
-        this.creationDate = readDateTime(creationDateBuffer);
+    public getPassword(): string | null {
+        let passwordBuffer = this.buffer.slice(
+            PASSWORD_OFFSET,
+            PASSWORD_OFFSET + this.format.databaseDefinitionPage.passwordSize
+        );
+
+        const mask = this.getPasswordMask();
+        if (mask !== null) {
+            passwordBuffer = xor(passwordBuffer, mask);
+        }
+
+        if (passwordBuffer.every((b) => b === 0)) {
+            return null;
+        }
+
+        let password = uncompressText(passwordBuffer, this.format);
+        const nullCharIndex = password.indexOf("\0");
+        if (nullCharIndex >= 0) {
+            password = password.slice(0, nullCharIndex);
+        }
+        return password;
+    }
+
+    private getPasswordMask(): Buffer | null {
+        if (this.format.databaseDefinitionPage.creationDateOffset === null) {
+            return null;
+        }
+
+        const mask = Buffer.alloc(this.format.databaseDefinitionPage.passwordSize);
+        const dateValue = this.buffer.readDoubleLE(this.format.databaseDefinitionPage.creationDateOffset);
+        mask.writeInt32LE(Math.floor(dateValue));
+        for (let i = 0; i < mask.length; ++i) {
+            mask[i] = mask[i % 4];
+        }
+        return mask;
+    }
+
+    public getCreationDate(): Date | null {
+        if (this.format.databaseDefinitionPage.creationDateOffset === null) {
+            return null;
+        }
+
+        const creationDateBuffer = this.buffer.slice(
+            this.format.databaseDefinitionPage.creationDateOffset,
+            this.format.databaseDefinitionPage.creationDateOffset + 8
+        );
+        return readDateTime(creationDateBuffer);
     }
 
     public getPage(page: number): Buffer {

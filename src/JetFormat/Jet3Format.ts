@@ -9,6 +9,7 @@ export const jet3Format: JetFormat = {
     databaseDefinitionPage: {
         encryptedSize: 126,
         passwordSize: 20,
+        creationDateOffset: null,
         defaultSortOrder: {
             offset: 0x3a, // 58
             size: 2,

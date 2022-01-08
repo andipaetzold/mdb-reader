@@ -14,6 +14,8 @@ export interface JetFormat {
         encryptedSize: number;
         passwordSize: number;
 
+        creationDateOffset: number | null;
+
         defaultSortOrder: {
             offset: number;
             size: number;

@@ -54,8 +54,15 @@ export default class MDBReader {
     /**
      * Date when the database was created
      */
-    public getCreationDate(): Date {
-        return this.db.creationDate;
+    public getCreationDate(): Date | null {
+        return this.db.getCreationDate();
+    }
+
+    /**
+     * Database password
+     */
+    public getPassword(): string | null {
+        return this.db.getPassword();
     }
 
     /**

@@ -76,7 +76,12 @@ class MDBReader {
     /**
      * Date when the database was created
      */
-    getCreationDate(): Date;
+    getCreationDate(): Date | null;
+
+    /**
+     * Database password
+     */
+    getPassword(): string | null;
 
     /**
      * Returns an array of table names.
