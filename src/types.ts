@@ -39,3 +39,8 @@ export type ValueMap = {
 };
 
 export type Value = ValueMap[ColumnType] | null;
+
+export interface SortOrder {
+    value: number;
+    version: number;
+}

@@ -1,11 +1,17 @@
+import { SortOrder } from "../types";
+
 export interface JetFormat {
     pageSize: number;
 
     textEncoding: "utf8" | "ucs-2";
 
+    defaultSortOrder: Readonly<SortOrder>;
+
     databaseDefinitionPage: {
         encryptedSize: number;
         passwordSize: number;
+
+        creationDateOffset: number | null;
 
         defaultSortOrder: {
             offset: number;

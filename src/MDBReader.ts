@@ -2,6 +2,7 @@ import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
 import SysObject, { isSysObjectType, isSystemObject, SysObjectType } from "./SysObject";
 import Table from "./Table";
+import { SortOrder } from "./types";
 
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
@@ -46,8 +47,22 @@ export default class MDBReader {
     /**
      * Date when the database was created
      */
-    public getCreationDate(): Date {
-        return this.db.creationDate;
+    public getCreationDate(): Date | null {
+        return this.db.getCreationDate();
+    }
+
+    /**
+     * Database password
+     */
+    public getPassword(): string | null {
+        return this.db.getPassword();
+    }
+
+    /**
+     * Default sort order
+     */
+    public getDefaultSortOrder(): Readonly<SortOrder> {
+        return this.db.getDefaultSortOrder();
     }
 
     /**

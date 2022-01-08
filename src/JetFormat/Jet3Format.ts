@@ -1,3 +1,4 @@
+import { GENERAL_97_SORT_ORDER } from "../SortOrder";
 import { JetFormat } from "./types";
 
 export const jet3Format: JetFormat = {
@@ -5,9 +6,12 @@ export const jet3Format: JetFormat = {
 
     textEncoding: "utf8",
 
+    defaultSortOrder: GENERAL_97_SORT_ORDER,
+
     databaseDefinitionPage: {
         encryptedSize: 126,
         passwordSize: 20,
+        creationDateOffset: null,
         defaultSortOrder: {
             offset: 0x3a, // 58
             size: 2,

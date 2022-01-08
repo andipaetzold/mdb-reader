@@ -71,7 +71,17 @@ class MDBReader {
     /**
      * Date when the database was created
      */
-    getCreationDate(): Date;
+    getCreationDate(): Date | null;
+
+    /**
+     * Database password
+     */
+    getPassword(): string | null;
+
+    /**
+     * Default sort order
+     */
+    getDefaultSortOrder(): Readonly<SortOrder>
 
     /**
      * Returns an array of table names.
