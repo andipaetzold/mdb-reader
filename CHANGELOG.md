@@ -110,6 +110,10 @@
 * drop node 12 support ([#110](https://github.com/andipaetzold/mdb-reader/issues/110)) ([05e7952](https://github.com/andipaetzold/mdb-reader/commit/05e795272972b6217f98d27397c56b51b01ec877))
 
 
+### BREAKING CHANGES
+
+* drop node 12 support
+
 ## [1.2.1](https://github.com/andipaetzold/mdb-reader/compare/v1.2.0...v1.2.1) (2022-01-10)
 
 
