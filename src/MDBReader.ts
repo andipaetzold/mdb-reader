@@ -15,15 +15,10 @@ export default class MDBReader {
     /**
      * @param buffer Buffer of the database.
      */
-    public constructor(
-        /**
-         * Buffer of the database.
-         */
-        public readonly buffer: Buffer
-    ) {
-        assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
+    public constructor(private readonly _buffer: Buffer) {
+        assertPageType(this._buffer, PageType.DatabaseDefinitionPage);
 
-        this.db = new Database(this.buffer);
+        this.db = new Database(this._buffer);
 
         const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.db, MSYS_OBJECTS_PAGE).getData<{
             Id: number;
@@ -46,7 +41,15 @@ export default class MDBReader {
     }
 
     /**
-     * @deprecated
+     * Buffer of the database.
+     * @deprecated Will be removed in `mdb-reader` v2
+     */
+    public get buffer(): Buffer {
+        return this._buffer;
+    }
+
+    /**
+     * @deprecated Will be removed in `mdb-reader` v2
      */
     public getFormat(): LegacyFormat {
         return this.db.format.legacyFormat;
