@@ -64,11 +64,6 @@ class MDBReader {
     constructor(buffer: Buffer);
 
     /**
-     * Buffer of the database.
-     */
-    readonly buffer: Buffer;
-
-    /**
      * Date when the database was created
      */
     getCreationDate(): Date | null;
