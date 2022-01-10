@@ -12,10 +12,11 @@ describe.each`
 `("$filename", ({ filename, format }) => {
     const path = resolve(__dirname, "data", filename);
 
+    let buffer: Buffer;
     let reader: MDBReader;
 
     beforeEach(() => {
-        const buffer = readFileSync(path);
+        buffer = readFileSync(path);
         reader = new MDBReader(buffer);
     });
 
@@ -38,5 +39,17 @@ describe.each`
     it("getTableNames()", () => {
         const tableNames = reader.getTableNames();
         expect(tableNames).toStrictEqual(["Table1", "Table2", "Table3", "Table4"]);
+    });
+
+    describe(".buffer", () => {
+        it("should return input buffer", () => {
+            const fileBuffer = readFileSync(path);
+            expect(Buffer.compare(reader.buffer, fileBuffer)).toBe(0);
+        });
+    });
+
+    it("should not modify the input buffer", () => {
+        const fileBuffer = readFileSync(path);
+        expect(Buffer.compare(buffer, fileBuffer)).toBe(0);
     });
 });
