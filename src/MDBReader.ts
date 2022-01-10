@@ -7,6 +7,10 @@ import { SortOrder } from "./types";
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
 
+interface Options {
+    password?: string;
+}
+
 export default class MDBReader {
     private readonly sysObjects: SysObject[];
     private readonly db: Database;
@@ -14,10 +18,10 @@ export default class MDBReader {
     /**
      * @param buffer Buffer of the database.
      */
-    public constructor(private readonly buffer: Buffer) {
+    public constructor(private readonly buffer: Buffer, { password }: Options = {}) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
-        this.db = new Database(this.buffer);
+        this.db = new Database(this.buffer, password ?? "");
 
         const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.db, MSYS_OBJECTS_PAGE).getData<{
             Id: number;

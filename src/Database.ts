@@ -16,7 +16,7 @@ export default class Database {
     private readonly pageDecrypter: PageDecrypter;
     private readonly databaseDefinitionPage: Buffer;
 
-    public constructor(private readonly buffer: Buffer) {
+    public constructor(private readonly buffer: Buffer, readonly password: string) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
         this.format = getJetFormat(this.buffer);
@@ -24,8 +24,7 @@ export default class Database {
         this.databaseDefinitionPage = Buffer.alloc(this.format.pageSize);
         this.buffer.copy(this.databaseDefinitionPage, 0, 0, this.format.pageSize);
         decryptHeader(this.databaseDefinitionPage, this.format);
-
-        this.pageDecrypter = createPageDecrypter(this.databaseDefinitionPage, "");
+        this.pageDecrypter = createPageDecrypter(this.databaseDefinitionPage, password);
     }
 
     public getPassword(): string | null {
