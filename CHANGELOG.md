@@ -1,3 +1,21 @@
+# [2.0.0-next.11](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.10...v2.0.0-next.11) (2022-01-10)
+
+
+### Bug Fixes
+
+* deprecate `.buffer` ([e03efb6](https://github.com/andipaetzold/mdb-reader/commit/e03efb63ab98508c2398287f2c4877200ec5c85a))
+* do not modify input buffer ([de062b2](https://github.com/andipaetzold/mdb-reader/commit/de062b2740755c429e3db21b52649d5d2782315c))
+
+
+### Features
+
+* remove `MDBReader.buffer` ([abb01bb](https://github.com/andipaetzold/mdb-reader/commit/abb01bbed3f11a6c5a026370e350c474e49f0901))
+
+
+### BREAKING CHANGES
+
+* remove `MDBReader.buffer`
+
 # [2.0.0-next.10](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.9...v2.0.0-next.10) (2022-01-08)
 
 
