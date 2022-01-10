@@ -1,7 +1,9 @@
 import { GENERAL_LEGACY_SORT_ORDER } from "../SortOrder";
-import { JetFormat } from "./types";
+import { CodecType, JetFormat } from "./types";
 
 export const jet4Format: JetFormat = {
+    codecType: CodecType.JET,
+    
     pageSize: 4096,
 
     textEncoding: "ucs-2",

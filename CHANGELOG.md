@@ -92,6 +92,14 @@
 * drop node 12 support ([#110](https://github.com/andipaetzold/mdb-reader/issues/110)) ([05e7952](https://github.com/andipaetzold/mdb-reader/commit/05e795272972b6217f98d27397c56b51b01ec877))
 
 
+## [1.2.1](https://github.com/andipaetzold/mdb-reader/compare/v1.2.0...v1.2.1) (2022-01-10)
+
+
+### Bug Fixes
+
+* deprecate `.buffer` ([e03efb6](https://github.com/andipaetzold/mdb-reader/commit/e03efb63ab98508c2398287f2c4877200ec5c85a))
+* do not modify input buffer ([de062b2](https://github.com/andipaetzold/mdb-reader/commit/de062b2740755c429e3db21b52649d5d2782315c))
+
 # [1.2.0](https://github.com/andipaetzold/mdb-reader/compare/v1.1.0...v1.2.0) (2022-01-08)
 
 

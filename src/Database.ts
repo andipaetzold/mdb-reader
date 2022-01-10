@@ -1,36 +1,35 @@
 import { readDateTime } from "./data/datetime";
 import { decrypt } from "./decrypt";
 import { getJetFormat, JetFormat } from "./JetFormat";
+import { createPageDecrypter } from "./PageDecrypter";
+import { PageDecrypter } from "./PageDecrypter/types";
 import PageType, { assertPageType } from "./PageType";
 import { SortOrder } from "./types";
 import { uncompressText } from "./unicodeCompression";
-import { xor } from "./util";
+import { isEmptyBuffer, xor } from "./util";
 
 const PASSWORD_OFFSET = 0x42;
-
-const ENCODING_KEY_OFFSET = 0x3e; // 62
-const ENCODING_KEY_SIZE = 4;
 
 export default class Database {
     public readonly format: JetFormat;
 
-    /**
-     * All 0 if the database is not encrypted
-     */
-    private readonly encodingKey: Buffer;
+    private readonly pageDecrypter: PageDecrypter;
+    private readonly databaseDefinitionPage: Buffer;
 
     public constructor(private readonly buffer: Buffer) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
         this.format = getJetFormat(this.buffer);
-        decryptHeader(this.buffer, this.format);
 
-        // read data from decrypted page
-        this.encodingKey = this.buffer.slice(ENCODING_KEY_OFFSET, ENCODING_KEY_OFFSET + ENCODING_KEY_SIZE);
+        this.databaseDefinitionPage = Buffer.alloc(this.format.pageSize);
+        this.buffer.copy(this.databaseDefinitionPage, 0, 0, this.format.pageSize);
+        decryptHeader(this.databaseDefinitionPage, this.format);
+
+        this.pageDecrypter = createPageDecrypter(this.databaseDefinitionPage, "");
     }
 
     public getPassword(): string | null {
-        let passwordBuffer = this.buffer.slice(
+        let passwordBuffer = this.databaseDefinitionPage.slice(
             PASSWORD_OFFSET,
             PASSWORD_OFFSET + this.format.databaseDefinitionPage.passwordSize
         );
@@ -40,7 +39,7 @@ export default class Database {
             passwordBuffer = xor(passwordBuffer, mask);
         }
 
-        if (passwordBuffer.every((b) => b === 0)) {
+        if (isEmptyBuffer(passwordBuffer)) {
             return null;
         }
 
@@ -58,7 +57,7 @@ export default class Database {
         }
 
         const mask = Buffer.alloc(this.format.databaseDefinitionPage.passwordSize);
-        const dateValue = this.buffer.readDoubleLE(this.format.databaseDefinitionPage.creationDateOffset);
+        const dateValue = this.databaseDefinitionPage.readDoubleLE(this.format.databaseDefinitionPage.creationDateOffset);
         mask.writeInt32LE(Math.floor(dateValue));
         for (let i = 0; i < mask.length; ++i) {
             mask[i] = mask[i % 4];
@@ -71,7 +70,7 @@ export default class Database {
             return null;
         }
 
-        const creationDateBuffer = this.buffer.slice(
+        const creationDateBuffer = this.databaseDefinitionPage.slice(
             this.format.databaseDefinitionPage.creationDateOffset,
             this.format.databaseDefinitionPage.creationDateOffset + 8
         );
@@ -79,7 +78,9 @@ export default class Database {
     }
 
     public getDefaultSortOrder(): Readonly<SortOrder> {
-        const value = this.buffer.readUInt16LE(this.format.databaseDefinitionPage.defaultSortOrder.offset + 3);
+        const value = this.databaseDefinitionPage.readUInt16LE(
+            this.format.databaseDefinitionPage.defaultSortOrder.offset + 3
+        );
 
         if (value === 0) {
             return this.format.defaultSortOrder;
@@ -87,31 +88,25 @@ export default class Database {
 
         let version = this.format.defaultSortOrder.version;
         if (this.format.databaseDefinitionPage.defaultSortOrder.size == 4) {
-            version = this.buffer.readUInt8(this.format.databaseDefinitionPage.defaultSortOrder.offset + 3);
+            version = this.databaseDefinitionPage.readUInt8(this.format.databaseDefinitionPage.defaultSortOrder.offset + 3);
         }
 
         return Object.freeze({ value, version });
     }
 
     public getPage(page: number): Buffer {
-        const offset = page * this.format.pageSize;
+        if (page === 0) {
+            // already decrypted
+            return this.databaseDefinitionPage;
+        }
 
+        const offset = page * this.format.pageSize;
         if (this.buffer.length < offset) {
             throw new Error(`Page ${page} does not exist`);
         }
 
         const pageBuffer = this.buffer.slice(offset, offset + this.format.pageSize);
-
-        if (page === 0 || this.encodingKey.every((v) => v === 0)) {
-            // no encryption
-            return pageBuffer;
-        }
-
-        const pageIndexBuffer = Buffer.alloc(4);
-        pageIndexBuffer.writeUInt32LE(page);
-
-        const pagekey = xor(pageIndexBuffer, this.encodingKey);
-        return decrypt(pageBuffer, pagekey);
+        return this.pageDecrypter(pageBuffer, page);
     }
 
     /**

@@ -1,6 +1,8 @@
 import { SortOrder } from "../types";
 
 export interface JetFormat {
+    codecType: CodecType;
+
     pageSize: number;
 
     textEncoding: "utf8" | "ucs-2";
@@ -62,4 +64,10 @@ export interface JetFormat {
 
         usageMapOffset: number;
     };
+}
+
+export const enum CodecType {
+    JET,
+    MSISAM,
+    OFFICE,
 }

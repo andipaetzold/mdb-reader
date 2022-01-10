@@ -81,7 +81,7 @@ class MDBReader {
     /**
      * Default sort order
      */
-    getDefaultSortOrder(): Readonly<SortOrder>
+    getDefaultSortOrder(): Readonly<SortOrder>;
 
     /**
      * Returns an array of table names.

@@ -1,4 +1,4 @@
-import { roundToFullByte, getBitmapValue, xor } from "./util";
+import { getBitmapValue, isEmptyBuffer, roundToFullByte, xor } from "./util";
 
 it("getBitmapValue", () => {
     const buffer = Buffer.from([parseInt("10101010", 2), parseInt("01010101", 2)]);
@@ -28,3 +28,10 @@ it("xor", () => {
         Buffer.from([0x00, 0x00, 0x00])
     );
 });
+
+it('isEmptyBuffer', () => {
+    expect(isEmptyBuffer(Buffer.alloc(4))).toBe(true);
+    expect(isEmptyBuffer(Buffer.alloc(0))).toBe(true);
+    expect(isEmptyBuffer(Buffer.from([0, 0, 0, 0]))).toBe(true);
+    expect(isEmptyBuffer(Buffer.from([0, 0, 1, 0]))).toBe(false);
+})
