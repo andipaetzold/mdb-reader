@@ -37,13 +37,6 @@ describe.each`
         expect(tableNames).toStrictEqual(["Table1", "Table2", "Table3", "Table4"]);
     });
 
-    describe(".buffer", () => {
-        it("should return input buffer", () => {
-            const fileBuffer = readFileSync(path);
-            expect(Buffer.compare(reader.buffer, fileBuffer)).toBe(0);
-        });
-    });
-
     it("should not modify the input buffer", () => {
         const fileBuffer = readFileSync(path);
         expect(Buffer.compare(buffer, fileBuffer)).toBe(0);

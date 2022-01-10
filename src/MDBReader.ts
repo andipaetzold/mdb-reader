@@ -14,7 +14,7 @@ export default class MDBReader {
     /**
      * @param buffer Buffer of the database.
      */
-    public constructor(public readonly buffer: Buffer) {
+    public constructor(private readonly buffer: Buffer) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
         this.db = new Database(this.buffer);
