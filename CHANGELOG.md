@@ -1,3 +1,33 @@
+# [2.0.0](https://github.com/andipaetzold/mdb-reader/compare/v1.2.1...v2.0.0) (2022-01-10)
+
+
+### Bug Fixes
+
+* fully specify file paths in imports ([c9ce276](https://github.com/andipaetzold/mdb-reader/commit/c9ce276c207d3d7aabd3fa13c1beb9c8fdf1e14f))
+
+
+* feat!: do not publish bundled version (#114) ([7d3fd1b](https://github.com/andipaetzold/mdb-reader/commit/7d3fd1b96b76e2dd80ab22cc3d0f0a7370c503a1)), closes [#114](https://github.com/andipaetzold/mdb-reader/issues/114)
+* feat!: remove MDBReader.getFormat() (#112) ([7600737](https://github.com/andipaetzold/mdb-reader/commit/76007376b63382af9f3bf64cc1125867a429b35f)), closes [#112](https://github.com/andipaetzold/mdb-reader/issues/112)
+
+
+### Features
+
+* drop node 12 support ([#110](https://github.com/andipaetzold/mdb-reader/issues/110)) ([05e7952](https://github.com/andipaetzold/mdb-reader/commit/05e795272972b6217f98d27397c56b51b01ec877))
+* make ColumnType an enum & export ValueMap ([332fa99](https://github.com/andipaetzold/mdb-reader/commit/332fa9956fcb0cc0b6d36040c9090bdaf617be99))
+* make package ESM only ([b207dbe](https://github.com/andipaetzold/mdb-reader/commit/b207dbe8c8b3fb7eb1aee8d23bb68c7977137a6d))
+* remove `MDBReader.buffer` ([abb01bb](https://github.com/andipaetzold/mdb-reader/commit/abb01bbed3f11a6c5a026370e350c474e49f0901))
+* support BigInt ([#109](https://github.com/andipaetzold/mdb-reader/issues/109)) ([7f78777](https://github.com/andipaetzold/mdb-reader/commit/7f78777b568c57f18832f0a6a84b4e347fc28777))
+* support DateTimeExtended ([#145](https://github.com/andipaetzold/mdb-reader/issues/145)) ([001045e](https://github.com/andipaetzold/mdb-reader/commit/001045eb3c416828f422fe58664b10b615ff2e3c))
+
+
+### BREAKING CHANGES
+
+* remove `MDBReader.buffer`
+* make package ESM only
+* The package doesn't include a bundled version anymore
+* remove MDBReader.getFormat()
+* drop node 12 support
+
 # [2.0.0-next.11](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0-next.10...v2.0.0-next.11) (2022-01-10)
 
 
