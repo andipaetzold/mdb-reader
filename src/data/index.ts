@@ -1,11 +1,13 @@
-import { Column, ColumnType } from "..";
-import { ColumnDefinition } from "../column";
+import { Column, ColumnDefinition } from "../column";
 import Database from "../Database";
+import { ColumnType, Value, ValueMap } from "../types";
+import { readBigInt } from "./bigint";
 import { readBinary } from "./binary";
 import { readByte } from "./byte";
 import { readComplexOrLong } from "./complexOrLong";
 import { readCurrency } from "./currency";
 import { readDateTime } from "./datetime";
+import { readDateTimeExtended } from "./datetimextended";
 import { readDouble } from "./double";
 import { readFloat } from "./float";
 import { readInteger } from "./integer";
@@ -15,35 +17,31 @@ import { readOLE } from "./ole";
 import { readRepID } from "./repid";
 import { readText } from "./text";
 
-export type Value = number | string | Buffer | Date | boolean | null;
-
 const readFnByColType: {
-    [type in Exclude<ColumnType, "boolean">]:
-        | ((buffer: Buffer, column: Column, database: Database) => Exclude<Value, boolean | null>)
+    [type in Exclude<ColumnType, ColumnType.Boolean>]:
+        | ((buffer: Buffer, column: Column, database: Database) => ValueMap[type])
         | undefined;
 } = {
-    binary: readBinary,
-    byte: readByte,
-    complex: readComplexOrLong,
-    currency: readCurrency,
-    datetime: readDateTime,
-    double: readDouble,
-    float: readFloat,
-    integer: readInteger,
-    long: readComplexOrLong,
-    text: readText,
-    memo: readMemo,
-    numeric: readNumeric,
-    ole: readOLE,
-    repid: readRepID,
-
-    // not supported
-    bigint: undefined,
-    datetimextended: undefined,
+    [ColumnType.BigInt]: readBigInt,
+    [ColumnType.Binary]: readBinary,
+    [ColumnType.Byte]: readByte,
+    [ColumnType.Complex]: readComplexOrLong,
+    [ColumnType.Currency]: readCurrency,
+    [ColumnType.DateTime]: readDateTime,
+    [ColumnType.DateTimeExtended]: readDateTimeExtended,
+    [ColumnType.Double]: readDouble,
+    [ColumnType.Float]: readFloat,
+    [ColumnType.Integer]: readInteger,
+    [ColumnType.Long]: readComplexOrLong,
+    [ColumnType.Text]: readText,
+    [ColumnType.Memo]: readMemo,
+    [ColumnType.Numeric]: readNumeric,
+    [ColumnType.OLE]: readOLE,
+    [ColumnType.RepID]: readRepID,
 };
 
-export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Database): Exclude<Value, boolean | null> {
-    if (column.type === "boolean") {
+export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Database): Value | undefined {
+    if (column.type === ColumnType.Boolean) {
         throw new Error("readFieldValue does not handle type boolean");
     }
 

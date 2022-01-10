@@ -1,5 +1,5 @@
-const { Buffer } = require("buffer/");
-const MDBReader = require("../../lib/index");
+import { Buffer } from "buffer/";
+import MDBReader from "../../../lib/index.js";
 
 const button = document.getElementById("button");
 const input = document.getElementById("input");

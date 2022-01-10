@@ -1,9 +1,8 @@
-import { SortOrder } from ".";
 import Database from "./Database";
-import { LegacyFormat } from "./JetFormat";
 import PageType, { assertPageType } from "./PageType";
 import SysObject, { isSysObjectType, isSystemObject, SysObjectType } from "./SysObject";
 import Table from "./Table";
+import { SortOrder } from "./types";
 
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
@@ -15,10 +14,10 @@ export default class MDBReader {
     /**
      * @param buffer Buffer of the database.
      */
-    public constructor(private readonly _buffer: Buffer) {
-        assertPageType(this._buffer, PageType.DatabaseDefinitionPage);
+    public constructor(private readonly buffer: Buffer) {
+        assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
-        this.db = new Database(this._buffer);
+        this.db = new Database(this.buffer);
 
         const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.db, MSYS_OBJECTS_PAGE).getData<{
             Id: number;
@@ -38,21 +37,6 @@ export default class MDBReader {
                 flags: mSysObject.Flags,
             };
         });
-    }
-
-    /**
-     * Buffer of the database.
-     * @deprecated Will be removed in `mdb-reader` v2
-     */
-    public get buffer(): Buffer {
-        return this._buffer;
-    }
-
-    /**
-     * @deprecated Will be removed in `mdb-reader` v2
-     */
-    public getFormat(): LegacyFormat {
-        return this.db.format.legacyFormat;
     }
 
     /**

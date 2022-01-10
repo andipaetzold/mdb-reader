@@ -1,7 +1,4 @@
-export interface SortOrder {
-    value: number;
-    version: number;
-}
+import { SortOrder } from "./types";
 
 const GENERAL_SORT_ORDER_VALUE = 1033;
 

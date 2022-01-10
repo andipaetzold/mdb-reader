@@ -1,12 +1,6 @@
-import { SortOrder } from "../SortOrder";
-
-/**
- * @deprecated
- */
-export type LegacyFormat = "Jet3" | "Jet4";
+import { SortOrder } from "../types";
 
 export interface JetFormat {
-    legacyFormat: LegacyFormat;
     codecType: CodecType;
 
     pageSize: number;
@@ -34,6 +28,7 @@ export interface JetFormat {
             countOffset: number;
 
             columnCountSize: number;
+            variableColumnCountSize: 1 | 2;
         };
     };
 

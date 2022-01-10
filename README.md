@@ -24,7 +24,7 @@ yarn add mdb-reader
 
 ### Node / JavaScript
 
--   Node 12, 14, and 16
+-   Node 14 and 16
 -   Works in the browser with [buffer](https://www.npmjs.com/package/buffer) ([Example](https://github.com/andipaetzold/mdb-reader/tree/main/examples/browser))
 
 ### Access Database versions
@@ -67,11 +67,6 @@ class MDBReader {
      * Buffer of the database.
      */
     readonly buffer: Buffer;
-
-    /**
-     * @deprecated
-     */
-    getFormat(): "Jet3" | "Jet4";
 
     /**
      * Date when the database was created
@@ -159,7 +154,7 @@ class Table {
      * @param rowLimit Maximum number of rows to be returned. Defaults to Infinity.
      */
     getData<TRow extends {
-        [column in TColumn]: number | string | Buffer | Date | boolean | null;
+        [column in TColumn]: Value;
         TColumn extends string = string;
     }>(options?: {
         columns?: ReadonlyArray<TColumn>;
@@ -181,24 +176,7 @@ interface Column {
     /**
      * Type of the table
      */
-    type:
-        | "boolean"
-        | "byte"
-        | "integer"
-        | "long"
-        | "currency"
-        | "float"
-        | "double"
-        | "datetime"
-        | "binary"
-        | "text"
-        | "ole"
-        | "memo"
-        | "repid"
-        | "numeric"
-        | "complex"
-        | "bigint"
-        | "datetimeextended";
+    type: ColumnType;
     size: number;
 
     fixedLength: boolean;
@@ -222,25 +200,25 @@ interface Column {
 
 The data types returned by `Table.getData()` depends on the column type. Null values are always returned as `null`.
 
-| Column Type      | JavaScript Type                           |
-| ---------------- | ----------------------------------------- |
-| boolean          | `boolean`                                 |
-| byte             | `number`                                  |
-| integer          | `number`                                  |
-| long             | `number`                                  |
-| currency         | `string`                                  |
-| float            | `number`                                  |
-| double           | `number`                                  |
-| datetime         | `Date`                                    |
-| binary           | `Buffer`                                  |
-| text             | `string`                                  |
-| ole              | `Buffer`                                  |
-| memo             | `string`                                  |
-| repid            | `string`                                  |
-| numeric          | `string`                                  |
-| complex          | `number`                                  |
-| bigint           | Not supported. Coming in `mdb-reader` v2. |
-| datetimeextended | Not supported. Coming in `mdb-reader` v2. |
+| Column Type      | JavaScript Type |
+| ---------------- | --------------- |
+| bigint           | `BigInt`        |
+| binary           | `Buffer`        |
+| boolean          | `boolean`       |
+| byte             | `number`        |
+| complex          | `number`        |
+| currency         | `string`        |
+| datetime         | `Date`          |
+| datetimeextended | `string`        |
+| double           | `number`        |
+| float            | `number`        |
+| integer          | `number`        |
+| long             | `number`        |
+| memo             | `string`        |
+| numeric          | `string`        |
+| ole              | `Buffer`        |
+| repid            | `string`        |
+| text             | `string`        |
 
 ## Development
 

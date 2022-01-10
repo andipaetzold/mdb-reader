@@ -4,7 +4,7 @@ import { getJetFormat, JetFormat } from "./JetFormat";
 import { createPageDecrypter } from "./PageDecrypter";
 import { PageDecrypter } from "./PageDecrypter/types";
 import PageType, { assertPageType } from "./PageType";
-import { SortOrder } from "./SortOrder";
+import { SortOrder } from "./types";
 import { uncompressText } from "./unicodeCompression";
 import { isEmptyBuffer, xor } from "./util";
 

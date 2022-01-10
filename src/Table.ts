@@ -1,7 +1,9 @@
+import { ColumnType } from ".";
 import { Column, ColumnDefinition, getColumnType, parseColumnFlags } from "./column";
-import { readFieldValue, Value } from "./data";
+import { readFieldValue } from "./data";
 import Database from "./Database";
 import PageType, { assertPageType } from "./PageType";
+import { Value } from "./types";
 import { uncompressText } from "./unicodeCompression";
 import { findMapPages } from "./usage-map";
 import { getBitmapValue, roundToFullByte } from "./util";
@@ -141,7 +143,7 @@ export default class Table {
                     this.db.format.tableDefinitionPage.columnsDefinition.variableIndexOffset
                 ),
                 size:
-                    type === "boolean"
+                    type === ColumnType.Boolean
                         ? 0
                         : columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.sizeOffset),
                 fixedIndex: columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset),
@@ -150,7 +152,7 @@ export default class Table {
                 ),
             };
 
-            if (type === "numeric") {
+            if (type === ColumnType.Numeric) {
                 column.precision = columnBuffer.readUInt8(11);
                 column.scale = columnBuffer.readUInt8(12);
             }
@@ -246,8 +248,8 @@ export default class Table {
             let variableColumnCount = 0;
             const variableColumnOffsets: number[] = [];
             if (this.variableColumnCount > 0) {
-                switch (this.db.format.legacyFormat) {
-                    case "Jet3": {
+                switch (this.db.format.dataPage.record.variableColumnCountSize) {
+                    case 1: {
                         variableColumnCount = pageBuffer.readUInt8(recordEnd - bitmaskSize);
 
                         // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L125-L147
@@ -272,7 +274,7 @@ export default class Table {
                         }
                         break;
                     }
-                    case "Jet4": {
+                    case 2: {
                         variableColumnCount = pageBuffer.readUInt16LE(recordEnd - bitmaskSize - 1);
 
                         // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L115-L124
@@ -321,13 +323,13 @@ export default class Table {
                     size = 0;
                 }
 
-                if (column.type === "boolean") {
+                if (column.type === ColumnType.Boolean) {
                     value = value === undefined;
                 } else if (value !== null) {
                     value = readFieldValue(pageBuffer.slice(start, start + size), column, this.db);
                 }
 
-                recordValues[column.name] = value;
+                recordValues[column.name] = value as Value;
             }
 
             data.push(recordValues);

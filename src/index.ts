@@ -1,6 +1,4 @@
-export type { Column, ColumnType } from "./column";
-export type { Value } from "./data";
+export type { Column } from "./column";
 export { default } from "./MDBReader";
-export type { SortOrder } from "./SortOrder";
 export type { default as Table } from "./Table";
-
+export * from "./types";

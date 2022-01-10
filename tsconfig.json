@@ -1,12 +1,16 @@
 {
+    "extends": "@tsconfig/node14/tsconfig.json",
     "compilerOptions": {
-        "declaration": true,
-        "module": "ES6",
+        "outDir": "lib",
+
+        "module": "ES2020",
         "moduleResolution": "Node",
-        "target": "ES2018",
-        "lib": ["ES2018"],
-        "strict": true,
-        "importHelpers": true
+        "importHelpers": true,
+
+        "declaration": true,
+        "declarationDir": "lib",
+
+        "plugins": [{ "transform": "typescript-transform-extensions", "extensions": { ".ts": ".js" } }]
     },
     "include": ["src/**/*"],
     "exclude": ["src/**/*.spec.ts"]
