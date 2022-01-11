@@ -12,6 +12,6 @@ beforeEach(() => {
 });
 
 it("reads ole data ", () => {
-    const rows = table.getData();
+    table.getData();
     // TODO: check for correct values
 });

@@ -28,7 +28,7 @@ export default class MDBReader {
             columns: ["Id", "Name", "Type", "Flags"],
         });
 
-        this.sysObjects = mSysObjectsTable.map((mSysObject: any) => {
+        this.sysObjects = mSysObjectsTable.map((mSysObject) => {
             const objectType = mSysObject.Type & 0x7f;
             return {
                 objectName: mSysObject.Name,

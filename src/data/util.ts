@@ -9,8 +9,10 @@ export function buildValue(array: ReadonlyArray<number>, scale: number, negative
         value += "-";
     }
 
-    let top: number;
-    for (top = length; top > 0 && top - 1 > scale && !array[top - 1]; top--) {}
+    let top = length;
+    while (top > 0 && top - 1 > scale && !array[top - 1]) {
+        top--;
+    }
 
     if (top === 0) {
         value += "0";
