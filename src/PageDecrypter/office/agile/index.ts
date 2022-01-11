@@ -1,9 +1,9 @@
-import { blockDecrypt, hash, iterateHash } from "../../../crypto-util";
-import { fixBufferLength, roundToFullByte } from "../../../util";
+import { blockDecrypt, deriveKey, hash } from "../../../crypto-util";
+import { roundToFullByte } from "../../../util";
 import { PageDecrypter } from "../../types";
 import { getPageEncodingKey } from "../../util";
 import { parseEncryptionDescriptor } from "./EncryptionDescriptor";
-import { CreateHash, PasswordKeyEncryptor } from "./types";
+import { PasswordKeyEncryptor } from "./types";
 
 const ENC_VERIFIER_INPUT_BLOCK = [0xfe, 0xa7, 0xd2, 0x76, 0x3b, 0x4b, 0x9e, 0x79];
 const ENC_VERIFIER_VALUE_BLOCK = [0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e];
@@ -22,7 +22,7 @@ export function createAgilePageDecryter(encodingKey: Buffer, encryptionProvider:
 }
 
 function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor): Buffer {
-    const key = cryptDeriveKey(
+    const key = deriveKey(
         password,
         ENC_VALUE_BLOCK,
         passwordKeyEncryptor.hash.create,
@@ -37,18 +37,4 @@ function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncr
         passwordKeyEncryptor.salt,
         passwordKeyEncryptor.encrypted.keyValue
     );
-}
-
-function cryptDeriveKey(
-    password: Buffer,
-    blockBytes: Buffer,
-    createHash: CreateHash,
-    salt: Buffer,
-    iterations: number,
-    keyByteLength: number
-): Buffer {
-    const baseHash = hash(createHash, [salt, password]);
-    const iterHash = iterateHash(createHash, baseHash, iterations);
-    const finalHash = hash(createHash, [iterHash, blockBytes]);
-    return fixBufferLength(finalHash, keyByteLength, 0x36);
 }

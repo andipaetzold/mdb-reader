@@ -21,12 +21,29 @@ export function hash(createHash: CreateHash, buffers: Buffer[], length?: number)
     return result;
 }
 
-export function iterateHash(createDigest: () => crypto.Hash, baseBuffer: Buffer, iterations: number): Buffer {
+function iterateHash(createDigest: () => crypto.Hash, baseBuffer: Buffer, iterations: number): Buffer {
     let iterHash = baseBuffer;
     for (let i = 0; i < iterations; ++i) {
         iterHash = hash(createDigest, [intToBuffer(i), iterHash]);
     }
     return iterHash;
+}
+
+/**
+ * Can probably be replaced with `crypto.webcrypto.subtle.derivekey(...)` once node 14 support is dropped
+ */
+export function deriveKey(
+    password: Buffer,
+    blockBytes: Buffer,
+    createHash: CreateHash,
+    salt: Buffer,
+    iterations: number,
+    keyByteLength: number
+): Buffer {
+    const baseHash = hash(createHash, [salt, password]);
+    const iterHash = iterateHash(createHash, baseHash, iterations);
+    const finalHash = hash(createHash, [iterHash, blockBytes]);
+    return fixBufferLength(finalHash, keyByteLength, 0x36);
 }
 
 export function blockDecrypt(cipher: Cipher, key: Buffer, iv: Buffer, data: Buffer): Buffer {
