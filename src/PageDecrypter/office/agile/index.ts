@@ -1,5 +1,4 @@
-import crypto from "crypto";
-import { hash, iterateHash } from "../../../crypto-util";
+import { blockDecrypt, hash, iterateHash } from "../../../crypto-util";
 import { fixBufferLength, roundToFullByte } from "../../../util";
 import { PageDecrypter } from "../../types";
 import { getPageEncodingKey } from "../../util";
@@ -18,7 +17,7 @@ export function createAgilePageDecryter(encodingKey: Buffer, encryptionProvider:
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageNumber);
         const iv = hash(keyData.hash.create, [keyData.salt, pageEncodingKey], keyData.blockSize);
 
-        return blockDecrypt(key, iv, b);
+        return blockDecrypt(keyData.cipher, key, iv, b);
     };
 }
 
@@ -32,7 +31,12 @@ function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncr
         roundToFullByte(passwordKeyEncryptor.keyBits)
     );
 
-    return blockDecrypt(key, passwordKeyEncryptor.salt, passwordKeyEncryptor.encrypted.keyValue);
+    return blockDecrypt(
+        passwordKeyEncryptor.cipher,
+        key,
+        passwordKeyEncryptor.salt,
+        passwordKeyEncryptor.encrypted.keyValue
+    );
 }
 
 function cryptDeriveKey(
@@ -47,10 +51,4 @@ function cryptDeriveKey(
     const iterHash = iterateHash(createHash, baseHash, iterations);
     const finalHash = hash(createHash, [iterHash, blockBytes]);
     return fixBufferLength(finalHash, keyByteLength, 0x36);
-}
-
-function blockDecrypt(key: Buffer, iv: Buffer, data: Buffer): Buffer {
-    const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
-    decipher.setAutoPadding(false);
-    return decipher.update(data);
 }
