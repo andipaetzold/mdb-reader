@@ -13,18 +13,12 @@ const ENC_VALUE_BLOCK = Buffer.from([0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0
 export function createAgilePageDecryter(encodingKey: Buffer, encryptionProvider: Buffer, password: Buffer): PageDecrypter {
     const { keyData, passwordKeyEncryptor } = parseEncryptionDescriptor(encryptionProvider);
 
-    const keyValue = decryptKeyValue(password, passwordKeyEncryptor);
-
+    const key = decryptKeyValue(password, passwordKeyEncryptor);
     return (b, pageNumber) => {
-        const blockBytes = getPageEncodingKey(encodingKey, pageNumber);
-        const iv = hash(keyData.hash.create, [keyData.salt, blockBytes], keyData.blockSize);
+        const pageEncodingKey = getPageEncodingKey(encodingKey, pageNumber);
+        const iv = hash(keyData.hash.create, [keyData.salt, pageEncodingKey], keyData.blockSize);
 
-        const decipher = forgeCipher.createDecipher("AES-CBC", forgeUtil.createBuffer(keyValue));
-        decipher.start({ iv: forgeUtil.createBuffer(iv) });
-        decipher.update(forgeUtil.createBuffer(b));
-        decipher.finish();
-
-        return Buffer.from(decipher.output.toHex(), "hex");
+        return blockDecrypt(key, iv, b);
     };
 }
 
@@ -38,7 +32,7 @@ function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncr
         roundToFullByte(passwordKeyEncryptor.keyBits)
     );
 
-    return blockDecryptBytes(key, passwordKeyEncryptor.salt, passwordKeyEncryptor.encrypted.keyValue);
+    return blockDecrypt(key, passwordKeyEncryptor.salt, passwordKeyEncryptor.encrypted.keyValue);
 }
 
 function cryptDeriveKey(
@@ -52,14 +46,13 @@ function cryptDeriveKey(
     const baseHash = hash(createHash, [salt, password]);
     const iterHash = iterateHash(createHash, baseHash, iterations);
     const finalHash = hash(createHash, [iterHash, blockBytes]);
-
     return fixBufferLength(finalHash, keyByteLength, 0x36);
 }
 
-function blockDecryptBytes(keyBytes: Buffer, iv: Buffer, encBytes: Buffer): Buffer {
-    const decipher = forgeCipher.createDecipher("AES-CBC", forgeUtil.createBuffer(keyBytes)); // use password key encrypter values
+function blockDecrypt(key: Buffer, iv: Buffer, data: Buffer): Buffer {
+    const decipher = forgeCipher.createDecipher("AES-CBC", forgeUtil.createBuffer(key)); // TODO: use correct algorithm
     decipher.start({ iv: forgeUtil.createBuffer(iv) });
-    decipher.update(forgeUtil.createBuffer(encBytes));
+    decipher.update(forgeUtil.createBuffer(data));
     decipher.finish();
     return Buffer.from(decipher.output.toHex(), "hex");
 }
