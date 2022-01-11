@@ -1,8 +1,8 @@
-import { CreateHash } from "../PageDecrypter/office/agile/types";
+import { createHash } from "crypto";
 import { fixBufferLength } from "../util";
 
-export function hash(createHash: CreateHash, buffers: Buffer[], length?: number): Buffer {
-    const digest = createHash();
+export function hash(algorithm: string, buffers: Buffer[], length?: number): Buffer {
+    const digest = createHash(algorithm);
 
     for (const buffer of buffers) {
         digest.update(buffer);

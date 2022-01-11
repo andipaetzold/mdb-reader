@@ -15,7 +15,7 @@ export function createAgilePageDecryter(encodingKey: Buffer, encryptionProvider:
     const key = decryptKeyValue(password, passwordKeyEncryptor);
     return (b, pageNumber) => {
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageNumber);
-        const iv = hash(keyData.hash.create, [keyData.salt, pageEncodingKey], keyData.blockSize);
+        const iv = hash(keyData.hash.algorithm, [keyData.salt, pageEncodingKey], keyData.blockSize);
 
         return blockDecrypt(keyData.cipher, key, iv, b);
     };
@@ -25,7 +25,7 @@ function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncr
     const key = deriveKey(
         password,
         ENC_VALUE_BLOCK,
-        passwordKeyEncryptor.hash.create,
+        passwordKeyEncryptor.hash.algorithm,
         passwordKeyEncryptor.salt,
         passwordKeyEncryptor.spinCount,
         roundToFullByte(passwordKeyEncryptor.keyBits)

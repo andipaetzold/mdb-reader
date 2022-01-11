@@ -1,4 +1,3 @@
-import { createHash } from "crypto";
 import { XMLParser } from "fast-xml-parser";
 import { EncryptionDescriptor } from "./types";
 
@@ -32,7 +31,6 @@ export function parseEncryptionDescriptor(buffer: Buffer): EncryptionDescriptor 
             },
             hash: {
                 size: keyData.hashSize,
-                create: () => createHash(keyData.hashAlgorithm),
                 algorithm: keyEncryptor.hashAlgorithm,
             },
             salt: Buffer.from(keyData.saltValue, "base64"),
@@ -47,7 +45,6 @@ export function parseEncryptionDescriptor(buffer: Buffer): EncryptionDescriptor 
             },
             hash: {
                 size: keyEncryptor.hashSize,
-                create: () => createHash(keyEncryptor.hashAlgorithm),
                 algorithm: keyEncryptor.hashAlgorithm,
             },
             salt: Buffer.from(keyEncryptor.saltValue, "base64"),

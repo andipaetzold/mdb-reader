@@ -1,7 +1,3 @@
-import { Hash } from "crypto";
-
-export type CreateHash = () => Hash;
-
 export interface EncryptionDescriptor {
     keyData: KeyData;
     passwordKeyEncryptor: PasswordKeyEncryptor;
@@ -16,9 +12,8 @@ export interface KeyData {
     };
 
     hash: {
-        create: CreateHash;
         size: number;
-        algorithm: string
+        algorithm: string;
     };
 
     salt: Buffer;
@@ -35,9 +30,8 @@ export interface PasswordKeyEncryptor {
     };
 
     hash: {
-        create: CreateHash;
         size: number;
-        algorithm: string
+        algorithm: string;
     };
 
     salt: Buffer;
