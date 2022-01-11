@@ -1,5 +1,5 @@
+import { decryptRC4 } from "./crypto-util";
 import { readDateTime } from "./data/datetime";
-import { decrypt } from "./decrypt";
 import { getJetFormat, JetFormat } from "./JetFormat";
 import { createPageDecrypter } from "./PageDecrypter";
 import { PageDecrypter } from "./PageDecrypter/types";
@@ -144,9 +144,9 @@ export default class Database {
 const ENCRYPTION_START = 0x18;
 const ENCRYPTION_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]);
 function decryptHeader(buffer: Buffer, format: JetFormat): void {
-    const decryptedBuffer = decrypt(
+    const decryptedBuffer = decryptRC4(
+        ENCRYPTION_KEY,
         buffer.slice(ENCRYPTION_START, ENCRYPTION_START + format.databaseDefinitionPage.encryptedSize),
-        ENCRYPTION_KEY
     );
     decryptedBuffer.copy(buffer, ENCRYPTION_START);
 }

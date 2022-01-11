@@ -1,6 +1,9 @@
-export function decrypt(input: Buffer, key: Buffer): Buffer {
+/**
+ * Cannot be replaced with node's crypto module because RC4 was remove from all browsers
+ */
+export function decryptRC4(key: Buffer, data: Buffer): Buffer {
     const keyStream = createKeyStream(key);
-    return decryptBuffer(input, keyStream);
+    return decryptBuffer(data, keyStream);
 }
 
 /**

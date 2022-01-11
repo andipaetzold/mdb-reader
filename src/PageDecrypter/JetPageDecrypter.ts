@@ -1,4 +1,4 @@
-import { decrypt } from "../decrypt";
+import { decryptRC4 } from "../crypto-util";
 import { isEmptyBuffer } from "../util";
 import { createIdentityDecrypter } from "./IdentityDecrypter";
 import { PageDecrypter } from "./types";
@@ -16,6 +16,6 @@ export function createJetPageDecrypter(databaseDefinitionPage: Buffer): PageDecr
 
     return (pageBuffer, pageIndex) => {
         const pagekey = getPageEncodingKey(encodingKey, pageIndex);
-        return decrypt(pageBuffer, pagekey);
+        return decryptRC4(pagekey, pageBuffer);
     };
 }
