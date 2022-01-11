@@ -1,4 +1,4 @@
-import { blockDecrypt, deriveKey, hash } from "../../../crypto-util";
+import { blockDecrypt, deriveKey, hash } from "../../../crypto";
 import { roundToFullByte } from "../../../util";
 import { PageDecrypter } from "../../types";
 import { getPageEncodingKey } from "../../util";

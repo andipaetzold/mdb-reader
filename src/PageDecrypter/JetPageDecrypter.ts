@@ -1,4 +1,4 @@
-import { decryptRC4 } from "../crypto-util";
+import { decryptRC4 } from "../crypto";
 import { isEmptyBuffer } from "../util";
 import { createIdentityDecrypter } from "./IdentityDecrypter";
 import { PageDecrypter } from "./types";

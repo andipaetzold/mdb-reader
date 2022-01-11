@@ -1,4 +1,4 @@
-import { decryptRC4 } from "./crypto-util";
+import { decryptRC4 } from "./crypto";
 import { readDateTime } from "./data/datetime";
 import { getJetFormat, JetFormat } from "./JetFormat";
 import { createPageDecrypter } from "./PageDecrypter";
