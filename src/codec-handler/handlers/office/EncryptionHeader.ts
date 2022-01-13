@@ -1,4 +1,4 @@
-import { isInRange } from "../../util";
+import { isInRange } from "../../../util";
 import { CryptoAlgorithm, CRYPTO_ALGORITHMS } from "./CryptoAlgorithm";
 import { HashAlgorithm, HASH_ALGORITHMS } from "./HashAlgorithm";
 

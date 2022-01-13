@@ -1,7 +1,8 @@
-import { blockDecrypt, deriveKey, hash } from "../../../crypto";
-import { roundToFullByte } from "../../../util";
-import { PageDecrypter } from "../../types";
-import { getPageEncodingKey } from "../../util";
+import { CodecHandler } from "../../..";
+import { blockDecrypt, deriveKey, hash } from "../../../../crypto";
+import { roundToFullByte } from "../../../../util";
+import { DecryptPage } from "../../../types";
+import { getPageEncodingKey } from "../../../util";
 import { parseEncryptionDescriptor } from "./EncryptionDescriptor";
 import { PasswordKeyEncryptor } from "./types";
 
@@ -9,15 +10,20 @@ import { PasswordKeyEncryptor } from "./types";
 // const ENC_VERIFIER_VALUE_BLOCK = [0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e];
 const ENC_VALUE_BLOCK = Buffer.from([0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0xd6]);
 
-export function createAgilePageDecryter(encodingKey: Buffer, encryptionProvider: Buffer, password: Buffer): PageDecrypter {
+export function createAgileCodecHandler(encodingKey: Buffer, encryptionProvider: Buffer, password: Buffer): CodecHandler {
     const { keyData, passwordKeyEncryptor } = parseEncryptionDescriptor(encryptionProvider);
 
     const key = decryptKeyValue(password, passwordKeyEncryptor);
-    return (b, pageNumber) => {
+    const decryptPage: DecryptPage = (b, pageNumber) => {
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageNumber);
         const iv = hash(keyData.hash.algorithm, [keyData.salt, pageEncodingKey], keyData.blockSize);
 
         return blockDecrypt(keyData.cipher, key, iv, b);
+    };
+
+    return {
+        decryptPage,
+        verifyPassword: () => true, // TODO
     };
 }
 

@@ -1,9 +1,9 @@
-import { isEmptyBuffer } from "../util";
-import { createIdentityDecrypter } from "./IdentityDecrypter";
-import { createAgilePageDecryter } from "./office/agile";
-import { EncryptionHeaderFlags, isFlagSet } from "./office/EncryptionHeader";
-import { createRC4CryptoAPIProvider } from "./office/RC4CryptoAPIProvider";
-import { PageDecrypter } from "./types";
+import { isEmptyBuffer } from "../../../util";
+import { createIdentityHandler } from "../identity";
+import { createAgileCodecHandler } from "./agile";
+import { EncryptionHeaderFlags, isFlagSet } from "./EncryptionHeader";
+import { createRC4CryptoAPICodecHandler } from "./rc4-cryptoapi";
+import { CodecHandler } from "../../types";
 
 const MAX_PASSWORD_LENGTH = 255;
 const CRYPT_STRUCTURE_OFFSET = 0x299;
@@ -13,11 +13,11 @@ const CRYPT_STRUCTURE_OFFSET = 0x299;
 const KEY_OFFSET = 0x3e;
 const KEY_SIZE = 4;
 
-export function createOfficePageDecrypter(databaseDefinitionPage: Buffer, password: string): PageDecrypter {
+export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, password: string): CodecHandler {
     const encodingKey = databaseDefinitionPage.slice(KEY_OFFSET, KEY_OFFSET + KEY_SIZE);
 
     if (isEmptyBuffer(encodingKey)) {
-        return createIdentityDecrypter();
+        return createIdentityHandler();
     }
 
     const passwordBuffer = Buffer.from(password.substring(0, MAX_PASSWORD_LENGTH), "utf16le");
@@ -33,7 +33,7 @@ export function createOfficePageDecrypter(databaseDefinitionPage: Buffer, passwo
     switch (version) {
         case "4.4":
             // Agile Encryption: 4.4
-            return createAgilePageDecryter(encodingKey, encryptionProviderBuffer, passwordBuffer);
+            return createAgileCodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
 
         case "4.3":
         case "3.3":
@@ -51,7 +51,7 @@ export function createOfficePageDecrypter(databaseDefinitionPage: Buffer, passwo
                     } else {
                         try {
                             // RC4 CryptoAPI Encryption
-                            return createRC4CryptoAPIProvider(encodingKey, encryptionProviderBuffer, passwordBuffer);
+                            return createRC4CryptoAPICodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
                         } catch (e) {
                             // Non Standard Encryption
                         }
