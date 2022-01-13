@@ -4,4 +4,4 @@ export interface CodecHandler {
 }
 
 export type DecryptPage = (pageBuffer: Buffer, pageIndex: number) => Buffer;
-export type VerifyPassword = (password: string) => boolean;
+export type VerifyPassword = () => boolean;

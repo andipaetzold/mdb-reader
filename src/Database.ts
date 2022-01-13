@@ -25,7 +25,7 @@ export default class Database {
         decryptHeader(this.databaseDefinitionPage, this.format);
         this.codecHandler = createCodecHandler(this.databaseDefinitionPage, password);
 
-        if (!this.codecHandler.verifyPassword(password)) {
+        if (!this.codecHandler.verifyPassword()) {
             throw new Error("Wrong password");
         }
     }
