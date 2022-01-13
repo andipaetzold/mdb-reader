@@ -1,3 +1,4 @@
+import { isInRange } from "../../util";
 import { CryptoAlgorithm, CRYPTO_ALGORITHMS } from "./CryptoAlgorithm";
 import { HashAlgorithm, HASH_ALGORITHMS } from "./HashAlgorithm";
 
@@ -38,7 +39,7 @@ export function parseEncryptionHeader(
         throw new Error("Invalid hash algorithm");
     }
 
-    if (!cryptoAlgorithm.isValidKeySize(keySize)) {
+    if (!isInRange(cryptoAlgorithm.keySizeMin, cryptoAlgorithm.keySizeMax, keySize)) {
         throw new Error("Invalid key size");
     }
 
