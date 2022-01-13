@@ -15,9 +15,9 @@ export const EncryptionHeaderFlags = {
 };
 
 export interface EncryptionHeader {
-    cryptoAlgorithm: CryptoAlgorithm;
-    keySize: number;
-    hashAlgorithm: HashAlgorithm;
+    readonly cryptoAlgorithm: CryptoAlgorithm;
+    readonly keySize: number;
+    readonly hashAlgorithm: HashAlgorithm;
 }
 
 export function parseEncryptionHeader(

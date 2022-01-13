@@ -1,8 +1,8 @@
 export interface CryptoAlgorithm {
-    id: number;
-    encryptionVerifierHashLength: number;
-    keySizeMin: number;
-    keySizeMax: number;
+    readonly id: number;
+    readonly encryptionVerifierHashLength: number;
+    readonly keySizeMin: number;
+    readonly keySizeMax: number;
 }
 
 const EXTERNAL: CryptoAlgorithm = {

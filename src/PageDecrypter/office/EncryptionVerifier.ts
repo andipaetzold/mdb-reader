@@ -8,7 +8,7 @@ const SALT_OFFSET = 142;
 const SALT_SIZE = 16;
 
 export interface EncryptionVerifier {
-    salt: Buffer;
+    readonly salt: Buffer;
 }
 
 export function parseEncryptionVerifier(encryptionProvider: Buffer, _cryptoAlgorithm: CryptoAlgorithm): EncryptionVerifier {
