@@ -1,6 +1,8 @@
 import { isEmptyBuffer } from "../util";
 import { createIdentityDecrypter } from "./IdentityDecrypter";
 import { createAgilePageDecryter } from "./office/agile";
+import { EncryptionHeaderFlags, isFlagSet } from "./office/EncryptionHeader";
+import { createRC4CryptoAPIProvider } from "./office/RC4CryptoAPIProvider";
 import { PageDecrypter } from "./types";
 
 const MAX_PASSWORD_LENGTH = 255;
@@ -40,7 +42,27 @@ export function createOfficePageDecrypter(databaseDefinitionPage: Buffer, passwo
         case "4.2":
         case "3.2":
         case "2.2":
-            throw new Error("Not implemented yet");
+            {
+                const flags = encryptionProviderBuffer.readInt32LE(4);
+                if (isFlagSet(flags, EncryptionHeaderFlags.FCRYPTO_API_FLAG)) {
+                    if (isFlagSet(flags, EncryptionHeaderFlags.FAES_FLAG)) {
+                        // Standard Encryption
+                        throw new Error("Not implemented yet");
+                    } else {
+                        try {
+                            // RC4 CryptoAPI Encryption
+                            return createRC4CryptoAPIProvider(encodingKey, encryptionProviderBuffer, passwordBuffer);
+                        } catch (e) {
+                            // Non Standard Encryption
+                        }
+
+                        throw new Error("Not implemented yet");
+                    }
+                } else {
+                    throw new Error("Unknown encryption");
+                }
+            }
+            break;
 
         case "1.1":
             // RC4 Encryption: 1.1
