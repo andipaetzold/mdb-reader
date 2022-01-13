@@ -53,7 +53,10 @@ export default class Table {
 
             nextDefinitionPage = curBuffer.readUInt32LE(4);
         }
-        this.definitionBuffer = buffer!;
+        if (!buffer) {
+            throw new Error("Could not find table definition page");
+        }
+        this.definitionBuffer = buffer;
 
         // Read row, column, and index counts
         this.rowCount = this.definitionBuffer.readUInt32LE(this.db.format.tableDefinitionPage.rowCountOffset);
@@ -99,6 +102,7 @@ export default class Table {
 
         columnDefinitions.sort((a, b) => a.index - b.index);
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         return columnDefinitions.map(({ index, variableIndex, fixedIndex, ...rest }) => rest);
     }
 
@@ -179,16 +183,18 @@ export default class Table {
      * @param rowOffset Index of the first row to be returned. 0-based. Defaults to 0.
      * @param rowLimit Maximum number of rows to be returned. Defaults to Infinity.
      */
-    public getData<TRow extends { [column in TColumn]: Value }, TColumn extends string = string>(options?: {
-        columns?: ReadonlyArray<string>;
-        rowOffset?: number;
-        rowLimit?: number;
-    }): TRow[] {
+    public getData<TRow extends { [column in TColumn]: Value }, TColumn extends string = string>(
+        options: {
+            columns?: ReadonlyArray<string>;
+            rowOffset?: number;
+            rowLimit?: number;
+        } = {}
+    ): TRow[] {
         const columnDefinitions = this.getColumnDefinitions();
 
         const data = [];
 
-        const columns = columnDefinitions.filter((c) => options?.columns === undefined || options.columns!.includes(c.name));
+        const columns = columnDefinitions.filter((c) => options.columns === undefined || options.columns.includes(c.name));
         const rowOffset = options?.rowOffset ?? 0;
         const rowLimit = options?.rowLimit ?? Infinity;
 

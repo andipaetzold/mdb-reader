@@ -19,5 +19,11 @@ export function readNumeric(buffer: Buffer, column: Pick<Column, "scale" | "prec
     }
 
     const negative = !!(buffer[0] & 0x80);
-    return buildValue(product, column.scale!, negative);
+    return buildValue(
+        product,
+        // Scale is always set for numeric columns
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        column.scale!,
+        negative
+    );
 }
