@@ -1,6 +1,5 @@
-import { blockDecrypt, decryptRC4, hash } from "../../crypto";
+import { decryptRC4, hash } from "../../crypto";
 import { roundToFullByte } from "../../util";
-import { createIdentityDecrypter } from "../IdentityDecrypter";
 import { PageDecrypter } from "../types";
 import { getPageEncodingKey } from "../util";
 import { CryptoAlgorithm, CRYPTO_ALGORITHMS } from "./CryptoAlgorithm";

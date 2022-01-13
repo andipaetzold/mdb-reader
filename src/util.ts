@@ -43,7 +43,7 @@ export function intToBuffer(n: number): Buffer {
     return buffer;
 }
 
-export function fixBufferLength(buffer: Buffer, length: number, padByte: number = 0): Buffer {
+export function fixBufferLength(buffer: Buffer, length: number, padByte = 0): Buffer {
     if (buffer.length > length) {
         return buffer.slice(0, length);
     }
