@@ -1,8 +1,7 @@
-import { decryptRC4 } from "./crypto-util";
+import { CodecHandler, createCodecHandler } from "./codec-handler";
+import { decryptRC4 } from "./crypto";
 import { readDateTime } from "./data/datetime";
 import { getJetFormat, JetFormat } from "./JetFormat";
-import { createPageDecrypter } from "./PageDecrypter";
-import { PageDecrypter } from "./PageDecrypter/types";
 import PageType, { assertPageType } from "./PageType";
 import { SortOrder } from "./types";
 import { uncompressText } from "./unicodeCompression";
@@ -13,10 +12,10 @@ const PASSWORD_OFFSET = 0x42;
 export default class Database {
     public readonly format: JetFormat;
 
-    private readonly pageDecrypter: PageDecrypter;
+    private readonly codecHandler: CodecHandler;
     private readonly databaseDefinitionPage: Buffer;
 
-    public constructor(private readonly buffer: Buffer) {
+    public constructor(private readonly buffer: Buffer, readonly password: string) {
         assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
 
         this.format = getJetFormat(this.buffer);
@@ -24,8 +23,11 @@ export default class Database {
         this.databaseDefinitionPage = Buffer.alloc(this.format.pageSize);
         this.buffer.copy(this.databaseDefinitionPage, 0, 0, this.format.pageSize);
         decryptHeader(this.databaseDefinitionPage, this.format);
+        this.codecHandler = createCodecHandler(this.databaseDefinitionPage, password);
 
-        this.pageDecrypter = createPageDecrypter(this.databaseDefinitionPage, "");
+        if (!this.codecHandler.verifyPassword()) {
+            throw new Error("Wrong password");
+        }
     }
 
     public getPassword(): string | null {
@@ -106,7 +108,7 @@ export default class Database {
         }
 
         const pageBuffer = this.buffer.slice(offset, offset + this.format.pageSize);
-        return this.pageDecrypter(pageBuffer, page);
+        return this.codecHandler.decryptPage(pageBuffer, page);
     }
 
     /**
@@ -146,7 +148,7 @@ const ENCRYPTION_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]);
 function decryptHeader(buffer: Buffer, format: JetFormat): void {
     const decryptedBuffer = decryptRC4(
         ENCRYPTION_KEY,
-        buffer.slice(ENCRYPTION_START, ENCRYPTION_START + format.databaseDefinitionPage.encryptedSize),
+        buffer.slice(ENCRYPTION_START, ENCRYPTION_START + format.databaseDefinitionPage.encryptedSize)
     );
     decryptedBuffer.copy(buffer, ENCRYPTION_START);
 }

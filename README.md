@@ -36,6 +36,12 @@ yarn add mdb-reader
 -   Access 2016 (ACE16)
 -   Access 2019 (ACE17)
 
+### Encryption
+
+- Jet
+- Office Agile
+- Office RC4 Crypto API
+
 ## Usage
 
 ```javascript
@@ -61,7 +67,12 @@ class MDBReader {
     /**
      * @param buffer Buffer of the database.
      */
-    constructor(buffer: Buffer);
+    constructor(
+        buffer: Buffer,
+        options: {
+            password?: string;
+        }
+    );
 
     /**
      * Date when the database was created
