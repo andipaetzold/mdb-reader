@@ -69,7 +69,7 @@ class MDBReader {
      */
     constructor(
         buffer: Buffer,
-        options: {
+        options?: {
             password?: string;
         }
     );
