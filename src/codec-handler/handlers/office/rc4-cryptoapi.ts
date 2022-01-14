@@ -1,4 +1,4 @@
-import { decryptRC4, hash } from "../../../crypto";
+import { createRC4Decrypter, decryptRC4, hash } from "../../../crypto";
 import { fixBufferLength, intToBuffer, roundToFullByte } from "../../../util";
 import { CodecHandler, DecryptPage } from "../../types";
 import { getPageEncodingKey } from "../../util";
@@ -32,13 +32,12 @@ export function createRC4CryptoAPICodecHandler(
         decryptPage,
         verifyPassword: () => {
             const encryptionKey = getEncryptionKey(encryptionHeader, baseHash, intToBuffer(0));
-            const decrypted = decryptRC4(
-                encryptionKey,
-                Buffer.concat([encryptionVerifier.encryptionVerifier, encryptionVerifier.encryptionVerifierHash])
-            );
-            const verifier = decrypted.slice(0, encryptionVerifier.encryptionVerifier.length);
+
+            const rc4Decrypter = createRC4Decrypter(encryptionKey);
+
+            const verifier = rc4Decrypter(encryptionVerifier.encryptionVerifier);
             const verifierHash = fixBufferLength(
-                decrypted.slice(encryptionVerifier.encryptionVerifier.length),
+                rc4Decrypter(encryptionVerifier.encryptionVerifierHash),
                 encryptionVerifier.encryptionVerifierHashSize
             );
 
