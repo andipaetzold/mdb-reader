@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0...v2.1.0) (2022-01-14)
+
+
+### Features
+
+* support Office Agile & RC4 Crypto API encrypted databases ([#150](https://github.com/andipaetzold/mdb-reader/issues/150)) ([6f017b0](https://github.com/andipaetzold/mdb-reader/commit/6f017b086aea7e9cb64efdec62740c6ddf6bc3f9))
+
 # [2.0.0](https://github.com/andipaetzold/mdb-reader/compare/v1.2.1...v2.0.0) (2022-01-10)
 
 ### Features
