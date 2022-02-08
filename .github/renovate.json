@@ -1,3 +1,4 @@
 {
-    "extends": ["config:js-lib", ":semanticCommitScopeDisabled"]
+    "extends": ["config:js-lib", ":semanticCommitScopeDisabled"],
+    "ignorePaths": ["**/node_modules/**"]
 }
