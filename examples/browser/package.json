@@ -10,7 +10,7 @@
         "buffer": "6.0.3"
     },
     "devDependencies": {
-        "parcel": "2.2.1",
+        "parcel": "2.3.1",
         "rimraf": "3.0.2"
     }
 }
