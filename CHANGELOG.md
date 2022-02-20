@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/andipaetzold/mdb-reader/compare/v2.1.0...v2.1.1) (2022-02-20)
+
+
+### Bug Fixes
+
+* use default import for fast-xml-parser ([#169](https://github.com/andipaetzold/mdb-reader/issues/169)) ([4a2ce3e](https://github.com/andipaetzold/mdb-reader/commit/4a2ce3e003b5504f17f34c1e3a01189e5dbe5f20))
+
 # [2.1.0](https://github.com/andipaetzold/mdb-reader/compare/v2.0.0...v2.1.0) (2022-01-14)
 
 
