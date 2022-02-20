@@ -28,8 +28,10 @@ jobs:
               run: npm run lint
             - name: Build
               run: npm run build
-            - name: Test
+            - name: Test (Unit)
               run: npm test -- --ci --runInBand --coverage
+            - name: Test (Imports)
+              run: node --input-type=module -e "import MDBReader from './lib/index.js';"
 
             - name: Install dependencies (examples/browser)
               run: npm ci
