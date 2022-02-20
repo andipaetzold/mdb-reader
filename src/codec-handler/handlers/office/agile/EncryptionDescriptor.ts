@@ -1,7 +1,7 @@
-import { XMLParser } from "fast-xml-parser";
+import FastXMLParser from "fast-xml-parser";
 import { EncryptionDescriptor } from "./types";
 
-const xmlParser = new XMLParser({
+const xmlParser = new FastXMLParser.XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: "",
     parseAttributeValue: true,
