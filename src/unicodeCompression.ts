@@ -5,7 +5,7 @@ import { JetFormat } from "./JetFormat";
  */
 export function uncompressText(buffer: Buffer, format: Pick<JetFormat, "textEncoding">): string {
     if (format.textEncoding === "unknown") {
-        // We assume windows 1252 (windows default) is used
+        // Assume charset is windows 1252 / CP1252 (windows default)
         // In some cases this might not work
         return decodeWindows1252(buffer);
     }
