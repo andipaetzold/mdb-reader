@@ -62,9 +62,9 @@ function decodeWindows1252(buffer: Buffer): string {
     const result = Buffer.alloc(buffer.length * 2);
 
     for (let i = 0; i < buffer.length; ++i) {
-        const idx1 = buffer[i] * 2;
-        result[i * 2] = charsBuffer[idx1];
-        result[i * 2 + 1] = charsBuffer[idx1 + 1];
+        const index = buffer[i] * 2;
+        result[i * 2] = charsBuffer[index];
+        result[i * 2 + 1] = charsBuffer[index + 1];
     }
 
     return result.toString("ucs2");
