@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/andipaetzold/mdb-reader/compare/v2.1.1...v2.1.2) (2022-02-22)
+
+
+### Bug Fixes
+
+* handle non-ascii characters in Jet3 databases ([#173](https://github.com/andipaetzold/mdb-reader/issues/173)) ([840c79d](https://github.com/andipaetzold/mdb-reader/commit/840c79d361c088cc961ec102aa5ae7e5c03b2798)), closes [#172](https://github.com/andipaetzold/mdb-reader/issues/172)
+
 ## [2.1.1](https://github.com/andipaetzold/mdb-reader/compare/v2.1.0...v2.1.1) (2022-02-20)
 
 
