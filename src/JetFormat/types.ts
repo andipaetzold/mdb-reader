@@ -5,7 +5,7 @@ export interface JetFormat {
 
     pageSize: number;
 
-    textEncoding: "utf8" | "ucs-2";
+    textEncoding: "unknown" | "ucs-2";
 
     defaultSortOrder: Readonly<SortOrder>;
 

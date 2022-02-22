@@ -6,7 +6,7 @@ export const jet3Format: JetFormat = {
 
     pageSize: 2048,
 
-    textEncoding: "utf8",
+    textEncoding: "unknown",
 
     defaultSortOrder: GENERAL_97_SORT_ORDER,
 
