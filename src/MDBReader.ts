@@ -7,7 +7,7 @@ import { SortOrder } from "./types";
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
 
-interface Options {
+export interface Options {
     password?: string;
 }
 
