@@ -3,6 +3,7 @@
     "parser": "@typescript-eslint/parser",
     "plugins": ["@typescript-eslint"],
     "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "ignorePatterns": ["node_modules", "lib"],
     "rules": {
         "@typescript-eslint/no-unused-vars": [
             "warn",
@@ -11,6 +12,50 @@
                 "varsIgnorePattern": "^_",
                 "caughtErrorsIgnorePattern": "^_"
             }
+        ],
+        "no-restricted-imports": [
+            "error",
+            "assert",
+            "buffer",
+            "child_process",
+            "cluster",
+            "crypto",
+            "dgram",
+            "dns",
+            "domain",
+            "events",
+            "freelist",
+            "fs",
+            "http",
+            "https",
+            "module",
+            "net",
+            "os",
+            "path",
+            "punycode",
+            "querystring",
+            "readline",
+            "repl",
+            "smalloc",
+            "stream",
+            "string_decoder",
+            "sys",
+            "timers",
+            "tls",
+            "tracing",
+            "tty",
+            "url",
+            "util",
+            "vm",
+            "zlib"
         ]
-    }
+    },
+    "overrides": [
+        {
+            "files": ["src/**/*.spec.ts", "src/environment/*.ts", "test/**", "typings/**"],
+            "rules": {
+                "no-restricted-imports": "off"
+            }
+        }
+    ]
 }

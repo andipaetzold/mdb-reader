@@ -1,4 +1,4 @@
-import { createDecipheriv } from "crypto";
+import { createDecipheriv } from "../environment";
 import { Cipher } from "./types";
 
 export function blockDecrypt(cipher: Cipher, key: Buffer, iv: Buffer, data: Buffer): Buffer {
