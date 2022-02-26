@@ -1,3 +1,15 @@
+# [2.2.0-next.1](https://github.com/andipaetzold/mdb-reader/compare/v2.1.2...v2.2.0-next.1) (2022-02-26)
+
+
+### Bug Fixes
+
+* use default import for browserify-aes ([4485952](https://github.com/andipaetzold/mdb-reader/commit/44859521b308e3b7c8a77a3f0c5a03092fad5462))
+
+
+### Features
+
+* create separate browser module ([d59e8b9](https://github.com/andipaetzold/mdb-reader/commit/d59e8b94aca5a47e83516c97504164485f6b67da))
+
 ## [2.1.2](https://github.com/andipaetzold/mdb-reader/compare/v2.1.1...v2.1.2) (2022-02-22)
 
 
