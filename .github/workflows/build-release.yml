@@ -18,7 +18,7 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: ${{ matrix.node }}
-                  cache: 'npm'
+                  cache: "npm"
             - name: Node version
               run: node --version
 
@@ -28,10 +28,8 @@ jobs:
               run: npm run lint
             - name: Build
               run: npm run build
-            - name: Test (Unit)
-              run: npm test -- --ci --runInBand --coverage
-            - name: Test (Imports)
-              run: node --input-type=module -e "import MDBReader from './lib/index.js';"
+            - name: Test
+              run: npm test
 
             - name: Install dependencies (examples/browser)
               run: npm ci
@@ -52,8 +50,8 @@ jobs:
             - name: Use node ${{ matrix.node }}
               uses: actions/setup-node@v3.0.0
               with:
-                  cache: 'npm'
-                  node-version-file: '.nvmrc'
+                  cache: "npm"
+                  node-version-file: ".nvmrc"
             - name: Node version
               run: node --version
 
@@ -62,5 +60,5 @@ jobs:
             - name: Release
               run: npm run semantic-release
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
