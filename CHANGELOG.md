@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/andipaetzold/mdb-reader/compare/v2.1.2...v2.2.0) (2022-02-26)
+
+
+### Features
+
+* export separate browser module ([5b7012d](https://github.com/andipaetzold/mdb-reader/commit/5b7012d9c9ab4807e45e65c926ed2332aafa9632))
+
 # [2.2.0-next.1](https://github.com/andipaetzold/mdb-reader/compare/v2.1.2...v2.2.0-next.1) (2022-02-26)
 
 
