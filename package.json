@@ -52,7 +52,9 @@
     "scripts": {
         "prepublishOnly": "npm run build",
         "build": "rimraf lib && ttsc",
-        "test": "jest",
+        "test": "npm run test:unit && npm run test:esm",
+        "test:unit": "jest",
+        "test:esm": "node --input-type=module -e \"import MDBReader from './lib/index.js';\"",
         "lint": "eslint . --ext .ts",
         "semantic-release": "semantic-release"
     }
