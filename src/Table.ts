@@ -195,21 +195,38 @@ export default class Table {
         const data = [];
 
         const columns = columnDefinitions.filter((c) => options.columns === undefined || options.columns.includes(c.name));
-        const rowOffset = options?.rowOffset ?? 0;
-        const rowLimit = options?.rowLimit ?? Infinity;
+
+        let rowsToSkip = options?.rowOffset ?? 0;
+        let rowsToRead = options?.rowLimit ?? Infinity;
 
         for (const dataPage of this.dataPages) {
-            if (data.length >= rowOffset + rowLimit) {
+            if (rowsToRead <= 0) {
+                // All required data was loaded
+                break;
+            }
+
+            const pageBuffer = this.getDataPage(dataPage);
+            const recordOffsets = this.getRecordOffsets(pageBuffer);
+
+            if (recordOffsets.length <= rowsToSkip) {
+                // All records can be skipped
+                rowsToSkip -= recordOffsets.length;
                 continue;
             }
 
-            data.push(...this.getDataFromPage(dataPage, columns));
+            const recordOffsetsToLoad = recordOffsets.slice(rowsToSkip, rowsToSkip + rowsToRead);
+            const recordsOnPage = this.getDataFromPage(pageBuffer, recordOffsetsToLoad, columns);
+
+            data.push(...recordsOnPage);
+
+            rowsToRead -= recordsOnPage.length;
+            rowsToSkip = 0;
         }
 
-        return data.slice(rowOffset, rowOffset + rowLimit) as TRow[];
+        return data as TRow[];
     }
 
-    private getDataFromPage(page: number, columns: ReadonlyArray<ColumnDefinition>): { [column: string]: Value }[] {
+    private getDataPage(page: number) {
         const pageBuffer = this.db.getPage(page);
         assertPageType(pageBuffer, PageType.DataPage);
 
@@ -217,8 +234,12 @@ export default class Table {
             throw new Error(`Data page ${page} does not belong to table ${this.name}`);
         }
 
+        return pageBuffer;
+    }
+
+    private getRecordOffsets(pageBuffer: Buffer): RecordOffset[] {
         const recordCount = pageBuffer.readUInt16LE(this.db.format.dataPage.recordCountOffset);
-        const recordOffsets: { start: number; end: number }[] = [];
+        const recordOffsets: RecordOffset[] = [];
         for (let record = 0; record < recordCount; ++record) {
             const offsetMask = 0x1fff;
 
@@ -235,18 +256,20 @@ export default class Table {
                     : pageBuffer.readUInt16LE(this.db.format.dataPage.record.countOffset + record * 2) & offsetMask;
             const recordLength = nextStart - recordStart;
             const recordEnd = recordStart + recordLength - 1;
-            recordOffsets.push({
-                start: recordStart,
-                end: recordEnd,
-            });
-        }
 
+            recordOffsets.push([recordStart, recordEnd]);
+        }
+        return recordOffsets;
+    }
+
+    private getDataFromPage(
+        pageBuffer: Buffer,
+        recordOffsets: RecordOffset[],
+        columns: ReadonlyArray<ColumnDefinition>
+    ): { [column: string]: Value }[] {
         const lastColumnIndex = Math.max(...columns.map((c) => c.index), 0);
         const data: { [column: string]: Value }[] = [];
-        for (const recordOffset of recordOffsets) {
-            const recordStart = recordOffset.start;
-            const recordEnd = recordOffset.end;
-
+        for (const [recordStart, recordEnd] of recordOffsets) {
             const totalVariableCount = pageBuffer.readUIntLE(recordStart, this.db.format.dataPage.record.columnCountSize);
 
             const bitmaskSize = roundToFullByte(totalVariableCount);
@@ -344,3 +367,5 @@ export default class Table {
         return data;
     }
 }
+
+type RecordOffset = [start: number, end: number];
