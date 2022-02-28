@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/andipaetzold/mdb-reader/compare/v2.2.1...v2.2.2) (2022-02-28)
+
+
+### Bug Fixes
+
+* performance of getData with offset/limit ([#177](https://github.com/andipaetzold/mdb-reader/issues/177)) ([de6bd37](https://github.com/andipaetzold/mdb-reader/commit/de6bd37b3b5e3ba4bd3221c08cd12bc32335afdf)), closes [#48](https://github.com/andipaetzold/mdb-reader/issues/48)
+
 ## [2.2.1](https://github.com/andipaetzold/mdb-reader/compare/v2.2.0...v2.2.1) (2022-02-26)
 
 
