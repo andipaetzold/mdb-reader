@@ -47,7 +47,7 @@
         "jest": "27.5.1",
         "rimraf": "3.0.2",
         "semantic-release": "19.0.2",
-        "ts-jest": "27.1.3",
+        "ts-jest": "27.1.4",
         "ttypescript": "1.5.13",
         "typescript": "4.4.4",
         "typescript-transform-extensions": "1.0.1"
