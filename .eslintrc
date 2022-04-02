@@ -52,7 +52,7 @@
     },
     "overrides": [
         {
-            "files": ["src/**/*.spec.ts", "src/environment/*.ts", "test/**", "typings/**"],
+            "files": ["src/**/*.spec.ts", "src/environment/*.ts", "test/**", "typings/**", "examples/**"],
             "rules": {
                 "no-restricted-imports": "off"
             }
