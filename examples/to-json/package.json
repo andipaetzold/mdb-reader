@@ -1,5 +1,5 @@
 {
-    "name": "mdb-reader-browser",
+    "name": "mdb-reader-to-json",
     "version": "0.0.0",
     "main": "src/index.mjs",
     "dependencies": {
