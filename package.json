@@ -44,7 +44,7 @@
         "@typescript-eslint/eslint-plugin": "5.22.0",
         "@typescript-eslint/parser": "5.22.0",
         "eslint": "8.14.0",
-        "jest": "28.0.3",
+        "jest": "28.1.0",
         "rimraf": "3.0.2",
         "semantic-release": "19.0.2",
         "ts-jest": "28.0.1",
