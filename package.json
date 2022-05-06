@@ -43,7 +43,7 @@
         "@types/node": "14.18.13",
         "@typescript-eslint/eslint-plugin": "5.22.0",
         "@typescript-eslint/parser": "5.22.0",
-        "eslint": "8.13.0",
+        "eslint": "8.14.0",
         "jest": "28.0.3",
         "rimraf": "3.0.2",
         "semantic-release": "19.0.2",
