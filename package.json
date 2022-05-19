@@ -1,5 +1,5 @@
 {
-    "name": "mdb-reader",
+    "name": "@ahaganDEV/mdb-reader",
     "version": "2.2.2",
     "description": "JavaScript library to read data from Access databases",
     "main": "lib/node/index.js",
@@ -12,7 +12,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/andipaetzold/mdb-reader.git"
+        "url": "git+https://github.com/ahaganDEV/mdb-reader.git"
     },
     "keywords": [
         "mdb",
@@ -38,7 +38,7 @@
     "devDependencies": {
         "@semantic-release/changelog": "6.0.1",
         "@semantic-release/git": "10.0.1",
-        "@tsconfig/node14": "1.0.1",
+        "@tsconfig/node14": "^1.0.1",
         "@types/jest": "27.5.0",
         "@types/node": "14.18.16",
         "@typescript-eslint/eslint-plugin": "5.22.0",

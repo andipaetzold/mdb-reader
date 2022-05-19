@@ -4,6 +4,11 @@
 [![license](https://img.shields.io/github/license/andipaetzold/mdb-reader)](https://github.com/andipaetzold/mdb-reader/blob/main/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
+# Note
+
+This is a forked version of the mdb-reader library.
+It mainly adds the missing parameters to the buffer functions.
+
 # MDB Reader
 
 JavaScript library to read data from Access databases.

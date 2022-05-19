@@ -1,3 +1,3 @@
 export function readFloat(buffer: Buffer): number {
-    return buffer.readFloatLE();
+    return buffer.readFloatLE(0);
 }
