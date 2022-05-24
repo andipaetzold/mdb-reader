@@ -270,16 +270,16 @@ export default class Table {
         const lastColumnIndex = Math.max(...columns.map((c) => c.index), 0);
         const data: { [column: string]: Value }[] = [];
         for (const [recordStart, recordEnd] of recordOffsets) {
-            const totalVariableCount = pageBuffer.readUIntLE(recordStart, this.db.format.dataPage.record.columnCountSize);
+            const rowColumnCount = pageBuffer.readUIntLE(recordStart, this.db.format.dataPage.record.columnCountSize);
 
-            const bitmaskSize = roundToFullByte(totalVariableCount);
+            const bitmaskSize = roundToFullByte(rowColumnCount);
 
-            let variableColumnCount = 0;
+            let rowVariableColumnCount = 0;
             const variableColumnOffsets: number[] = [];
             if (this.variableColumnCount > 0) {
                 switch (this.db.format.dataPage.record.variableColumnCountSize) {
                     case 1: {
-                        variableColumnCount = pageBuffer.readUInt8(recordEnd - bitmaskSize);
+                        rowVariableColumnCount = pageBuffer.readUInt8(recordEnd - bitmaskSize);
 
                         // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L125-L147
                         const recordLength = recordEnd - recordStart + 1;
@@ -287,12 +287,12 @@ export default class Table {
                         const columnPointer = recordEnd - bitmaskSize - jumpCount - 1;
 
                         /* If last jump is a dummy value, ignore it */
-                        if ((columnPointer - recordStart - variableColumnCount) / 256 < jumpCount) {
+                        if ((columnPointer - recordStart - rowVariableColumnCount) / 256 < jumpCount) {
                             --jumpCount;
                         }
 
                         let jumpsUsed = 0;
-                        for (let i = 0; i < variableColumnCount + 1; ++i) {
+                        for (let i = 0; i < rowVariableColumnCount + 1; ++i) {
                             while (
                                 jumpsUsed < jumpCount &&
                                 i === pageBuffer.readUInt8(recordEnd - bitmaskSize - jumpsUsed - 1)
@@ -304,10 +304,10 @@ export default class Table {
                         break;
                     }
                     case 2: {
-                        variableColumnCount = pageBuffer.readUInt16LE(recordEnd - bitmaskSize - 1);
+                        rowVariableColumnCount = pageBuffer.readUInt16LE(recordEnd - bitmaskSize - 1);
 
                         // https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/write.c#L115-L124
-                        for (let i = 0; i < variableColumnCount + 1; ++i) {
+                        for (let i = 0; i < rowVariableColumnCount + 1; ++i) {
                             variableColumnOffsets.push(pageBuffer.readUInt16LE(recordEnd - bitmaskSize - 3 - i * 2));
                         }
                         break;
@@ -315,7 +315,7 @@ export default class Table {
                 }
             }
 
-            const fixedColumnCount = totalVariableCount - variableColumnCount;
+            const rowFixedColumnCount = rowColumnCount - rowVariableColumnCount;
 
             const nullMask = pageBuffer.slice(
                 recordEnd - bitmaskSize + 1,
@@ -337,12 +337,12 @@ export default class Table {
                     value = null;
                 }
 
-                if (column.fixedLength && fixedColumnsFound < fixedColumnCount) {
+                if (column.fixedLength && fixedColumnsFound < rowFixedColumnCount) {
                     const colStart = column.fixedIndex + this.db.format.dataPage.record.columnCountSize;
                     start = recordStart + colStart;
                     size = column.size;
                     ++fixedColumnsFound;
-                } else if (!column.fixedLength && column.variableIndex < variableColumnCount) {
+                } else if (!column.fixedLength && column.variableIndex < rowVariableColumnCount) {
                     const colStart = variableColumnOffsets[column.variableIndex];
                     start = recordStart + colStart;
                     size = variableColumnOffsets[column.variableIndex + 1] - colStart;
