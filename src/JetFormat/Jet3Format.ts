@@ -35,7 +35,7 @@ export const jet3Format: JetFormat = {
         rowCountOffset: 12,
 
         columnCountOffset: 25,
-        variableColumnCountOffset: 25,
+        variableColumnCountOffset: 23,
 
         logicalIndexCountOffset: 27,
         realIndexCountOffset: 31,
