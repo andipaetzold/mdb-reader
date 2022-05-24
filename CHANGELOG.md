@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/andipaetzold/mdb-reader/compare/v2.2.2...v2.2.3) (2022-05-24)
+
+
+### Bug Fixes
+
+* correctly read number of variable columns of Jet3 dbs ([#222](https://github.com/andipaetzold/mdb-reader/issues/222)) ([a92de98](https://github.com/andipaetzold/mdb-reader/commit/a92de985cebc7a22379c1ed9e4c1fa1750a1271a))
+
 ## [2.2.2](https://github.com/andipaetzold/mdb-reader/compare/v2.2.1...v2.2.2) (2022-02-28)
 
 
