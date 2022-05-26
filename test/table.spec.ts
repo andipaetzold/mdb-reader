@@ -1,191 +1,194 @@
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader, { Table } from "../src";
+import MDBReader, { Table } from "../src/index.js";
+import { expect } from "chai";
+import forEach from "mocha-each";
 
-// The test databases are slightly different, so we need some extra arguments here
-describe.each`
-    filename              | reverseRows | columnALength | columnBLength | table4Length
-    ${"V1997/test.mdb"}   | ${true}     | ${50}         | ${100}        | ${50}
-    ${"V2000/test.mdb"}   | ${false}    | ${100}        | ${200}        | ${100}
-    ${"V2003/test.mdb"}   | ${false}    | ${100}        | ${200}        | ${100}
-    ${"V2007/test.accdb"} | ${true}     | ${100}        | ${200}        | ${100}
-    ${"V2010/test.accdb"} | ${true}     | ${100}        | ${200}        | ${100}
-`("$filename", ({ filename, reverseRows, columnALength, columnBLength, table4Length }) => {
-    const path = resolve(__dirname, "data", filename);
+describe("Table", () => {
+    // The test databases are slightly different, so we need some extra arguments here
+    forEach([
+        ["V1997/test.mdb", true, 50, 100, 50],
+        ["V2000/test.mdb", false, 100, 200, 100],
+        ["V2003/test.mdb", false, 100, 200, 100],
+        ["V2007/test.accdb", true, 100, 200, 100],
+        ["V2010/test.accdb", true, 100, 200, 100],
+    ]).describe("%s", (filename, reverseRows, columnALength, columnBLength, table4Length) => {
+        const path = resolve("test/data", filename);
 
-    let reader: MDBReader;
+        let reader: MDBReader;
 
-    beforeEach(() => {
-        const buffer = readFileSync(path);
-        reader = new MDBReader(buffer);
-    });
-
-    it("getData()", () => {
-        const table = reader.getTable("Table1");
-        const rows = table.getData();
-
-        if (reverseRows) {
-            rows.reverse();
-        }
-
-        expect(rows[0]["A"]).toBe("abcdefg");
-        expect(rows[0]["B"]).toBe("hijklmnop");
-        expect(rows[0]["C"]).toBe(2);
-        expect(rows[0]["D"]).toBe(222);
-        expect(rows[0]["E"]).toBe(333333333);
-        expect(rows[0]["F"]).toBe(444.555);
-        expect((rows[0]["G"] as Date).getTime()).toBe(148953600000); // TODO: check expected value
-        expect(rows[0]["H"]).toBe("3.5000");
-        expect(rows[0]["I"]).toBe(true);
-
-        expect(rows[1]["A"]).toBe("a");
-        expect(rows[1]["B"]).toBe("b");
-        expect(rows[1]["C"]).toBe(0);
-        expect(rows[1]["D"]).toBe(0);
-        expect(rows[1]["E"]).toBe(0);
-        expect(rows[1]["F"]).toBe(0);
-        expect((rows[1]["G"] as Date).getTime()).toBe(376963200000); // TODO: check expected value
-        expect(rows[1]["H"]).toBe("0.0000");
-        expect(rows[1]["I"]).toBe(false);
-    });
-
-    describe("getColumns()", () => {
-        it("returns correct data types", () => {
-            const table = reader.getTable("Table1");
-            const columns = table.getColumns();
-
-            expect(columns[0].name).toBe("A");
-            expect(columns[0].type).toBe("text");
-            expect(columns[0].size).toBe(columnALength);
-
-            expect(columns[1].name).toBe("B");
-            expect(columns[1].type).toBe("text");
-            expect(columns[1].size).toBe(columnBLength);
-
-            expect(columns[2].name).toBe("C");
-            expect(columns[2].type).toBe("byte");
-
-            expect(columns[3].name).toBe("D");
-            expect(columns[3].type).toBe("integer");
-
-            expect(columns[4].name).toBe("E");
-            expect(columns[4].type).toBe("long");
-
-            expect(columns[5].name).toBe("F");
-            expect(columns[5].type).toBe("double");
-
-            expect(columns[6].name).toBe("G");
-            expect(columns[6].type).toBe("datetime");
-
-            expect(columns[7].name).toBe("H");
-            expect(columns[7].type).toBe("currency");
-
-            expect(columns[8].name).toBe("I");
-            expect(columns[8].type).toBe("boolean");
-        });
-
-        it("can handle many columns", () => {
-            const table = reader.getTable("Table2");
-            const columns = table.getColumns();
-
-            expect(columns.length).toBe(89);
-            for (let i = 0; i < 89; ++i) {
-                expect(columns[i].name).toBe(`column${i + 1}`);
-                expect(columns[i].type).toBe("text");
-                expect(columns[i].size).toBe(table4Length);
-            }
-        });
-    });
-
-    it("getColumnNames()", () => {
-        const table = reader.getTable("Table1");
-        const columnNames = table.getColumnNames();
-
-        expect(columnNames).toStrictEqual(["A", "B", "C", "D", "E", "F", "G", "H", "I"]);
-    });
-});
-
-describe("getData()", () => {
-    describe("real/ASampleDatabase.accdb", () => {
-        const path = resolve(__dirname, "data/real/ASampleDatabase.accdb");
-        let table: Table;
-
-        beforeAll(() => {
+        beforeEach(() => {
             const buffer = readFileSync(path);
-            const reader = new MDBReader(buffer);
-            table = reader.getTable("Asset Items");
+            reader = new MDBReader(buffer);
         });
 
-        it("no options", () => {
+        it("getData()", () => {
+            const table = reader.getTable("Table1");
             const rows = table.getData();
-            expect(rows.length).toBe(65);
 
-            const assetNumbers = rows.map((row) => row["Asset No"]);
-            expect(new Set(assetNumbers).size).toBe(65);
+            if (reverseRows) {
+                rows.reverse();
+            }
+
+            expect(rows[0]["A"]).to.eq("abcdefg");
+            expect(rows[0]["B"]).to.eq("hijklmnop");
+            expect(rows[0]["C"]).to.eq(2);
+            expect(rows[0]["D"]).to.eq(222);
+            expect(rows[0]["E"]).to.eq(333333333);
+            expect(rows[0]["F"]).to.eq(444.555);
+            expect((rows[0]["G"] as Date).getTime()).to.eq(148953600000); // TODO: check expected value
+            expect(rows[0]["H"]).to.eq("3.5000");
+            expect(rows[0]["I"]).to.eq(true);
+
+            expect(rows[1]["A"]).to.eq("a");
+            expect(rows[1]["B"]).to.eq("b");
+            expect(rows[1]["C"]).to.eq(0);
+            expect(rows[1]["D"]).to.eq(0);
+            expect(rows[1]["E"]).to.eq(0);
+            expect(rows[1]["F"]).to.eq(0);
+            expect((rows[1]["G"] as Date).getTime()).to.eq(376963200000); // TODO: check expected value
+            expect(rows[1]["H"]).to.eq("0.0000");
+            expect(rows[1]["I"]).to.eq(false);
         });
 
-        it("with rowOffset", () => {
-            const rows = table.getData({ rowOffset: 30 });
-            expect(rows.length).toBe(35);
+        describe("getColumns()", () => {
+            it("returns correct data types", () => {
+                const table = reader.getTable("Table1");
+                const columns = table.getColumns();
 
-            const assetNumbers = rows.map((row) => row["Asset No"]);
-            expect(new Set(assetNumbers).size).toBe(35);
+                expect(columns[0].name).to.eq("A");
+                expect(columns[0].type).to.eq("text");
+                expect(columns[0].size).to.eq(columnALength);
+
+                expect(columns[1].name).to.eq("B");
+                expect(columns[1].type).to.eq("text");
+                expect(columns[1].size).to.eq(columnBLength);
+
+                expect(columns[2].name).to.eq("C");
+                expect(columns[2].type).to.eq("byte");
+
+                expect(columns[3].name).to.eq("D");
+                expect(columns[3].type).to.eq("integer");
+
+                expect(columns[4].name).to.eq("E");
+                expect(columns[4].type).to.eq("long");
+
+                expect(columns[5].name).to.eq("F");
+                expect(columns[5].type).to.eq("double");
+
+                expect(columns[6].name).to.eq("G");
+                expect(columns[6].type).to.eq("datetime");
+
+                expect(columns[7].name).to.eq("H");
+                expect(columns[7].type).to.eq("currency");
+
+                expect(columns[8].name).to.eq("I");
+                expect(columns[8].type).to.eq("boolean");
+            });
+
+            it("can handle many columns", () => {
+                const table = reader.getTable("Table2");
+                const columns = table.getColumns();
+
+                expect(columns.length).to.eq(89);
+                for (let i = 0; i < 89; ++i) {
+                    expect(columns[i].name).to.eq(`column${i + 1}`);
+                    expect(columns[i].type).to.eq("text");
+                    expect(columns[i].size).to.eq(table4Length);
+                }
+            });
         });
 
-        it("with rowOffset > rowCount", () => {
-            const rows = table.getData({ rowOffset: 100 });
-            expect(rows.length).toBe(0);
+        it("getColumnNames()", () => {
+            const table = reader.getTable("Table1");
+            const columnNames = table.getColumnNames();
 
-            const assetNumbers = rows.map((row) => row["Asset No"]);
-            expect(new Set(assetNumbers).size).toBe(0);
-        });
-
-        it("with rowLimit", () => {
-            const rows = table.getData({ rowLimit: 40 });
-            expect(rows.length).toBe(40);
-
-            const assetNumbers = rows.map((row) => row["Asset No"]);
-            expect(new Set(assetNumbers).size).toBe(40);
-        });
-
-        it("with rowLimit > rowCount", () => {
-            const rows = table.getData({ rowLimit: 100 });
-            expect(rows.length).toBe(65);
-
-            const assetNumbers = rows.map((row) => row["Asset No"]);
-            expect(new Set(assetNumbers).size).toBe(65);
-        });
-
-        it("with rowOffset & rowLimit", () => {
-            const rows = table.getData({ rowOffset: 30, rowLimit: 15 });
-            expect(rows.length).toBe(15);
-
-            const assetNumbers = rows.map((row) => row["Asset No"]);
-            expect(new Set(assetNumbers).size).toBe(15);
+            expect(columnNames).to.deep.eq(["A", "B", "C", "D", "E", "F", "G", "H", "I"]);
         });
     });
 
-    describe("V2016/withdeletedcol.accdb", () => {
-        it("with offset column indices due to a column deletion", () => {
-            const withDeletedColPath = resolve(__dirname, "data/V2016/withdeletedcol.accdb");
-            const buffer = readFileSync(withDeletedColPath);
-            const reader = new MDBReader(buffer);
-            const withDeletedColTable = reader.getTable("Table1");
+    describe("getData()", () => {
+        describe("real/ASampleDatabase.accdb", () => {
+            const path = resolve("test/data/real/ASampleDatabase.accdb");
+            let table: Table;
 
-            expect(withDeletedColTable.getData()).toStrictEqual([
-                { col1: 0, col2: 1, col3: 2, col5: 4, col6: 5, col7: 6, col8: 7 },
-            ]);
+            before(() => {
+                const buffer = readFileSync(path);
+                const reader = new MDBReader(buffer);
+                table = reader.getTable("Asset Items");
+            });
+
+            it("no options", () => {
+                const rows = table.getData();
+                expect(rows.length).to.eq(65);
+
+                const assetNumbers = rows.map((row) => row["Asset No"]);
+                expect(new Set(assetNumbers).size).to.eq(65);
+            });
+
+            it("with rowOffset", () => {
+                const rows = table.getData({ rowOffset: 30 });
+                expect(rows.length).to.eq(35);
+
+                const assetNumbers = rows.map((row) => row["Asset No"]);
+                expect(new Set(assetNumbers).size).to.eq(35);
+            });
+
+            it("with rowOffset > rowCount", () => {
+                const rows = table.getData({ rowOffset: 100 });
+                expect(rows.length).to.eq(0);
+
+                const assetNumbers = rows.map((row) => row["Asset No"]);
+                expect(new Set(assetNumbers).size).to.eq(0);
+            });
+
+            it("with rowLimit", () => {
+                const rows = table.getData({ rowLimit: 40 });
+                expect(rows.length).to.eq(40);
+
+                const assetNumbers = rows.map((row) => row["Asset No"]);
+                expect(new Set(assetNumbers).size).to.eq(40);
+            });
+
+            it("with rowLimit > rowCount", () => {
+                const rows = table.getData({ rowLimit: 100 });
+                expect(rows.length).to.eq(65);
+
+                const assetNumbers = rows.map((row) => row["Asset No"]);
+                expect(new Set(assetNumbers).size).to.eq(65);
+            });
+
+            it("with rowOffset & rowLimit", () => {
+                const rows = table.getData({ rowOffset: 30, rowLimit: 15 });
+                expect(rows.length).to.eq(15);
+
+                const assetNumbers = rows.map((row) => row["Asset No"]);
+                expect(new Set(assetNumbers).size).to.eq(15);
+            });
         });
-    });
 
-    describe("V2016/withinsertedcol.accdb", () => {
-        it("with offset column indices due to a column insertion", () => {
-            const withInsertedColPath = resolve(__dirname, "data/V2016/withinsertedcol.accdb");
-            const buffer = readFileSync(withInsertedColPath);
-            const reader = new MDBReader(buffer);
-            const withInsertedColTable = reader.getTable("Table1");
+        describe("V2016/withdeletedcol.accdb", () => {
+            it("with offset column indices due to a column deletion", () => {
+                const withDeletedColPath = resolve("test/data/V2016/withdeletedcol.accdb");
+                const buffer = readFileSync(withDeletedColPath);
+                const reader = new MDBReader(buffer);
+                const withDeletedColTable = reader.getTable("Table1");
 
-            expect(withInsertedColTable.getData()).toStrictEqual([{ col1: true, col2: true, col3: false }]);
+                expect(withDeletedColTable.getData()).to.deep.eq([
+                    { col1: 0, col2: 1, col3: 2, col5: 4, col6: 5, col7: 6, col8: 7 },
+                ]);
+            });
+        });
+
+        describe("V2016/withinsertedcol.accdb", () => {
+            it("with offset column indices due to a column insertion", () => {
+                const withInsertedColPath = resolve("test/data/V2016/withinsertedcol.accdb");
+                const buffer = readFileSync(withInsertedColPath);
+                const reader = new MDBReader(buffer);
+                const withInsertedColTable = reader.getTable("Table1");
+
+                expect(withInsertedColTable.getData()).to.deep.eq([{ col1: true, col2: true, col3: false }]);
+            });
         });
     });
 });
