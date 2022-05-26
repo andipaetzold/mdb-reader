@@ -1,4 +1,4 @@
-import { xor } from "../util";
+import { xor } from "../util.js";
 
 export function getPageEncodingKey(encodingKey: Buffer, pageNumber: number): Buffer {
     const pageIndexBuffer = Buffer.alloc(4);

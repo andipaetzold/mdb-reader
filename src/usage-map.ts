@@ -1,6 +1,6 @@
-import { getBitmapValue } from "./util";
-import Database from './Database';
-import PageType, { assertPageType } from './PageType';
+import { getBitmapValue } from "./util.js";
+import Database from "./Database.js";
+import PageType, { assertPageType } from "./PageType.js";
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/HACKING#L556-L622
@@ -34,7 +34,7 @@ function findMapPages1(buffer: Buffer, db: Database): number[] {
 
     const pages: number[] = [];
     for (let mapIndex = 0; mapIndex < mapCount; ++mapIndex) {
-        const page = buffer.readUInt32LE(1 + (mapIndex * 4));
+        const page = buffer.readUInt32LE(1 + mapIndex * 4);
         if (page === 0) {
             continue;
         }

@@ -1,12 +1,12 @@
-import { ColumnType } from ".";
-import { Column, ColumnDefinition, getColumnType, parseColumnFlags } from "./column";
-import { readFieldValue } from "./data";
-import Database from "./Database";
-import PageType, { assertPageType } from "./PageType";
-import { Value } from "./types";
-import { uncompressText } from "./unicodeCompression";
-import { findMapPages } from "./usage-map";
-import { getBitmapValue, roundToFullByte } from "./util";
+import { ColumnType } from "./index.js";
+import { Column, ColumnDefinition, getColumnType, parseColumnFlags } from "./column.js";
+import { readFieldValue } from "./data/index.js";
+import Database from "./Database.js";
+import PageType, { assertPageType } from "./PageType.js";
+import { Value } from "./types.js";
+import { uncompressText } from "./unicodeCompression.js";
+import { findMapPages } from "./usage-map.js";
+import { getBitmapValue, roundToFullByte } from "./util.js";
 
 export default class Table {
     private readonly definitionBuffer: Buffer;

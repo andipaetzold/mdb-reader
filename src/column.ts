@@ -1,4 +1,4 @@
-import { ColumnType } from "./types";
+import { ColumnType } from "./types.js";
 
 export interface Column {
     /**

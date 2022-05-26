@@ -1,11 +1,11 @@
-import { CodecHandler, createCodecHandler } from "./codec-handler";
-import { decryptRC4 } from "./crypto";
-import { readDateTime } from "./data/datetime";
-import { getJetFormat, JetFormat } from "./JetFormat";
-import PageType, { assertPageType } from "./PageType";
-import { SortOrder } from "./types";
-import { uncompressText } from "./unicodeCompression";
-import { isEmptyBuffer, xor } from "./util";
+import { CodecHandler, createCodecHandler } from "./codec-handler/index.js";
+import { decryptRC4 } from "./crypto/index.js";
+import { readDateTime } from "./data/datetime.js";
+import { getJetFormat, JetFormat } from "./JetFormat/index.js";
+import PageType, { assertPageType } from "./PageType.js";
+import { SortOrder } from "./types.js";
+import { uncompressText } from "./unicodeCompression.js";
+import { isEmptyBuffer, xor } from "./util.js";
 
 const PASSWORD_OFFSET = 0x42;
 

@@ -1,9 +1,9 @@
-import { isEmptyBuffer } from "../../../util";
-import { createIdentityHandler } from "../identity";
-import { createAgileCodecHandler } from "./agile";
-import { EncryptionHeaderFlags, isFlagSet } from "./EncryptionHeader";
-import { createRC4CryptoAPICodecHandler } from "./rc4-cryptoapi";
-import { CodecHandler } from "../../types";
+import { isEmptyBuffer } from "../../../util.js";
+import { createIdentityHandler } from "../identity.js";
+import { createAgileCodecHandler } from "./agile/index.js";
+import { EncryptionHeaderFlags, isFlagSet } from "./EncryptionHeader.js";
+import { createRC4CryptoAPICodecHandler } from "./rc4-cryptoapi.js";
+import { CodecHandler } from "../../types.js";
 
 const MAX_PASSWORD_LENGTH = 255;
 const CRYPT_STRUCTURE_OFFSET = 0x299;

@@ -48,9 +48,7 @@
         "rimraf": "3.0.2",
         "semantic-release": "19.0.2",
         "ts-jest": "28.0.3",
-        "ttypescript": "1.5.13",
-        "typescript": "4.4.4",
-        "typescript-transform-extensions": "1.0.1"
+        "typescript": "4.7.2"
     },
     "scripts": {
         "prepublishOnly": "npm run build",
@@ -58,8 +56,8 @@
         "prepare:node": "cp src/environment/node.ts src/environment/index.ts",
         "prepare:browser": "cp src/environment/browser.ts src/environment/index.ts",
         "build": "npm run build:node && npm run build:browser",
-        "build:node": "npm run prepare:node && ttsc -P tsconfig.json",
-        "build:browser": "npm run prepare:browser && ttsc -P tsconfig.browser.json",
+        "build:node": "npm run prepare:node && tsc -P tsconfig.json",
+        "build:browser": "npm run prepare:browser && tsc -P tsconfig.browser.json",
         "test": "npm run test:unit && npm run test:esm",
         "test:unit": "npm run test:unit:node && npm run test:unit:browser",
         "test:unit:node": "npm run prepare:node && jest",
