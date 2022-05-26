@@ -1,6 +1,6 @@
-import { isInRange } from "../../../util";
-import { CryptoAlgorithm, CRYPTO_ALGORITHMS } from "./CryptoAlgorithm";
-import { HashAlgorithm, HASH_ALGORITHMS } from "./HashAlgorithm";
+import { isInRange } from "../../../util.js";
+import { CryptoAlgorithm, CRYPTO_ALGORITHMS } from "./CryptoAlgorithm.js";
+import { HashAlgorithm, HASH_ALGORITHMS } from "./HashAlgorithm.js";
 
 const FLAGS_OFFSET = 0;
 const CRYPTO_OFFSET = 8;

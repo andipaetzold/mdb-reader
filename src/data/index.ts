@@ -1,21 +1,21 @@
-import { Column, ColumnDefinition } from "../column";
-import Database from "../Database";
-import { ColumnType, Value, ValueMap } from "../types";
-import { readBigInt } from "./bigint";
-import { readBinary } from "./binary";
-import { readByte } from "./byte";
-import { readComplexOrLong } from "./complexOrLong";
-import { readCurrency } from "./currency";
-import { readDateTime } from "./datetime";
-import { readDateTimeExtended } from "./datetimextended";
-import { readDouble } from "./double";
-import { readFloat } from "./float";
-import { readInteger } from "./integer";
-import { readMemo } from "./memo";
-import { readNumeric } from "./numeric";
-import { readOLE } from "./ole";
-import { readRepID } from "./repid";
-import { readText } from "./text";
+import { Column, ColumnDefinition } from "../column.js";
+import Database from "../Database.js";
+import { ColumnType, Value, ValueMap } from "../types.js";
+import { readBigInt } from "./bigint.js";
+import { readBinary } from "./binary.js";
+import { readByte } from "./byte.js";
+import { readComplexOrLong } from "./complexOrLong.js";
+import { readCurrency } from "./currency.js";
+import { readDateTime } from "./datetime.js";
+import { readDateTimeExtended } from "./datetimextended.js";
+import { readDouble } from "./double.js";
+import { readFloat } from "./float.js";
+import { readInteger } from "./integer.js";
+import { readMemo } from "./memo.js";
+import { readNumeric } from "./numeric.js";
+import { readOLE } from "./ole.js";
+import { readRepID } from "./repid.js";
+import { readText } from "./text.js";
 
 const readFnByColType: {
     [type in Exclude<ColumnType, ColumnType.Boolean>]:

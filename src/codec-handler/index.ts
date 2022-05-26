@@ -1,2 +1,2 @@
-export { createCodecHandler } from "./create";
-export * from "./types";
+export { createCodecHandler } from "./create.js";
+export * from "./types.js";

@@ -1,4 +1,4 @@
-import { CryptoAlgorithm } from "./CryptoAlgorithm";
+import { CryptoAlgorithm } from "./CryptoAlgorithm.js";
 
 // are those the same values for ECMA Standard?
 const SALT_SIZE_OFFSET = 138;

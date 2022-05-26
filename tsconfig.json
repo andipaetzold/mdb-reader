@@ -2,14 +2,9 @@
     "extends": "@tsconfig/node14/tsconfig.json",
     "compilerOptions": {
         "outDir": "lib/node",
-
-        "module": "ES2020",
-        "moduleResolution": "Node",
-
+        "module": "Node16",
         "declaration": true,
-        "declarationDir": "lib/types",
-
-        "plugins": [{ "transform": "typescript-transform-extensions", "extensions": { ".ts": ".js" } }]
+        "declarationDir": "lib/types"
     },
     "files": ["src/index.ts"]
 }

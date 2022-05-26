@@ -2,13 +2,8 @@
     "extends": "@tsconfig/node14/tsconfig.json",
     "compilerOptions": {
         "outDir": "lib/browser",
-
-        "module": "ES2020",
-        "moduleResolution": "Node",
-
-        "declaration": false,
-
-        "plugins": [{ "transform": "typescript-transform-extensions", "extensions": { ".ts": ".js" } }]
+        "module": "Node16",
+        "declaration": false
     },
     "files": ["src/index.ts", "typings/browserify-aes.d.ts", "typings/create-hash.d.ts"]
 }
