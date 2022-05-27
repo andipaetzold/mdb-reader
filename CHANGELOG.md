@@ -1,3 +1,10 @@
+## [2.2.4](https://github.com/andipaetzold/mdb-reader/compare/v2.2.3...v2.2.4) (2022-05-27)
+
+
+### Bug Fixes
+
+* use unboxed `bigint` type instead of `BigInt` ([2d12670](https://github.com/andipaetzold/mdb-reader/commit/2d126700c3e37d989f1380980b082d16da8bc39d))
+
 ## [2.2.3](https://github.com/andipaetzold/mdb-reader/compare/v2.2.2...v2.2.3) (2022-05-24)
 
 
