@@ -20,7 +20,7 @@ export enum ColumnType {
 
 export type ValueMap = {
     [ColumnType.Binary]: Buffer;
-    [ColumnType.BigInt]: BigInt;
+    [ColumnType.BigInt]: bigint;
     [ColumnType.Boolean]: boolean;
     [ColumnType.Byte]: number;
     [ColumnType.Complex]: number;
