@@ -1,3 +1,17 @@
+## [2.2.4](https://github.com/andipaetzold/mdb-reader/compare/v2.2.3...v2.2.4) (2022-05-27)
+
+
+### Bug Fixes
+
+* use unboxed `bigint` type instead of `BigInt` ([2d12670](https://github.com/andipaetzold/mdb-reader/commit/2d126700c3e37d989f1380980b082d16da8bc39d))
+
+## [2.2.3](https://github.com/andipaetzold/mdb-reader/compare/v2.2.2...v2.2.3) (2022-05-24)
+
+
+### Bug Fixes
+
+* correctly read number of variable columns of Jet3 dbs ([#222](https://github.com/andipaetzold/mdb-reader/issues/222)) ([a92de98](https://github.com/andipaetzold/mdb-reader/commit/a92de985cebc7a22379c1ed9e4c1fa1750a1271a))
+
 ## [2.2.2](https://github.com/andipaetzold/mdb-reader/compare/v2.2.1...v2.2.2) (2022-02-28)
 
 

@@ -216,7 +216,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 
 | Column Type      | JavaScript Type |
 | ---------------- | --------------- |
-| bigint           | `BigInt`        |
+| bigint           | `bigint`        |
 | binary           | `Buffer`        |
 | boolean          | `boolean`       |
 | byte             | `number`        |

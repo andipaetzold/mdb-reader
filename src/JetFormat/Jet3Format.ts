@@ -1,5 +1,5 @@
-import { GENERAL_97_SORT_ORDER } from "../SortOrder";
-import { CodecType, JetFormat } from "./types";
+import { GENERAL_97_SORT_ORDER } from "../SortOrder.js";
+import { CodecType, JetFormat } from "./types.js";
 
 export const jet3Format: JetFormat = {
     codecType: CodecType.JET,
@@ -35,7 +35,7 @@ export const jet3Format: JetFormat = {
         rowCountOffset: 12,
 
         columnCountOffset: 25,
-        variableColumnCountOffset: 25,
+        variableColumnCountOffset: 23,
 
         logicalIndexCountOffset: 27,
         realIndexCountOffset: 31,

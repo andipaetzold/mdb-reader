@@ -1,4 +1,4 @@
-import { JetFormat } from "./JetFormat";
+import { JetFormat } from "./JetFormat/index.js";
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/HACKING#L823-L831

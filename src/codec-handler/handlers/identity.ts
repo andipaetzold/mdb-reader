@@ -1,4 +1,4 @@
-import { CodecHandler } from "../types";
+import { CodecHandler } from "../types.js";
 
 export function createIdentityHandler(): CodecHandler {
     return {

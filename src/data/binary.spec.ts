@@ -1,9 +1,12 @@
-import { readBinary } from "./binary";
+import { expect } from "chai";
+import { readBinary } from "./binary.js";
 
-it("can read binary", () => {
-    const buffer = Buffer.from("HELLO", "ascii");
+describe("Binary", () => {
+    it("can read binary", () => {
+        const buffer = Buffer.from("HELLO", "ascii");
 
-    const result = readBinary(buffer);
-    expect(result).not.toBe(buffer);
-    expect(result).toStrictEqual(buffer);
+        const result = readBinary(buffer);
+        expect(result).not.to.eq(buffer);
+        expect(result).to.deep.eq(buffer);
+    });
 });

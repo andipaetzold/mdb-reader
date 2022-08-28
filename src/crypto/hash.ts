@@ -1,5 +1,5 @@
-import { createHash } from "../environment";
-import { fixBufferLength } from "../util";
+import { createHash } from "../environment/index.js";
+import { fixBufferLength } from "../util.js";
 
 export function hash(algorithm: string, buffers: Buffer[], length?: number): Buffer {
     const digest = createHash(algorithm);

@@ -1,9 +1,9 @@
-import { CodecHandler } from "..";
-import { decryptRC4 } from "../../crypto";
-import { isEmptyBuffer } from "../../util";
-import { createIdentityHandler } from "./identity";
-import { DecryptPage } from "../types";
-import { getPageEncodingKey } from "../util";
+import { CodecHandler } from "../index.js";
+import { decryptRC4 } from "../../crypto/index.js";
+import { isEmptyBuffer } from "../../util.js";
+import { createIdentityHandler } from "./identity.js";
+import { DecryptPage } from "../types.js";
+import { getPageEncodingKey } from "../util.js";
 
 const KEY_OFFSET = 0x3e; // 62
 const KEY_SIZE = 4;

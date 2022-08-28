@@ -1,14 +1,14 @@
-import { jet12Format } from "./Jet12Format";
-import { jet14Format } from "./Jet14Format";
-import { jet15Format } from "./Jet15Format";
-import { jet16Format } from "./Jet16Format";
-import { jet17Format } from "./Jet17Format";
-import { jet3Format } from "./Jet3Format";
-import { jet4Format } from "./Jet4Format";
-import { msisamFormat } from "./MSISAMFormat";
-import { JetFormat } from "./types";
+import { jet12Format } from "./Jet12Format.js";
+import { jet14Format } from "./Jet14Format.js";
+import { jet15Format } from "./Jet15Format.js";
+import { jet16Format } from "./Jet16Format.js";
+import { jet17Format } from "./Jet17Format.js";
+import { jet3Format } from "./Jet3Format.js";
+import { jet4Format } from "./Jet4Format.js";
+import { msisamFormat } from "./MSISAMFormat.js";
+import { JetFormat } from "./types.js";
 
-export type { JetFormat } from "./types";
+export type { JetFormat } from "./types.js";
 
 const OFFSET_VERSION = 0x14;
 const OFFSET_ENGINE_NAME = 0x4;

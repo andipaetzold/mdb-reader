@@ -1,11 +1,14 @@
-import { readDouble } from "./double";
+import { expect } from "chai";
+import { readDouble } from "./double.js";
 
-it("can read double", () => {
-    const value = 3.14159;
+describe("Double", () => {
+    it("can read double", () => {
+        const value = 3.14159;
 
-    const buffer = Buffer.alloc(8);
-    buffer.writeDoubleLE(value);
+        const buffer = Buffer.alloc(8);
+        buffer.writeDoubleLE(value);
 
-    const result = readDouble(buffer);
-    expect(result).toBe(value);
+        const result = readDouble(buffer);
+        expect(result).to.eq(value);
+    });
 });

@@ -1,6 +1,6 @@
-import { addArray, multiplyArray, toArray } from "../array";
-import { Column } from "../column";
-import { buildValue } from "./util";
+import { addArray, multiplyArray, toArray } from "../array.js";
+import { Column } from "../column.js";
+import { buildValue } from "./util.js";
 
 const MAX_PRECISION = 40;
 
