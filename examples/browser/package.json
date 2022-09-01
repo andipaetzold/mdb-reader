@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "buffer": "6.0.3",
-        "mdb-reader": "file:../.."
+        "mdb-reader": "2.2.4"
     },
     "devDependencies": {
         "parcel": "2.2.1",

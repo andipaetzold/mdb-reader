@@ -1,4 +1,4 @@
-name: Build & Release
+name: Push
 
 on:
     - push
@@ -19,8 +19,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node }}
                   cache: "npm"
-            - name: Node version
-              run: node --version
 
             - name: Install dependencies
               run: npm ci
@@ -30,13 +28,6 @@ jobs:
               run: npm run build
             - name: Test
               run: npm test
-
-            - name: Install dependencies (examples/browser)
-              run: npm ci
-              working-directory: examples/browser
-            - name: Build (examples/browser)
-              run: npm run build
-              working-directory: examples/browser
 
     release:
         name: Release
@@ -62,3 +53,23 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    examples:
+        name: Examples
+        runs-on: ubuntu-20.04
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup node
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node }}
+                  cache: "npm"
+
+            - name: Install dependencies (examples/browser)
+              run: npm ci
+              working-directory: examples/browser
+            - name: Build (examples/browser)
+              run: npm run build
+              working-directory: examples/browser
