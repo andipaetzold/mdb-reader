@@ -12,7 +12,7 @@ export type { JetFormat } from "./types.js";
 
 const OFFSET_VERSION = 0x14;
 const OFFSET_ENGINE_NAME = 0x4;
-const MSISAM_ENGINE = Buffer.from("MSISAM Database", "ascii");
+const MSISAM_ENGINE = "MSISAM Database";
 
 /**
  * Returns the database format of the given buffer
@@ -30,7 +30,10 @@ export function getJetFormat(buffer: Buffer): JetFormat {
         case 0x00: // JET 3
             return jet3Format;
         case 0x01: // JET 4
-            if (buffer.slice(OFFSET_ENGINE_NAME, OFFSET_ENGINE_NAME + MSISAM_ENGINE.length).equals(MSISAM_ENGINE)) {
+            if (
+                buffer.slice(OFFSET_ENGINE_NAME, OFFSET_ENGINE_NAME + MSISAM_ENGINE.length).toString("ascii") ===
+                MSISAM_ENGINE
+            ) {
                 return msisamFormat;
             }
 

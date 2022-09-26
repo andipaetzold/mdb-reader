@@ -144,10 +144,10 @@ export default class Database {
 }
 
 const ENCRYPTION_START = 0x18;
-const ENCRYPTION_KEY = Buffer.from([0xc7, 0xda, 0x39, 0x6b]);
+const ENCRYPTION_KEY = [0xc7, 0xda, 0x39, 0x6b];
 function decryptHeader(buffer: Buffer, format: JetFormat): void {
     const decryptedBuffer = decryptRC4(
-        ENCRYPTION_KEY,
+        Buffer.from(ENCRYPTION_KEY),
         buffer.slice(ENCRYPTION_START, ENCRYPTION_START + format.databaseDefinitionPage.encryptedSize)
     );
     decryptedBuffer.copy(buffer, ENCRYPTION_START);
