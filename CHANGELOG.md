@@ -1,3 +1,10 @@
+## [2.2.5](https://github.com/andipaetzold/mdb-reader/compare/v2.2.4...v2.2.5) (2022-10-25)
+
+
+### Bug Fixes
+
+* do not use `Buffer` on import ([#251](https://github.com/andipaetzold/mdb-reader/issues/251)) ([bd85ba5](https://github.com/andipaetzold/mdb-reader/commit/bd85ba586087959bf841bcae2e682bd256b9d17c))
+
 ## [2.2.4](https://github.com/andipaetzold/mdb-reader/compare/v2.2.3...v2.2.4) (2022-05-27)
 
 
