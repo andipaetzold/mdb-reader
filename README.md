@@ -1,5 +1,5 @@
 [![npm](https://img.shields.io/npm/v/mdb-reader)](https://www.npmjs.com/package/mdb-reader)
-[![tests](https://github.com/andipaetzold/mdb-reader/actions/workflows/build-release.yml/badge.svg?branch=main)](https://github.com/andipaetzold/mdb-reader/actions/workflows/build-release.yml?query=branch%3Amain)
+[![tests](https://github.com/andipaetzold/mdb-reader/actions/workflows/push.yml/badge.svg?branch=main)](https://github.com/andipaetzold/mdb-reader/actions/workflows/push.yml?query=branch%3Amain)
 [![downloads](https://img.shields.io/npm/dm/mdb-reader)](https://www.npmjs.com/package/mdb-reader)
 [![license](https://img.shields.io/github/license/andipaetzold/mdb-reader)](https://github.com/andipaetzold/mdb-reader/blob/main/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
