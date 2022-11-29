@@ -36,7 +36,7 @@
         "fast-xml-parser": "^4.0.0"
     },
     "devDependencies": {
-        "@semantic-release/changelog": "6.0.1",
+        "@semantic-release/changelog": "6.0.2",
         "@semantic-release/git": "10.0.1",
         "@tsconfig/node14": "1.0.1",
         "@types/chai": "4.3.3",
