@@ -11,7 +11,7 @@
         "mdb-reader": "2.2.5"
     },
     "devDependencies": {
-        "parcel": "2.2.1",
+        "parcel": "2.8.1",
         "rimraf": "3.0.2"
     }
 }
