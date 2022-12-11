@@ -1,4 +1,12 @@
 {
     "extends": ["config:js-lib", ":semanticCommitScopeDisabled"],
+    "packageRules": [
+        {
+            "matchDepTypes": ["devDependencies"],
+            "matchUpdateTypes": ["patch", "minor"],
+            "groupName": "dev dependencies (non-major)",
+            "groupSlug": "dev-dependencies"
+        }
+    ],
     "ignorePaths": ["**/node_modules/**"]
 }
