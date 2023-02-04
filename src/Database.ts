@@ -9,7 +9,7 @@ import { isEmptyBuffer, xor } from "./util.js";
 
 const PASSWORD_OFFSET = 0x42;
 
-export default class Database {
+export class Database {
     public readonly format: JetFormat;
 
     private readonly codecHandler: CodecHandler;
