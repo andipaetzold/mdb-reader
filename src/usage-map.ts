@@ -1,6 +1,6 @@
 import { getBitmapValue } from "./util.js";
 import Database from "./Database.js";
-import PageType, { assertPageType } from "./PageType.js";
+import { PageType, assertPageType } from "./PageType.js";
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/HACKING#L556-L622
