@@ -24,7 +24,7 @@ yarn add mdb-reader
 
 ### Node / JavaScript
 
--   Node 14, 16, and 18
+-   Node 16 and 18
 -   Works in the browser with [buffer](https://www.npmjs.com/package/buffer) ([Example](https://github.com/andipaetzold/mdb-reader/tree/main/examples/browser))
 
 ### Access Database versions
