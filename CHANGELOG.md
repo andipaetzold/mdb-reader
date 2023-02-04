@@ -1,3 +1,22 @@
+# [3.0.0-next.2](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.1...v3.0.0-next.2) (2023-02-04)
+
+
+### Bug Fixes
+
+* use named import for fast-xml-parser ([#273](https://github.com/andipaetzold/mdb-reader/issues/273)) ([314e786](https://github.com/andipaetzold/mdb-reader/commit/314e786175d6b334ce214cd78527b61aed358ce6)), closes [#170](https://github.com/andipaetzold/mdb-reader/issues/170)
+
+
+### Features
+
+* do not use/export enums ([#274](https://github.com/andipaetzold/mdb-reader/issues/274)) ([ce27203](https://github.com/andipaetzold/mdb-reader/commit/ce272038872768f0300a3e8babad2565f98422ad))
+
+
+### BREAKING CHANGES
+
+* `ColumnType` is not a TypeScript enum anymore:
+- `ColumnType` is a union type
+- `ColumnTypes` a map for easier usage of `ColumnType`
+
 # [3.0.0-next.1](https://github.com/andipaetzold/mdb-reader/compare/v2.2.5...v3.0.0-next.1) (2023-02-04)
 
 
