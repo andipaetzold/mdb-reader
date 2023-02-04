@@ -14,8 +14,8 @@
 ### BREAKING CHANGES
 
 * `ColumnType` is not a TypeScript enum anymore:
-- `ColumnType` is a union type
-- `ColumnTypes` a map for easier usage of `ColumnType`
+  - `ColumnType` is a union type
+  - `ColumnTypes` a map for easier usage of `ColumnType`
 
 # [3.0.0-next.1](https://github.com/andipaetzold/mdb-reader/compare/v2.2.5...v3.0.0-next.1) (2023-02-04)
 
