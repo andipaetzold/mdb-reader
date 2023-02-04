@@ -1,8 +1,8 @@
 /**
  * @see https://github.com/ashtuchkin/iconv-lite/blob/928f7c68e1be51c1391c70dbee244fd32623f121/encodings/sbcs-codec.js#L17-L19
  */
-const ASCII_CHARS = Array.from(new Array(128).keys())
-    .map((i) => String.fromCharCode(i))
+const ASCII_CHARS = Array.from({ length: 128 })
+    .map((_, i) => String.fromCharCode(i))
     .join("");
 /**
  * @see https://github.com/ashtuchkin/iconv-lite/blob/5d99a923f2bb9352abf80f8aeb850d924a8a1e38/encodings/sbcs-data-generated.js#L82
