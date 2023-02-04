@@ -1,8 +1,8 @@
-import { ColumnType } from "./index.js";
+import { ColumnTypes } from "./index.js";
 import { Column, ColumnDefinition, getColumnType, parseColumnFlags } from "./column.js";
 import { readFieldValue } from "./data/index.js";
 import Database from "./Database.js";
-import PageType, { assertPageType } from "./PageType.js";
+import { PageType, assertPageType } from "./PageType.js";
 import { Value } from "./types.js";
 import { uncompressText } from "./unicodeCompression.js";
 import { findMapPages } from "./usage-map.js";
@@ -147,7 +147,7 @@ export default class Table {
                     this.db.format.tableDefinitionPage.columnsDefinition.variableIndexOffset
                 ),
                 size:
-                    type === ColumnType.Boolean
+                    type === ColumnTypes.Boolean
                         ? 0
                         : columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.sizeOffset),
                 fixedIndex: columnBuffer.readUInt16LE(this.db.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset),
@@ -156,7 +156,7 @@ export default class Table {
                 ),
             };
 
-            if (type === ColumnType.Numeric) {
+            if (type === ColumnTypes.Numeric) {
                 column.precision = columnBuffer.readUInt8(11);
                 column.scale = columnBuffer.readUInt8(12);
             }
@@ -352,7 +352,7 @@ export default class Table {
                     size = 0;
                 }
 
-                if (column.type === ColumnType.Boolean) {
+                if (column.type === ColumnTypes.Boolean) {
                     value = value === undefined;
                 } else if (value !== null) {
                     value = readFieldValue(pageBuffer.slice(start, start + size), column, this.db);

@@ -1,4 +1,26 @@
-export default interface SysObject {
+/**
+ * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/include/mdbtools.h#L73-L87
+ */
+export const SysObjectTypes = {
+    Form: 0x00,
+    Table: 0x01,
+    Macro: 0x02,
+    SystemTable: 0x03,
+    Report: 0x04,
+    Query: 0x05,
+    LinkedTable: 0x06,
+    Module: 0x07,
+    Relationship: 0x08,
+    DatabaseProperty: 0x0b,
+} satisfies Record<string, number>;
+
+export type SysObjectType = typeof SysObjectTypes[keyof typeof SysObjectTypes];
+
+export function isSysObjectType(typeValue: number): boolean {
+    return Object.values(SysObjectTypes).includes(typeValue);
+}
+
+export interface SysObject {
     objectName: string;
 
     /**
@@ -7,26 +29,6 @@ export default interface SysObject {
     objectType: SysObjectType | null;
     tablePage: number;
     flags: number;
-}
-
-/**
- * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/include/mdbtools.h#L73-L87
- */
-export enum SysObjectType {
-    Form = 0x00,
-    Table = 0x01,
-    Macro = 0x02,
-    SystemTable = 0x03,
-    Report = 0x04,
-    Query = 0x05,
-    LinkedTable = 0x06,
-    Module = 0x07,
-    Relationship = 0x08,
-    DatabaseProperty = 0x0b,
-}
-
-export function isSysObjectType(typeValue: number): typeValue is SysObjectType {
-    return Object.values(SysObjectType).includes(typeValue);
 }
 
 const SYSTEM_OBJECT_FLAG = 0x80000000;

@@ -13,6 +13,13 @@
                 "caughtErrorsIgnorePattern": "^_"
             }
         ],
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "TSEnumDeclaration:not([const=true])",
+                "message": "Do not use enums"
+            }
+        ],
         "no-restricted-imports": [
             "error",
             "assert",

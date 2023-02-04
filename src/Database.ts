@@ -2,7 +2,7 @@ import { CodecHandler, createCodecHandler } from "./codec-handler/index.js";
 import { decryptRC4 } from "./crypto/index.js";
 import { readDateTime } from "./data/datetime.js";
 import { getJetFormat, JetFormat } from "./JetFormat/index.js";
-import PageType, { assertPageType } from "./PageType.js";
+import { PageType, assertPageType } from "./PageType.js";
 import { SortOrder } from "./types.js";
 import { uncompressText } from "./unicodeCompression.js";
 import { isEmptyBuffer, xor } from "./util.js";

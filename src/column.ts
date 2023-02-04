@@ -1,4 +1,4 @@
-import { ColumnType } from "./types.js";
+import { ColumnType, ColumnTypes } from "./types.js";
 
 export interface Column {
     /**
@@ -37,24 +37,24 @@ export interface ColumnDefinition extends Column {
     fixedIndex: number;
 }
 
-const columnTypeMap: { [v: number]: ColumnType } = {
-    0x01: ColumnType.Boolean,
-    0x02: ColumnType.Byte,
-    0x03: ColumnType.Integer,
-    0x04: ColumnType.Long,
-    0x05: ColumnType.Currency,
-    0x06: ColumnType.Float,
-    0x07: ColumnType.Double,
-    0x08: ColumnType.DateTime,
-    0x09: ColumnType.Binary,
-    0x0a: ColumnType.Text,
-    0x0b: ColumnType.Long,
-    0x0c: ColumnType.Memo,
-    0x0f: ColumnType.RepID,
-    0x10: ColumnType.Numeric,
-    0x12: ColumnType.Complex,
-    0x13: ColumnType.BigInt,
-    0x14: ColumnType.DateTimeExtended,
+const columnTypeMap: Record<number, ColumnType> = {
+    0x01: ColumnTypes.Boolean,
+    0x02: ColumnTypes.Byte,
+    0x03: ColumnTypes.Integer,
+    0x04: ColumnTypes.Long,
+    0x05: ColumnTypes.Currency,
+    0x06: ColumnTypes.Float,
+    0x07: ColumnTypes.Double,
+    0x08: ColumnTypes.DateTime,
+    0x09: ColumnTypes.Binary,
+    0x0a: ColumnTypes.Text,
+    0x0b: ColumnTypes.Long,
+    0x0c: ColumnTypes.Memo,
+    0x0f: ColumnTypes.RepID,
+    0x10: ColumnTypes.Numeric,
+    0x12: ColumnTypes.Complex,
+    0x13: ColumnTypes.BigInt,
+    0x14: ColumnTypes.DateTimeExtended,
 };
 
 /**

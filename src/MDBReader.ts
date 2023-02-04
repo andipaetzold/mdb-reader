@@ -1,6 +1,6 @@
 import Database from "./Database.js";
-import PageType, { assertPageType } from "./PageType.js";
-import SysObject, { isSysObjectType, isSystemObject, SysObjectType } from "./SysObject.js";
+import { PageType, assertPageType } from "./PageType.js";
+import { SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
 import Table from "./Table.js";
 import { SortOrder } from "./types.js";
 
@@ -84,7 +84,7 @@ export default class MDBReader {
     ): string[] {
         const filteredSysObjects: SysObject[] = [];
         for (const sysObject of this.sysObjects) {
-            if (sysObject.objectType === SysObjectType.Table) {
+            if (sysObject.objectType === SysObjectTypes.Table) {
                 if (!isSystemObject(sysObject)) {
                     if (normalTables) {
                         filteredSysObjects.push(sysObject);
@@ -92,7 +92,7 @@ export default class MDBReader {
                 } else if (systemTables) {
                     filteredSysObjects.push(sysObject);
                 }
-            } else if (sysObject.objectType === SysObjectType.LinkedTable && linkedTables) {
+            } else if (sysObject.objectType === SysObjectTypes.LinkedTable && linkedTables) {
                 filteredSysObjects.push(sysObject);
             }
         }
@@ -107,7 +107,7 @@ export default class MDBReader {
      */
     public getTable(name: string): Table {
         const sysObject = this.sysObjects
-            .filter((o) => o.objectType === SysObjectType.Table)
+            .filter((o) => o.objectType === SysObjectTypes.Table)
             .find((o) => o.objectName === name);
 
         if (!sysObject) {
