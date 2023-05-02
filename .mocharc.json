@@ -1,5 +1,6 @@
 {
+    "loader": "ts-node/esm",
     "extension": ["ts"],
-    "node-option": ["loader=ts-node/esm"],
-    "spec": "**/*.spec.ts"
+    "spec": ["**/*.spec.ts"],
+    "watch-files": ["src", "test"]
 }

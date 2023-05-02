@@ -10,16 +10,15 @@ describe("Creation Date", () => {
         ["V2000.mdb", "2022-01-07T16:20:28.023Z"],
         ["V2010.accdb", "2022-01-07T16:20:39.512Z"],
     ]).describe("%s", (filename, date) => {
-        const path = resolve("test/creation-date/data", filename);
-
-        let reader: MDBReader;
+        let buffer: Buffer;
 
         beforeEach(() => {
-            const buffer = readFileSync(path);
-            reader = new MDBReader(buffer);
+            const path = resolve("test/creation-date/data", filename);
+            buffer = readFileSync(path);
         });
 
         it("should read the creation date", () => {
+            const reader = new MDBReader(buffer);
             const expected = date === null ? null : new Date(Date.parse(date));
             expect(reader.getCreationDate()).to.deep.eq(expected);
         });

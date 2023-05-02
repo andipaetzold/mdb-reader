@@ -8,14 +8,14 @@ describe("Currency", () => {
     forEach([["V2016/currency.accdb"]]).describe("%s", (filename) => {
         const path = resolve("test/data", filename);
 
-        let reader: MDBReader;
+        let buffer: Buffer;
 
         beforeEach(() => {
-            const buffer = readFileSync(path);
-            reader = new MDBReader(buffer);
+            buffer = readFileSync(path);
         });
 
         it("getData(): returns correct currency data", () => {
+            const reader = new MDBReader(buffer);
             const table = reader.getTable("Table");
             const rows = table.getData();
 
