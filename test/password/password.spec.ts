@@ -17,14 +17,15 @@ describe("Password", () => {
     ]).describe("%s", (filename, password, result) => {
         const path = resolve("test/password/data", filename);
 
-        let reader: MDBReader;
+        let buffer: Buffer;
 
         beforeEach(() => {
-            const buffer = readFileSync(path);
-            reader = new MDBReader(buffer, { password });
+            buffer = readFileSync(path);
         });
 
-        it("should read the password", () => {
+        it("should read the password", function () {
+            this.timeout(5000); // node 20 in CI is slow
+            const reader = new MDBReader(buffer, { password });
             expect(reader.getPassword()).to.eq(result);
         });
     });
