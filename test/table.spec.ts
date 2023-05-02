@@ -15,14 +15,14 @@ describe("Table", () => {
     ]).describe("%s", (filename, reverseRows, columnALength, columnBLength, table4Length) => {
         const path = resolve("test/data", filename);
 
-        let reader: MDBReader;
+        let buffer: Buffer;
 
         beforeEach(() => {
-            const buffer = readFileSync(path);
-            reader = new MDBReader(buffer);
+            buffer = readFileSync(path);
         });
 
         it("getData()", () => {
+            const reader = new MDBReader(buffer);
             const table = reader.getTable("Table1");
             const rows = table.getData();
 
@@ -53,6 +53,7 @@ describe("Table", () => {
 
         describe("getColumns()", () => {
             it("returns correct data types", () => {
+                const reader = new MDBReader(buffer);
                 const table = reader.getTable("Table1");
                 const columns = table.getColumns();
 
@@ -87,6 +88,7 @@ describe("Table", () => {
             });
 
             it("can handle many columns", () => {
+                const reader = new MDBReader(buffer);
                 const table = reader.getTable("Table2");
                 const columns = table.getColumns();
 
@@ -100,6 +102,7 @@ describe("Table", () => {
         });
 
         it("getColumnNames()", () => {
+            const reader = new MDBReader(buffer);
             const table = reader.getTable("Table1");
             const columnNames = table.getColumnNames();
 

@@ -10,14 +10,14 @@ describe("empty", () => {
         describe(file, () => {
             const filename = resolve("test/data", file);
 
-            let reader: MDBReader;
+            let buffer: Buffer;
 
             beforeEach(() => {
-                const buffer = readFileSync(filename);
-                reader = new MDBReader(buffer);
+                buffer = readFileSync(filename);
             });
 
             it("should have no tables", () => {
+                const reader = new MDBReader(buffer);
                 const tableNames = reader.getTableNames();
                 expect(tableNames).to.deep.eq([]);
             });

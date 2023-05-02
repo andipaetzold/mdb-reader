@@ -11,14 +11,14 @@ describe("Encryption", () => {
     ]).describe("%s", (filename, password) => {
         const path = resolve("test/encryption/data", filename);
 
-        let reader: MDBReader;
+        let buffer: Buffer;
 
         beforeEach(() => {
-            const buffer = readFileSync(path);
-            reader = new MDBReader(buffer, { password });
+            buffer = readFileSync(path);
         });
 
         it("should be able to read a page", () => {
+            const reader = new MDBReader(buffer, { password });
             expect(reader.getTableNames()).to.deep.eq(["Table1"]);
         });
     });
