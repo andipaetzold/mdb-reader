@@ -38,11 +38,11 @@
     "devDependencies": {
         "@semantic-release/changelog": "6.0.2",
         "@semantic-release/git": "10.0.1",
-        "@tsconfig/node16": "1.0.3",
+        "@tsconfig/node18": "2.0.1",
         "@types/chai": "4.3.4",
         "@types/mocha": "10.0.1",
         "@types/mocha-each": "2.0.0",
-        "@types/node": "16.11.7",
+        "@types/node": "18.16.16",
         "@typescript-eslint/eslint-plugin": "5.50.0",
         "@typescript-eslint/parser": "5.50.0",
         "chai": "4.3.7",
