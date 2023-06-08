@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import MDBReader from "../src/index.js";
+import { MDBReader } from "../src/index.js";
 
 describe("LongText", () => {
     it("multiple pages", () => {

@@ -11,7 +11,7 @@ export interface Options {
     password?: string;
 }
 
-export default class MDBReader {
+export class MDBReader {
     private readonly sysObjects: SysObject[];
     private readonly db: Database;
 

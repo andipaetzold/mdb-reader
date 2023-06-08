@@ -1,5 +1,5 @@
 import { Buffer } from "buffer/";
-import MDBReader from "mdb-reader";
+import { MDBReader } from "mdb-reader";
 
 const button = document.getElementById("button");
 const input = document.getElementById("input");
