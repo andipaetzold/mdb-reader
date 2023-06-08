@@ -15,13 +15,15 @@ export function readMemo(buffer: Buffer, _col: Column, db: Database): string {
     const type = buffer.readUInt8(3);
     switch (type) {
         case TYPE_THIS_PAGE: {
-            return uncompressText(buffer.slice(12, 12 + memoLength), db.format);
+            const compressedText = buffer.slice(12, 12 + memoLength);
+            return uncompressText(compressedText, db.format);
         }
 
         case TYPE_OTHER_PAGE: {
             const pageRow = buffer.readUInt32LE(4);
             const rowBuffer = db.findPageRow(pageRow);
-            return uncompressText(rowBuffer.slice(0, memoLength), db.format);
+            const compressedText = rowBuffer.slice(0, memoLength);
+            return uncompressText(compressedText, db.format);
         }
 
         case TYPE_OTHER_PAGES: {
@@ -43,7 +45,8 @@ export function readMemo(buffer: Buffer, _col: Column, db: Database): string {
                 pageRow = rowBuffer.readInt32LE(0);
             } while (pageRow !== 0);
 
-            return uncompressText(memoDataBuffer.slice(0, memoLength), db.format);
+            const compressedText = memoDataBuffer.slice(0, memoLength);
+            return uncompressText(compressedText, db.format);
         }
         default:
             throw new Error(`Unknown memo type ${type}`);
