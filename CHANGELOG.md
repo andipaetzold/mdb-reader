@@ -1,3 +1,15 @@
+# [3.0.0-next.4](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.3...v3.0.0-next.4) (2023-06-08)
+
+
+### Features
+
+* replace default export with named export ([#285](https://github.com/andipaetzold/mdb-reader/issues/285)) ([946b1c1](https://github.com/andipaetzold/mdb-reader/commit/946b1c1bb5ba91effeeac23f531551e5495214df))
+
+
+### BREAKING CHANGES
+
+* default export of `MDBReader` was replaced with named export
+
 # [3.0.0-next.3](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.2...v3.0.0-next.3) (2023-06-08)
 
 
