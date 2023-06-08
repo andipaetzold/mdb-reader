@@ -1,4 +1,4 @@
-import { MDBReader } from "mdb-reader";
+import MDBReader from "mdb-reader";
 import fs from "fs";
 
 const filename = process.argv[2];
