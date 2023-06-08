@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import { readFileSync } from "fs";
-import { it } from "mocha";
 import { resolve } from "path";
 import MDBReader from "../src/index.js";
 
