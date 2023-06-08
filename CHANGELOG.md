@@ -1,3 +1,10 @@
+## [2.2.6](https://github.com/andipaetzold/mdb-reader/compare/v2.2.5...v2.2.6) (2023-06-08)
+
+
+### Bug Fixes
+
+* Long Text fields with ~2k+ characters ([#282](https://github.com/andipaetzold/mdb-reader/issues/282)) ([ad81f42](https://github.com/andipaetzold/mdb-reader/commit/ad81f42df4614cc4714f93afbdb48aefe512134d))
+
 # [3.0.0-next.2](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.1...v3.0.0-next.2) (2023-02-04)
 
 
