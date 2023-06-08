@@ -32,7 +32,7 @@ export function readMemo(buffer: Buffer, _col: Column, db: Database): string {
                 break;
             }
 
-            memoDataBuffer = Buffer.concat([memoDataBuffer, rowBuffer.slice(4, buffer.length)]);
+            memoDataBuffer = Buffer.concat([memoDataBuffer, rowBuffer.slice(4)]);
 
             pageRow = rowBuffer.readInt32LE(0);
         } while (pageRow !== 0);
