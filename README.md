@@ -54,7 +54,7 @@ To decrypt databases, this library requires a few dependencies:
 
 ```javascript
 import { readFileSync } from "fs";
-import MDBReader from "mdb-reader";
+import { MDBReader } from "mdb-reader";
 
 const buffer = readFileSync("database.mdb");
 const reader = new MDBReader(buffer);

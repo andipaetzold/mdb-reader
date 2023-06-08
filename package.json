@@ -67,8 +67,8 @@
         "test:unit:node": "npm run prepare:node && mocha",
         "test:unit:browser": "npm run prepare:browser && TS_NODE_PROJECT='./tsconfig.browser.json' mocha",
         "test:esm": "npm run test:esm:node && npm run test:esm:browser",
-        "test:esm:node": "node --input-type=module -e \"import MDBReader from './lib/node/index.js';\"",
-        "test:esm:browser": "node --input-type=module -e \"import MDBReader from './lib/browser/index.js';\"",
+        "test:esm:node": "node --input-type=module -e \"import { MDBReader } from './lib/node/index.js';\"",
+        "test:esm:browser": "node --input-type=module -e \"import { MDBReader } from './lib/browser/index.js';\"",
         "lint": "eslint . --ext .ts",
         "semantic-release": "semantic-release"
     }

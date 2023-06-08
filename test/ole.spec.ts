@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import MDBReader from "../src/index.js";
+import { MDBReader } from "../src/index.js";
 import { resolve } from "path";
 
 describe("OLE", () => {
