@@ -12,7 +12,7 @@ jobs:
                 node: ["18.0.0", "18", "20.0.0", "20"]
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - name: Setup node
               uses: actions/setup-node@v3
@@ -34,7 +34,7 @@ jobs:
         runs-on: ubuntu-22.04
         needs: build-test
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
@@ -59,7 +59,7 @@ jobs:
         runs-on: ubuntu-22.04
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - name: Setup node
               uses: actions/setup-node@v3
