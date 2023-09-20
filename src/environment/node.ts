@@ -1,1 +1,1 @@
-export { createDecipheriv, createHash } from "crypto";
+export { createDecipheriv, createHash, webcrypto } from "node:crypto";
