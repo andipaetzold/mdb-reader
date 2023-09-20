@@ -1,3 +1,15 @@
+# [3.0.0-next.4](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.3...v3.0.0-next.4) (2023-09-20)
+
+
+### Code Refactoring
+
+* use private class fields/methods ([2fef138](https://github.com/andipaetzold/mdb-reader/commit/2fef138e6719e4cc2d4e3f09861b96e164275ef2))
+
+
+### BREAKING CHANGES
+
+* browser/node must support private class fields/methods
+
 # [3.0.0-next.3](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.2...v3.0.0-next.3) (2023-06-08)
 
 
