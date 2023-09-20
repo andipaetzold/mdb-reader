@@ -12,18 +12,21 @@ export interface Options {
 }
 
 export default class MDBReader {
-    private readonly sysObjects: SysObject[];
-    private readonly db: Database;
+    #buffer: Buffer;
+    #sysObjects: SysObject[];
+    #database: Database;
 
     /**
      * @param buffer Buffer of the database.
      */
-    public constructor(private readonly buffer: Buffer, { password }: Options = {}) {
-        assertPageType(this.buffer, PageType.DatabaseDefinitionPage);
+    constructor(buffer: Buffer, { password }: Options = {}) {
+        this.#buffer = buffer;
 
-        this.db = new Database(this.buffer, password ?? "");
+        assertPageType(this.#buffer, PageType.DatabaseDefinitionPage);
 
-        const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.db, MSYS_OBJECTS_PAGE).getData<{
+        this.#database = new Database(this.#buffer, password ?? "");
+
+        const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.#database, MSYS_OBJECTS_PAGE).getData<{
             Id: number;
             Name: string;
             Type: number;
@@ -32,7 +35,7 @@ export default class MDBReader {
             columns: ["Id", "Name", "Type", "Flags"],
         });
 
-        this.sysObjects = mSysObjectsTable.map((mSysObject) => {
+        this.#sysObjects = mSysObjectsTable.map((mSysObject) => {
             const objectType = mSysObject.Type & 0x7f;
             return {
                 objectName: mSysObject.Name,
@@ -46,22 +49,22 @@ export default class MDBReader {
     /**
      * Date when the database was created
      */
-    public getCreationDate(): Date | null {
-        return this.db.getCreationDate();
+    getCreationDate(): Date | null {
+        return this.#database.getCreationDate();
     }
 
     /**
      * Database password
      */
-    public getPassword(): string | null {
-        return this.db.getPassword();
+    getPassword(): string | null {
+        return this.#database.getPassword();
     }
 
     /**
      * Default sort order
      */
-    public getDefaultSortOrder(): Readonly<SortOrder> {
-        return this.db.getDefaultSortOrder();
+    getDefaultSortOrder(): Readonly<SortOrder> {
+        return this.#database.getDefaultSortOrder();
     }
 
     /**
@@ -71,7 +74,7 @@ export default class MDBReader {
      * @param systemTables Includes system tables. Default false.
      * @param linkedTables Includes linked tables. Default false.
      */
-    public getTableNames(
+    getTableNames(
         {
             normalTables,
             systemTables,
@@ -83,7 +86,7 @@ export default class MDBReader {
         } = { normalTables: true, systemTables: false, linkedTables: false }
     ): string[] {
         const filteredSysObjects: SysObject[] = [];
-        for (const sysObject of this.sysObjects) {
+        for (const sysObject of this.#sysObjects) {
             if (sysObject.objectType === SysObjectTypes.Table) {
                 if (!isSystemObject(sysObject)) {
                     if (normalTables) {
@@ -105,8 +108,8 @@ export default class MDBReader {
      *
      * @param name Name of the table. Case sensitive.
      */
-    public getTable(name: string): Table {
-        const sysObject = this.sysObjects
+    getTable(name: string): Table {
+        const sysObject = this.#sysObjects
             .filter((o) => o.objectType === SysObjectTypes.Table)
             .find((o) => o.objectName === name);
 
@@ -114,6 +117,6 @@ export default class MDBReader {
             throw new Error(`Could not find table with name ${name}`);
         }
 
-        return new Table(name, this.db, sysObject.tablePage);
+        return new Table(name, this.#database, sysObject.tablePage);
     }
 }

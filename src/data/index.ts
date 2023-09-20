@@ -40,7 +40,7 @@ const readFnByColType: {
     [ColumnTypes.RepID]: readRepID,
 };
 
-export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Database): Value | undefined {
+export function readFieldValue(buffer: Buffer, column: ColumnDefinition, database: Database): Value | undefined {
     if (column.type === ColumnTypes.Boolean) {
         throw new Error("readFieldValue does not handle type boolean");
     }
@@ -50,5 +50,5 @@ export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Dat
         return `Column type ${column.type} is currently not supported`;
     }
 
-    return read(buffer, column, db);
+    return read(buffer, column, database);
 }
