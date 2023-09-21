@@ -105,7 +105,7 @@ export class Database {
         return Object.freeze({ value, version });
     }
 
-    getPage(page: number): Buffer {
+    async getPage(page: number): Promise<Buffer> {
         if (page === 0) {
             // already decrypted
             return this.#databaseDefinitionPage;
@@ -117,7 +117,7 @@ export class Database {
         }
 
         const pageBuffer = this.#buffer.slice(offset, offset + this.#format.pageSize);
-        return this.#codecHandler.decryptPage(pageBuffer, page);
+        return await this.#codecHandler.decryptPage(pageBuffer, page);
     }
 
     /**
@@ -125,11 +125,11 @@ export class Database {
      *
      * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/data.c#L102-L124
      */
-    findPageRow(pageRow: number): Buffer {
+    async findPageRow(pageRow: number): Promise<Buffer> {
         const page = pageRow >> 8;
         const row = pageRow & 0xff;
 
-        const pageBuffer = this.getPage(page);
+        const pageBuffer = await this.getPage(page);
         return this.findRow(pageBuffer, row);
     }
 

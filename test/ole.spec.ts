@@ -10,10 +10,10 @@ describe("OLE", () => {
         buffer = readFileSync(path);
     });
 
-    it("reads ole data ", () => {
+    it("reads ole data ", async () => {
         const reader = new MDBReader(buffer);
-        const table = reader.getTable("Table1");
-        table.getData();
+        const table = await reader.getTable("Table1");
+        await table.getData();
         // TODO: check for correct values
     });
 });

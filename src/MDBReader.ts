@@ -1,8 +1,8 @@
 import { Database } from "./Database.js";
 import { PageType, assertPageType } from "./PageType.js";
 import { SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
-import { Table } from "./Table.js";
-import { SortOrder } from "./types.js";
+import { createTable } from "./Table.js";
+import { SortOrder, Table } from "./types.js";
 
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
@@ -13,7 +13,7 @@ export interface Options {
 
 export default class MDBReader {
     #buffer: Buffer;
-    #sysObjects: SysObject[];
+    #sysObjectsPromise: Promise<SysObject[]>;
     #database: Database;
 
     /**
@@ -26,24 +26,7 @@ export default class MDBReader {
 
         this.#database = new Database(this.#buffer, password ?? "");
 
-        const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.#database, MSYS_OBJECTS_PAGE).getData<{
-            Id: number;
-            Name: string;
-            Type: number;
-            Flags: number;
-        }>({
-            columns: ["Id", "Name", "Type", "Flags"],
-        });
-
-        this.#sysObjects = mSysObjectsTable.map((mSysObject) => {
-            const objectType = mSysObject.Type & 0x7f;
-            return {
-                objectName: mSysObject.Name,
-                objectType: isSysObjectType(objectType) ? objectType : null,
-                tablePage: mSysObject.Id & 0x00ffffff,
-                flags: mSysObject.Flags,
-            };
-        });
+        this.#sysObjectsPromise = getSysObjects(this.#database);
     }
 
     /**
@@ -74,7 +57,7 @@ export default class MDBReader {
      * @param systemTables Includes system tables. Default false.
      * @param linkedTables Includes linked tables. Default false.
      */
-    getTableNames(
+    async getTableNames(
         {
             normalTables,
             systemTables,
@@ -84,9 +67,10 @@ export default class MDBReader {
             systemTables: boolean;
             linkedTables: boolean;
         } = { normalTables: true, systemTables: false, linkedTables: false }
-    ): string[] {
+    ): Promise<string[]> {
+        const sysObjects = await this.#sysObjectsPromise;
         const filteredSysObjects: SysObject[] = [];
-        for (const sysObject of this.#sysObjects) {
+        for (const sysObject of sysObjects) {
             if (sysObject.objectType === SysObjectTypes.Table) {
                 if (!isSystemObject(sysObject)) {
                     if (normalTables) {
@@ -108,15 +92,36 @@ export default class MDBReader {
      *
      * @param name Name of the table. Case sensitive.
      */
-    getTable(name: string): Table {
-        const sysObject = this.#sysObjects
-            .filter((o) => o.objectType === SysObjectTypes.Table)
-            .find((o) => o.objectName === name);
+    async getTable(name: string): Promise<Table> {
+        const sysObjects = await this.#sysObjectsPromise;
+        const sysObject = sysObjects.filter((o) => o.objectType === SysObjectTypes.Table).find((o) => o.objectName === name);
 
         if (!sysObject) {
             throw new Error(`Could not find table with name ${name}`);
         }
 
-        return new Table(name, this.#database, sysObject.tablePage);
+        return await createTable(name, this.#database, sysObject.tablePage);
     }
+}
+
+async function getSysObjects(database: Database): Promise<SysObject[]> {
+    const table = await createTable(MSYS_OBJECTS_TABLE, database, MSYS_OBJECTS_PAGE);
+    const tableData = await table.getData<{
+        Id: number;
+        Name: string;
+        Type: number;
+        Flags: number;
+    }>({
+        columns: ["Id", "Name", "Type", "Flags"],
+    });
+
+    return tableData.map((mSysObject) => {
+        const objectType = mSysObject.Type & 0x7f;
+        return {
+            objectName: mSysObject.Name,
+            objectType: isSysObjectType(objectType) ? objectType : null,
+            tablePage: mSysObject.Id & 0x00ffffff,
+            flags: mSysObject.Flags,
+        };
+    });
 }

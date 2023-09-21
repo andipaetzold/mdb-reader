@@ -1,3 +1,5 @@
+import { Column } from "./column.js";
+
 export const ColumnTypes = {
     Boolean: "boolean",
     Byte: "byte",
@@ -18,7 +20,7 @@ export const ColumnTypes = {
     DateTimeExtended: "datetimextended",
 } as const;
 
-export type ColumnType = typeof ColumnTypes[keyof typeof ColumnTypes];
+export type ColumnType = (typeof ColumnTypes)[keyof typeof ColumnTypes];
 
 export type ValueMap = {
     [ColumnTypes.Binary]: Buffer;
@@ -46,3 +48,24 @@ export interface SortOrder {
     value: number;
     version: number;
 }
+
+export type Table = {
+    get name(): string;
+    get rowCount(): number;
+    get columnCount(): number;
+
+    getColumn(name: string): Column;
+    getColumns(): Column[];
+    getColumnNames(): string[];
+
+    getData<
+        TRow extends {
+            [column in TColumn]: Value;
+        },
+        TColumn extends string = string
+    >(options?: {
+        columns?: ReadonlyArray<string>;
+        rowOffset?: number;
+        rowLimit?: number;
+    }): Promise<TRow[]>;
+};

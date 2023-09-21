@@ -15,7 +15,7 @@ export async function hash(algorithm: string, buffers: Buffer[], length?: number
     }
 
     const concatBuffer = Buffer.concat(buffers);
-    const result = await webcrypto.subtle.digest(algorithm, concatBuffer);
+    const result = await webcrypto.subtle.digest(webcryptoAlgorithm, concatBuffer);
     const resultAsBuffer = Buffer.from(result);
 
     if (length === undefined) {

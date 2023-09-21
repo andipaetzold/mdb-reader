@@ -21,10 +21,10 @@ describe("Table", () => {
             buffer = readFileSync(path);
         });
 
-        it("getData()", () => {
+        it("getData()", async () => {
             const reader = new MDBReader(buffer);
-            const table = reader.getTable("Table1");
-            const rows = table.getData();
+            const table = await reader.getTable("Table1");
+            const rows = await table.getData();
 
             if (reverseRows) {
                 rows.reverse();
@@ -52,9 +52,9 @@ describe("Table", () => {
         });
 
         describe("getColumns()", () => {
-            it("returns correct data types", () => {
+            it("returns correct data types", async () => {
                 const reader = new MDBReader(buffer);
-                const table = reader.getTable("Table1");
+                const table = await reader.getTable("Table1");
                 const columns = table.getColumns();
 
                 expect(columns[0].name).to.eq("A");
@@ -87,9 +87,9 @@ describe("Table", () => {
                 expect(columns[8].type).to.eq("boolean");
             });
 
-            it("can handle many columns", () => {
+            it("can handle many columns", async () => {
                 const reader = new MDBReader(buffer);
-                const table = reader.getTable("Table2");
+                const table = await reader.getTable("Table2");
                 const columns = table.getColumns();
 
                 expect(columns.length).to.eq(89);
@@ -101,10 +101,10 @@ describe("Table", () => {
             });
         });
 
-        it("getColumnNames()", () => {
+        it("getColumnNames()", async () => {
             const reader = new MDBReader(buffer);
-            const table = reader.getTable("Table1");
-            const columnNames = table.getColumnNames();
+            const table = await reader.getTable("Table1");
+            const columnNames = await table.getColumnNames();
 
             expect(columnNames).to.deep.eq(["A", "B", "C", "D", "E", "F", "G", "H", "I"]);
         });
@@ -115,54 +115,54 @@ describe("Table", () => {
             const path = resolve("test/data/real/ASampleDatabase.accdb");
             let table: Table;
 
-            before(() => {
+            before(async () => {
                 const buffer = readFileSync(path);
                 const reader = new MDBReader(buffer);
-                table = reader.getTable("Asset Items");
+                table = await reader.getTable("Asset Items");
             });
 
-            it("no options", () => {
-                const rows = table.getData();
+            it("no options", async () => {
+                const rows = await table.getData();
                 expect(rows.length).to.eq(65);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
                 expect(new Set(assetNumbers).size).to.eq(65);
             });
 
-            it("with rowOffset", () => {
-                const rows = table.getData({ rowOffset: 30 });
+            it("with rowOffset", async () => {
+                const rows = await table.getData({ rowOffset: 30 });
                 expect(rows.length).to.eq(35);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
                 expect(new Set(assetNumbers).size).to.eq(35);
             });
 
-            it("with rowOffset > rowCount", () => {
-                const rows = table.getData({ rowOffset: 100 });
+            it("with rowOffset > rowCount", async () => {
+                const rows = await table.getData({ rowOffset: 100 });
                 expect(rows.length).to.eq(0);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
                 expect(new Set(assetNumbers).size).to.eq(0);
             });
 
-            it("with rowLimit", () => {
-                const rows = table.getData({ rowLimit: 40 });
+            it("with rowLimit", async () => {
+                const rows = await table.getData({ rowLimit: 40 });
                 expect(rows.length).to.eq(40);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
                 expect(new Set(assetNumbers).size).to.eq(40);
             });
 
-            it("with rowLimit > rowCount", () => {
-                const rows = table.getData({ rowLimit: 100 });
+            it("with rowLimit > rowCount", async () => {
+                const rows = await table.getData({ rowLimit: 100 });
                 expect(rows.length).to.eq(65);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
                 expect(new Set(assetNumbers).size).to.eq(65);
             });
 
-            it("with rowOffset & rowLimit", () => {
-                const rows = table.getData({ rowOffset: 30, rowLimit: 15 });
+            it("with rowOffset & rowLimit", async () => {
+                const rows = await table.getData({ rowOffset: 30, rowLimit: 15 });
                 expect(rows.length).to.eq(15);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
@@ -171,26 +171,26 @@ describe("Table", () => {
         });
 
         describe("V2016/withdeletedcol.accdb", () => {
-            it("with offset column indices due to a column deletion", () => {
+            it("with offset column indices due to a column deletion", async () => {
                 const withDeletedColPath = resolve("test/data/V2016/withdeletedcol.accdb");
                 const buffer = readFileSync(withDeletedColPath);
                 const reader = new MDBReader(buffer);
-                const withDeletedColTable = reader.getTable("Table1");
+                const withDeletedColTable = await reader.getTable("Table1");
 
-                expect(withDeletedColTable.getData()).to.deep.eq([
+                expect(await withDeletedColTable.getData()).to.deep.eq([
                     { col1: 0, col2: 1, col3: 2, col5: 4, col6: 5, col7: 6, col8: 7 },
                 ]);
             });
         });
 
         describe("V2016/withinsertedcol.accdb", () => {
-            it("with offset column indices due to a column insertion", () => {
+            it("with offset column indices due to a column insertion", async () => {
                 const withInsertedColPath = resolve("test/data/V2016/withinsertedcol.accdb");
                 const buffer = readFileSync(withInsertedColPath);
                 const reader = new MDBReader(buffer);
-                const withInsertedColTable = reader.getTable("Table1");
+                const withInsertedColTable = await reader.getTable("Table1");
 
-                expect(withInsertedColTable.getData()).to.deep.eq([{ col1: true, col2: true, col3: false }]);
+                expect(await withInsertedColTable.getData()).to.deep.eq([{ col1: true, col2: true, col3: false }]);
             });
         });
     });

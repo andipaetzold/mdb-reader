@@ -13,19 +13,20 @@ const ENC_VALUE_BLOCK = [0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0xd6];
 export function createAgileCodecHandler(encodingKey: Buffer, encryptionProvider: Buffer, password: Buffer): CodecHandler {
     const { keyData, passwordKeyEncryptor } = parseEncryptionDescriptor(encryptionProvider);
 
-    const key = decryptKeyValue(password, passwordKeyEncryptor);
-    const decryptPage: DecryptPage = (b, pageNumber) => {
+    const decryptPage: DecryptPage = async (b, pageNumber) => {
+        const key = await decryptKeyValue(password, passwordKeyEncryptor);
+
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageNumber);
-        const iv = hash(keyData.hash.algorithm, [keyData.salt, pageEncodingKey], keyData.blockSize);
+        const iv = await hash(keyData.hash.algorithm, [keyData.salt, pageEncodingKey], keyData.blockSize);
 
         return blockDecrypt(keyData.cipher, key, iv, b);
     };
 
-    const verifyPassword: VerifyPassword = () => {
-        const verifier = decryptVerifierHashInput(password, passwordKeyEncryptor);
-        const verifierHash = decryptVerifierHashValue(password, passwordKeyEncryptor);
+    const verifyPassword: VerifyPassword = async () => {
+        const verifier = await decryptVerifierHashInput(password, passwordKeyEncryptor);
+        const verifierHash = await decryptVerifierHashValue(password, passwordKeyEncryptor);
 
-        let testHash = hash(passwordKeyEncryptor.hash.algorithm, [verifier]);
+        let testHash = await hash(passwordKeyEncryptor.hash.algorithm, [verifier]);
 
         const blockSize = passwordKeyEncryptor.blockSize;
         if (testHash.length % blockSize != 0) {
@@ -42,8 +43,8 @@ export function createAgileCodecHandler(encodingKey: Buffer, encryptionProvider:
     };
 }
 
-function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor): Buffer {
-    const key = deriveKey(
+async function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor): Promise<Buffer> {
+    const key = await deriveKey(
         password,
         Buffer.from(ENC_VALUE_BLOCK),
         passwordKeyEncryptor.hash.algorithm,
@@ -60,8 +61,8 @@ function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncr
     );
 }
 
-function decryptVerifierHashInput(password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor): Buffer {
-    const key = deriveKey(
+async function decryptVerifierHashInput(password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor): Promise<Buffer> {
+    const key = await deriveKey(
         password,
         Buffer.from(ENC_VERIFIER_INPUT_BLOCK),
         passwordKeyEncryptor.hash.algorithm,
@@ -78,8 +79,8 @@ function decryptVerifierHashInput(password: Buffer, passwordKeyEncryptor: Passwo
     );
 }
 
-function decryptVerifierHashValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor): Buffer {
-    const key = deriveKey(
+async function decryptVerifierHashValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor): Promise<Buffer> {
+    const key = await deriveKey(
         password,
         Buffer.from(ENC_VERIFIER_VALUE_BLOCK),
         passwordKeyEncryptor.hash.algorithm,
