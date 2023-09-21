@@ -3,6 +3,7 @@ import { PageType, assertPageType } from "./PageType.js";
 import { SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
 import { createTable } from "./Table.js";
 import { SortOrder, Table } from "./types.js";
+import { memoPromise } from "./util.js";
 
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
@@ -13,7 +14,6 @@ export interface Options {
 
 export default class MDBReader {
     #buffer: Buffer;
-    #sysObjectsPromise: Promise<SysObject[]>;
     #database: Database;
 
     /**
@@ -25,9 +25,9 @@ export default class MDBReader {
         assertPageType(this.#buffer, PageType.DatabaseDefinitionPage);
 
         this.#database = new Database(this.#buffer, password ?? "");
-
-        this.#sysObjectsPromise = getSysObjects(this.#database);
     }
+
+    #getSysObjects = memoPromise(() => getSysObjects(this.#database));
 
     /**
      * Date when the database was created
@@ -68,7 +68,7 @@ export default class MDBReader {
             linkedTables: boolean;
         } = { normalTables: true, systemTables: false, linkedTables: false }
     ): Promise<string[]> {
-        const sysObjects = await this.#sysObjectsPromise;
+        const sysObjects = await this.#getSysObjects();
         const filteredSysObjects: SysObject[] = [];
         for (const sysObject of sysObjects) {
             if (sysObject.objectType === SysObjectTypes.Table) {
@@ -93,7 +93,7 @@ export default class MDBReader {
      * @param name Name of the table. Case sensitive.
      */
     async getTable(name: string): Promise<Table> {
-        const sysObjects = await this.#sysObjectsPromise;
+        const sysObjects = await this.#getSysObjects();
         const sysObject = sysObjects.filter((o) => o.objectType === SysObjectTypes.Table).find((o) => o.objectName === name);
 
         if (!sysObject) {

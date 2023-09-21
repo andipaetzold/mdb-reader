@@ -58,3 +58,15 @@ export function fixBufferLength(buffer: Buffer, length: number, padByte = 0): Bu
 export function isInRange(from: number, to: number, value: number): boolean {
     return from <= value && value <= to;
 }
+
+export function memoPromise<T>(fn: () => Promise<T>): () => Promise<T> {
+    let promise: Promise<T> | undefined;
+
+    return async () => {
+        if (!promise) {
+            promise = fn();
+        }
+
+        return await promise;
+    };
+}
