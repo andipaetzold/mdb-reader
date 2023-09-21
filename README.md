@@ -47,7 +47,6 @@ yarn add mdb-reader
 To decrypt databases, this library requires a few dependencies:
 
 -   [`browserify-aes`](https://www.npmjs.com/browserify-aes): Only imported when running in browser
--   [`create-hash`](https://www.npmjs.com/create-hash): Only imported when running in browser
 -   [`fast-xml-parser`](https://www.npmjs.com/fast-xml-parser)
 
 ## Usage
