@@ -33,6 +33,8 @@ jobs:
         name: Release
         runs-on: ubuntu-22.04
         needs: build-test
+        permissions:
+          id-token: write
         steps:
             - uses: actions/checkout@v3
               with:
