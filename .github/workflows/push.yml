@@ -33,8 +33,12 @@ jobs:
         name: Release
         runs-on: ubuntu-22.04
         needs: build-test
+        # https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md#node-project-configuration
         permissions:
-          id-token: write
+            contents: write # to be able to publish a GitHub release
+            issues: write # to be able to comment on released issues
+            pull-requests: write # to be able to comment on released pull requests
+            id-token: write # to enable use of OIDC for npm provenance
         steps:
             - uses: actions/checkout@v3
               with:
