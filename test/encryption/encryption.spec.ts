@@ -7,7 +7,7 @@ import { expect } from "chai";
 describe("Encryption", () => {
     forEach([
         ["office-agile-4.4.accdb", "password"],
-        // ["office-agile-4.2.accdb", "password"],
+        ["office-agile-4.2.accdb", "password"],
     ]).describe("%s", (filename, password) => {
         const path = resolve("test/encryption/data", filename);
 
@@ -17,24 +17,24 @@ describe("Encryption", () => {
             buffer = readFileSync(path);
         });
 
-        it("should be able to read a page", async function () {
+        it("should be able to read a page", function () {
             this.timeout(5000); // node 20 in CI is slow
             const reader = new MDBReader(buffer, { password });
-            expect(await reader.getTableNames()).to.deep.eq(["Table1"]);
+            expect(reader.getTableNames()).to.deep.eq(["Table1"]);
         });
     });
 
-    // forEach([["office-agile-4.4.accdb"], ["office-agile-4.2.accdb"]]).describe("%s", (filename) => {
-    //     const path = resolve("test/encryption/data", filename);
+    forEach([["office-agile-4.4.accdb"], ["office-agile-4.2.accdb"]]).describe("%s", (filename) => {
+        const path = resolve("test/encryption/data", filename);
 
-    //     let buffer: Buffer;
+        let buffer: Buffer;
 
-    //     beforeEach(() => {
-    //         buffer = readFileSync(path);
-    //     });
+        beforeEach(() => {
+            buffer = readFileSync(path);
+        });
 
-    //     it("should throw for wrong password", () => {
-    //         expect(() => new MDBReader(buffer, { password: "wrong-password" })).to.throw;
-    //     });
-    // });
+        it("should throw for wrong password", () => {
+            expect(() => new MDBReader(buffer, { password: "wrong-password" })).to.throw;
+        });
+    });
 });
