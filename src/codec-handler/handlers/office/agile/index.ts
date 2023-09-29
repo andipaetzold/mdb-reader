@@ -19,7 +19,7 @@ export function createAgileCodecHandler(encodingKey: Buffer, encryptionProvider:
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageNumber);
         const iv = await hash(keyData.hash.algorithm, [keyData.salt, pageEncodingKey], keyData.blockSize);
 
-        return blockDecrypt(keyData.cipher, key, iv, b);
+        return await blockDecrypt(keyData.cipher, key, iv, b);
     };
 
     const verifyPassword: VerifyPassword = async () => {
@@ -53,7 +53,7 @@ async function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordK
         roundToFullByte(passwordKeyEncryptor.keyBits)
     );
 
-    return blockDecrypt(
+    return await blockDecrypt(
         passwordKeyEncryptor.cipher,
         key,
         passwordKeyEncryptor.salt,
@@ -71,7 +71,7 @@ async function decryptVerifierHashInput(password: Buffer, passwordKeyEncryptor: 
         roundToFullByte(passwordKeyEncryptor.keyBits)
     );
 
-    return blockDecrypt(
+    return await blockDecrypt(
         passwordKeyEncryptor.cipher,
         key,
         passwordKeyEncryptor.salt,
@@ -89,7 +89,7 @@ async function decryptVerifierHashValue(password: Buffer, passwordKeyEncryptor: 
         roundToFullByte(passwordKeyEncryptor.keyBits)
     );
 
-    return blockDecrypt(
+    return await blockDecrypt(
         passwordKeyEncryptor.cipher,
         key,
         passwordKeyEncryptor.salt,
