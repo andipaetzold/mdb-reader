@@ -42,7 +42,7 @@
         "@types/chai": "4.3.5",
         "@types/mocha": "10.0.1",
         "@types/mocha-each": "2.0.0",
-        "@types/node": "18.16.16",
+        "@types/node": "20.10.0",
         "@typescript-eslint/eslint-plugin": "6.0.0",
         "@typescript-eslint/parser": "6.0.0",
         "chai": "4.3.7",
