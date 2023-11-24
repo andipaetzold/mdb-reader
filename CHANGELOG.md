@@ -1,3 +1,10 @@
+# [3.0.0-next.5](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.4...v3.0.0-next.5) (2023-11-24)
+
+
+### Bug Fixes
+
+* set conditional exports in package.json ([#299](https://github.com/andipaetzold/mdb-reader/issues/299)) ([ef65273](https://github.com/andipaetzold/mdb-reader/commit/ef652736ed9e7e5758389101d6e7fdf2da75a130))
+
 # [3.0.0-next.4](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.3...v3.0.0-next.4) (2023-09-20)
 
 
