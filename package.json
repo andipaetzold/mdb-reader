@@ -5,6 +5,14 @@
     "main": "lib/node/index.js",
     "browser": "lib/browser/index.js",
     "types": "lib/types/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./lib/types/index.d.ts",
+            "node": "./lib/node/index.js",
+            "default": "./lib/browser/index.js"
+        },
+        "./package.json": "./package.json"
+    },
     "sideEffects": false,
     "type": "module",
     "files": [
