@@ -21,7 +21,7 @@ export function buildValue(array: ReadonlyArray<number>, scale: number, negative
             if (i === scale) {
                 value += ".";
             }
-            value += array[i - 1].toString();
+            value += array[i - 1]!.toString();
         }
     }
 

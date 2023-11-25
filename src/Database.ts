@@ -69,7 +69,7 @@ export class Database {
         const dateValue = this.#databaseDefinitionPage.readDoubleLE(this.#format.databaseDefinitionPage.creationDateOffset);
         mask.writeInt32LE(Math.floor(dateValue));
         for (let i = 0; i < mask.length; ++i) {
-            mask[i] = mask[i % 4];
+            mask[i] = mask[i % 4]!;
         }
         return mask;
     }
