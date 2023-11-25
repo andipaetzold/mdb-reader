@@ -26,13 +26,13 @@ describe("Numeric", () => {
 
                 expect(rows.length).to.eq(1);
 
-                const row = rows[0];
-                expect(row.col2).to.eq("1");
-                expect(row.col3).to.eq("0");
-                expect(row.col4).to.eq("0");
-                expect(row.col5).to.eq("4");
-                expect(row.col6).to.eq("-1");
-                expect(row.col7).to.eq("1");
+                const row = rows[0]!;
+                expect(row['col2']).to.eq("1");
+                expect(row['col3']).to.eq("0");
+                expect(row['col4']).to.eq("0");
+                expect(row['col5']).to.eq("4");
+                expect(row['col6']).to.eq("-1");
+                expect(row['col7']).to.eq("1");
             });
         }
     );

@@ -9,6 +9,6 @@ describe("LongText", () => {
         const buffer = readFileSync(path);
         const reader = new MDBReader(buffer);
         const data = reader.getTable("Table1").getData();
-        expect(data[0].LongText).to.have.length(5000);
+        expect(data[0]!['LongText']).to.have.length(5000);
     });
 });

@@ -21,8 +21,8 @@ describe("Currency", () => {
 
             expect(rows.length).to.eq(1);
 
-            const row = rows[0];
-            expect(row.Money).to.eq("42.0000");
+            const row = rows[0]!;
+            expect(row['Money']).to.eq("42.0000");
         });
     });
 });
