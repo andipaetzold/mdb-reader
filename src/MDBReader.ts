@@ -8,7 +8,7 @@ const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
 
 export interface Options {
-    password?: string;
+    password?: string | undefined;
 }
 
 export default class MDBReader {
@@ -19,7 +19,7 @@ export default class MDBReader {
     /**
      * @param buffer Buffer of the database.
      */
-    constructor(buffer: Buffer, { password }: Options = {}) {
+    constructor(buffer: Buffer, { password }: Options | undefined = {}) {
         this.#buffer = buffer;
 
         assertPageType(this.#buffer, PageType.DatabaseDefinitionPage);
@@ -74,17 +74,15 @@ export default class MDBReader {
      * @param systemTables Includes system tables. Default false.
      * @param linkedTables Includes linked tables. Default false.
      */
-    getTableNames(
-        {
-            normalTables,
-            systemTables,
-            linkedTables,
-        }: {
-            normalTables: boolean;
-            systemTables: boolean;
-            linkedTables: boolean;
-        } = { normalTables: true, systemTables: false, linkedTables: false }
-    ): string[] {
+    getTableNames({
+        normalTables = true,
+        systemTables = false,
+        linkedTables = false,
+    }: {
+        normalTables?: boolean | undefined;
+        systemTables?: boolean | undefined;
+        linkedTables?: boolean | undefined;
+    } = {}): string[] {
         const filteredSysObjects: SysObject[] = [];
         for (const sysObject of this.#sysObjects) {
             if (sysObject.objectType === SysObjectTypes.Table) {

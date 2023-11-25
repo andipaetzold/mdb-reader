@@ -13,12 +13,12 @@ export function readNumeric(buffer: Buffer, column: Pick<Column, "scale" | "prec
 
     const bytes = buffer.slice(1, 17);
     for (let i = 0; i < bytes.length; ++i) {
-        const byte = bytes[12 - 4 * Math.floor(i / 4) + (i % 4)];
+        const byte = bytes[12 - 4 * Math.floor(i / 4) + (i % 4)]!;
         product = addArray(product, multiplyArray(multiplier, toArray(byte, MAX_PRECISION)));
         multiplier = multiplyArray(multiplier, toArray(256, MAX_PRECISION));
     }
 
-    const negative = !!(buffer[0] & 0x80);
+    const negative = !!(buffer[0]! & 0x80);
     return buildValue(
         product,
         // Scale is always set for numeric columns

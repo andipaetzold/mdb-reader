@@ -27,9 +27,9 @@ export class Table {
     #columnCount: number;
 
     #variableColumnCount: number;
-    #fixedColumnCount: number;
+    // #fixedColumnCount: number;
 
-    #logicalIndexCount: number;
+    // #logicalIndexCount: number;
     #realIndexCount: number;
 
     /**
@@ -69,11 +69,11 @@ export class Table {
         this.#variableColumnCount = this.#definitionBuffer.readUInt16LE(
             this.#database.format.tableDefinitionPage.variableColumnCountOffset
         );
-        this.#fixedColumnCount = this.#columnCount - this.#variableColumnCount;
+        // this.#fixedColumnCount = this.#columnCount - this.#variableColumnCount;
 
-        this.#logicalIndexCount = this.#definitionBuffer.readInt32LE(
-            this.#database.format.tableDefinitionPage.logicalIndexCountOffset
-        );
+        // this.#logicalIndexCount = this.#definitionBuffer.readInt32LE(
+        //     this.#database.format.tableDefinitionPage.logicalIndexCountOffset
+        // );
         this.#realIndexCount = this.#definitionBuffer.readInt32LE(
             this.#database.format.tableDefinitionPage.realIndexCountOffset
         );
@@ -204,11 +204,13 @@ export class Table {
      * @param rowLimit Maximum number of rows to be returned. Defaults to Infinity.
      */
     getData<TRow extends { [column in TColumn]: Value }, TColumn extends string = string>(
-        options: {
-            columns?: ReadonlyArray<string>;
-            rowOffset?: number;
-            rowLimit?: number;
-        } = {}
+        options:
+            | {
+                  columns?: ReadonlyArray<string> | undefined;
+                  rowOffset?: number | undefined;
+                  rowLimit?: number | undefined;
+              }
+            | undefined = {}
     ): TRow[] {
         const columnDefinitions = this.#getColumnDefinitions();
 
@@ -363,9 +365,9 @@ export class Table {
                     size = column.size;
                     ++fixedColumnsFound;
                 } else if (!column.fixedLength && column.variableIndex < rowVariableColumnCount) {
-                    const colStart = variableColumnOffsets[column.variableIndex];
+                    const colStart = variableColumnOffsets[column.variableIndex]!;
                     start = recordStart + colStart;
-                    size = variableColumnOffsets[column.variableIndex + 1] - colStart;
+                    size = variableColumnOffsets[column.variableIndex + 1]! - colStart;
                 } else {
                     start = 0;
                     value = null;

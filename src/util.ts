@@ -6,7 +6,7 @@
 export function getBitmapValue(bitmap: Buffer, pos: number): boolean {
     const byteNumber = Math.floor(pos / 8);
     const bitNumber = pos % 8;
-    return !!(bitmap[byteNumber] & (1 << bitNumber));
+    return !!(bitmap[byteNumber]! & (1 << bitNumber));
 }
 
 /**
@@ -24,7 +24,7 @@ export function xor(a: Buffer, b: Buffer) {
     const buffer = Buffer.allocUnsafe(length);
 
     for (let i = 0; i < length; i++) {
-        buffer[i] = a[i] ^ b[i];
+        buffer[i] = a[i]! ^ b[i]!;
     }
 
     return buffer;

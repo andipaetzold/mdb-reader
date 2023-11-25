@@ -20,9 +20,9 @@ export function createRC4Decrypter(key: Buffer): (data: Buffer) => Buffer {
          */
         for (let k = 0; k < data.length; ++k) {
             i = (i + 1) % 256;
-            j = (j + S[i]) % 256;
-            [S[i], S[j]] = [S[j], S[i]];
-            resultBuffer[k] ^= S[(S[i] + S[j]) % 256];
+            j = (j + S[i]!) % 256;
+            [S[i], S[j]] = [S[j]!, S[i]!];
+            resultBuffer[k] ^= S[(S[i]! + S[j]!) % 256]!;
         }
 
         return resultBuffer;
@@ -39,8 +39,8 @@ function createKeyStream(key: Buffer): Uint8Array {
     }
     let j = 0;
     for (let i = 0; i < 256; ++i) {
-        j = (j + S[i] + key[i % key.length]) % 256;
-        [S[i], S[j]] = [S[j], S[i]];
+        j = (j + S[i]! + key[i % key.length]!) % 256;
+        [S[i], S[j]] = [S[j]!, S[i]!];
     }
 
     return S;
