@@ -1,3 +1,10 @@
+# [3.0.0-next.6](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.5...v3.0.0-next.6) (2023-11-25)
+
+
+### Bug Fixes
+
+* `exactOptionalPropertyTypes` TS option compatibility ([#300](https://github.com/andipaetzold/mdb-reader/issues/300)) ([31b129a](https://github.com/andipaetzold/mdb-reader/commit/31b129ad3f8e9a978d7b311573082e74c78ac3d9))
+
 # [3.0.0-next.5](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.4...v3.0.0-next.5) (2023-11-24)
 
 
