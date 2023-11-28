@@ -1,3 +1,34 @@
+# [3.0.0](https://github.com/andipaetzold/mdb-reader/compare/v2.2.6...v3.0.0) (2023-11-28)
+
+
+### Bug Fixes
+
+* `exactOptionalPropertyTypes` TS option compatibility ([#300](https://github.com/andipaetzold/mdb-reader/issues/300)) ([31b129a](https://github.com/andipaetzold/mdb-reader/commit/31b129ad3f8e9a978d7b311573082e74c78ac3d9))
+* set conditional exports in package.json ([#299](https://github.com/andipaetzold/mdb-reader/issues/299)) ([ef65273](https://github.com/andipaetzold/mdb-reader/commit/ef652736ed9e7e5758389101d6e7fdf2da75a130))
+* use named import for fast-xml-parser ([#273](https://github.com/andipaetzold/mdb-reader/issues/273)) ([314e786](https://github.com/andipaetzold/mdb-reader/commit/314e786175d6b334ce214cd78527b61aed358ce6)), closes [#170](https://github.com/andipaetzold/mdb-reader/issues/170)
+
+
+### Code Refactoring
+
+* use private class fields/methods ([2fef138](https://github.com/andipaetzold/mdb-reader/commit/2fef138e6719e4cc2d4e3f09861b96e164275ef2))
+
+
+### Features
+
+* do not use/export enums ([#274](https://github.com/andipaetzold/mdb-reader/issues/274)) ([ce27203](https://github.com/andipaetzold/mdb-reader/commit/ce272038872768f0300a3e8babad2565f98422ad))
+* drop node 14 support ([#272](https://github.com/andipaetzold/mdb-reader/issues/272)) ([d44c67d](https://github.com/andipaetzold/mdb-reader/commit/d44c67d16616f6f25c86fe8de6df0b97e8be68b9))
+* drop node 16 support ([#283](https://github.com/andipaetzold/mdb-reader/issues/283)) ([19bc255](https://github.com/andipaetzold/mdb-reader/commit/19bc255b8ad834f1da29c414bec6dc46d0602456))
+
+
+### BREAKING CHANGES
+
+* browser/node must support private class fields/methods
+* drop node 16 support
+* `ColumnType` is not a TypeScript enum anymore:
+- `ColumnType` is a union type
+- `ColumnTypes` a map for easier usage of `ColumnType`
+* drop node 14 support
+
 # [3.0.0-next.6](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0-next.5...v3.0.0-next.6) (2023-11-25)
 
 
