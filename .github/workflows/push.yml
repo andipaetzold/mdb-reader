@@ -9,10 +9,10 @@ jobs:
         runs-on: ubuntu-22.04
         strategy:
             matrix:
-                node: ["14.0.0", "14", "16.0.0", "16", "18.0.0", "18", "20.0.0", "20"]
+                node: ["18.0.0", "18", "20.0.0", "20"]
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - name: Setup node
               uses: actions/setup-node@v3
@@ -33,13 +33,19 @@ jobs:
         name: Release
         runs-on: ubuntu-22.04
         needs: build-test
+        # https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md#node-project-configuration
+        permissions:
+            contents: write # to be able to publish a GitHub release
+            issues: write # to be able to comment on released issues
+            pull-requests: write # to be able to comment on released pull requests
+            id-token: write # to enable use of OIDC for npm provenance
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
             - name: Use node ${{ matrix.node }}
-              uses: actions/setup-node@v3.6.0
+              uses: actions/setup-node@v3.8.1
               with:
                   cache: "npm"
                   node-version-file: ".nvmrc"
@@ -59,7 +65,7 @@ jobs:
         runs-on: ubuntu-22.04
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - name: Setup node
               uses: actions/setup-node@v3

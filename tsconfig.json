@@ -1,8 +1,9 @@
 {
-    "extends": "@tsconfig/node14/tsconfig.json",
+    "extends": ["@tsconfig/node18/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
     "compilerOptions": {
         "outDir": "lib/node",
         "module": "Node16",
+        "moduleResolution": "node16",
         "declaration": true,
         "declarationDir": "lib/types"
     },

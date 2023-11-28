@@ -62,7 +62,6 @@ export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, passwor
                     throw new Error("Unknown encryption");
                 }
             }
-            break;
 
         case "1.1":
             // RC4 Encryption: 1.1

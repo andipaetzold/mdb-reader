@@ -1,10 +1,18 @@
 {
     "name": "mdb-reader",
-    "version": "2.2.6",
+    "version": "3.0.0-next.6",
     "description": "JavaScript library to read data from Access databases",
     "main": "lib/node/index.js",
     "browser": "lib/browser/index.js",
     "types": "lib/types/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./lib/types/index.d.ts",
+            "node": "./lib/node/index.js",
+            "default": "./lib/browser/index.js"
+        },
+        "./package.json": "./package.json"
+    },
     "sideEffects": false,
     "type": "module",
     "files": [
@@ -36,23 +44,24 @@
         "fast-xml-parser": "^4.0.0"
     },
     "devDependencies": {
-        "@semantic-release/changelog": "6.0.2",
+        "@semantic-release/changelog": "6.0.3",
         "@semantic-release/git": "10.0.1",
-        "@tsconfig/node14": "1.0.1",
-        "@types/chai": "4.3.4",
+        "@tsconfig/node18": "18.2.0",
+        "@tsconfig/strictest": "2.0.2",
+        "@types/chai": "4.3.5",
         "@types/mocha": "10.0.1",
         "@types/mocha-each": "2.0.0",
-        "@types/node": "14.18.31",
-        "@typescript-eslint/eslint-plugin": "5.50.0",
-        "@typescript-eslint/parser": "5.50.0",
+        "@types/node": "18.16.16",
+        "@typescript-eslint/eslint-plugin": "6.0.0",
+        "@typescript-eslint/parser": "6.0.0",
         "chai": "4.3.7",
-        "eslint": "8.33.0",
+        "eslint": "8.42.0",
         "mocha": "10.2.0",
         "mocha-each": "2.0.1",
-        "rimraf": "4.1.1",
-        "semantic-release": "19.0.5",
+        "rimraf": "5.0.1",
+        "semantic-release": "22.0.0",
         "ts-node": "10.9.1",
-        "typescript": "5.0.4"
+        "typescript": "5.1.3"
     },
     "scripts": {
         "prepublishOnly": "npm run build",
@@ -64,8 +73,12 @@
         "build:browser": "npm run prepare:browser && tsc -P tsconfig.browser.json",
         "test": "npm run test:unit && npm run test:esm",
         "test:unit": "npm run test:unit:node && npm run test:unit:browser",
-        "test:unit:node": "npm run prepare:node && mocha",
-        "test:unit:browser": "npm run prepare:browser && TS_NODE_PROJECT='./tsconfig.browser.json' mocha",
+        "pretest:unit:node": "tsc --project tsconfig.json --showConfig > tsconfig.test.json",
+        "test:unit:node": "npm run prepare:node && TS_NODE_PROJECT='./tsconfig.test.json' mocha",
+        "posttest:unit:node": "rimraf tsconfig.test.json",
+        "pretest:unit:browser": "tsc --project tsconfig.browser.json --showConfig > tsconfig.test.json",
+        "test:unit:browser": "npm run prepare:browser && TS_NODE_PROJECT='./tsconfig.test.json' mocha",
+        "posttest:unit:browser": "rimraf tsconfig.test.json",
         "test:esm": "npm run test:esm:node && npm run test:esm:browser",
         "test:esm:node": "node --input-type=module -e \"import MDBReader from './lib/node/index.js';\"",
         "test:esm:browser": "node --input-type=module -e \"import MDBReader from './lib/browser/index.js';\"",

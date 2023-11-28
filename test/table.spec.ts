@@ -30,25 +30,25 @@ describe("Table", () => {
                 rows.reverse();
             }
 
-            expect(rows[0]["A"]).to.eq("abcdefg");
-            expect(rows[0]["B"]).to.eq("hijklmnop");
-            expect(rows[0]["C"]).to.eq(2);
-            expect(rows[0]["D"]).to.eq(222);
-            expect(rows[0]["E"]).to.eq(333333333);
-            expect(rows[0]["F"]).to.eq(444.555);
-            expect((rows[0]["G"] as Date).getTime()).to.eq(148953600000); // TODO: check expected value
-            expect(rows[0]["H"]).to.eq("3.5000");
-            expect(rows[0]["I"]).to.eq(true);
+            expect(rows[0]!["A"]).to.eq("abcdefg");
+            expect(rows[0]!["B"]).to.eq("hijklmnop");
+            expect(rows[0]!["C"]).to.eq(2);
+            expect(rows[0]!["D"]).to.eq(222);
+            expect(rows[0]!["E"]).to.eq(333333333);
+            expect(rows[0]!["F"]).to.eq(444.555);
+            expect((rows[0]!["G"] as Date).getTime()).to.eq(148953600000); // TODO: check expected value
+            expect(rows[0]!["H"]).to.eq("3.5000");
+            expect(rows[0]!["I"]).to.eq(true);
 
-            expect(rows[1]["A"]).to.eq("a");
-            expect(rows[1]["B"]).to.eq("b");
-            expect(rows[1]["C"]).to.eq(0);
-            expect(rows[1]["D"]).to.eq(0);
-            expect(rows[1]["E"]).to.eq(0);
-            expect(rows[1]["F"]).to.eq(0);
-            expect((rows[1]["G"] as Date).getTime()).to.eq(376963200000); // TODO: check expected value
-            expect(rows[1]["H"]).to.eq("0.0000");
-            expect(rows[1]["I"]).to.eq(false);
+            expect(rows[1]!["A"]).to.eq("a");
+            expect(rows[1]!["B"]).to.eq("b");
+            expect(rows[1]!["C"]).to.eq(0);
+            expect(rows[1]!["D"]).to.eq(0);
+            expect(rows[1]!["E"]).to.eq(0);
+            expect(rows[1]!["F"]).to.eq(0);
+            expect((rows[1]!["G"] as Date).getTime()).to.eq(376963200000); // TODO: check expected value
+            expect(rows[1]!["H"]).to.eq("0.0000");
+            expect(rows[1]!["I"]).to.eq(false);
         });
 
         describe("getColumns()", () => {
@@ -57,34 +57,34 @@ describe("Table", () => {
                 const table = reader.getTable("Table1");
                 const columns = table.getColumns();
 
-                expect(columns[0].name).to.eq("A");
-                expect(columns[0].type).to.eq("text");
-                expect(columns[0].size).to.eq(columnALength);
+                expect(columns[0]!.name).to.eq("A");
+                expect(columns[0]!.type).to.eq("text");
+                expect(columns[0]!.size).to.eq(columnALength);
 
-                expect(columns[1].name).to.eq("B");
-                expect(columns[1].type).to.eq("text");
-                expect(columns[1].size).to.eq(columnBLength);
+                expect(columns[1]!.name).to.eq("B");
+                expect(columns[1]!.type).to.eq("text");
+                expect(columns[1]!.size).to.eq(columnBLength);
 
-                expect(columns[2].name).to.eq("C");
-                expect(columns[2].type).to.eq("byte");
+                expect(columns[2]!.name).to.eq("C");
+                expect(columns[2]!.type).to.eq("byte");
 
-                expect(columns[3].name).to.eq("D");
-                expect(columns[3].type).to.eq("integer");
+                expect(columns[3]!.name).to.eq("D");
+                expect(columns[3]!.type).to.eq("integer");
 
-                expect(columns[4].name).to.eq("E");
-                expect(columns[4].type).to.eq("long");
+                expect(columns[4]!.name).to.eq("E");
+                expect(columns[4]!.type).to.eq("long");
 
-                expect(columns[5].name).to.eq("F");
-                expect(columns[5].type).to.eq("double");
+                expect(columns[5]!.name).to.eq("F");
+                expect(columns[5]!.type).to.eq("double");
 
-                expect(columns[6].name).to.eq("G");
-                expect(columns[6].type).to.eq("datetime");
+                expect(columns[6]!.name).to.eq("G");
+                expect(columns[6]!.type).to.eq("datetime");
 
-                expect(columns[7].name).to.eq("H");
-                expect(columns[7].type).to.eq("currency");
+                expect(columns[7]!.name).to.eq("H");
+                expect(columns[7]!.type).to.eq("currency");
 
-                expect(columns[8].name).to.eq("I");
-                expect(columns[8].type).to.eq("boolean");
+                expect(columns[8]!.name).to.eq("I");
+                expect(columns[8]!.type).to.eq("boolean");
             });
 
             it("can handle many columns", () => {
@@ -94,9 +94,9 @@ describe("Table", () => {
 
                 expect(columns.length).to.eq(89);
                 for (let i = 0; i < 89; ++i) {
-                    expect(columns[i].name).to.eq(`column${i + 1}`);
-                    expect(columns[i].type).to.eq("text");
-                    expect(columns[i].size).to.eq(table4Length);
+                    expect(columns[i]!.name).to.eq(`column${i + 1}`);
+                    expect(columns[i]!.type).to.eq("text");
+                    expect(columns[i]!.size).to.eq(table4Length);
                 }
             });
         });

@@ -15,10 +15,10 @@ export function readCurrency(buffer: Buffer): string {
     const bytes = buffer.slice(0, bytesCount);
 
     let negative = false;
-    if (bytes[bytesCount - 1] & 0x80) {
+    if (bytes[bytesCount - 1]! & 0x80) {
         negative = true;
         for (let i = 0; i < bytesCount; ++i) {
-            bytes[i] = ~bytes[i];
+            bytes[i] = ~bytes[i]!;
         }
         for (let i = 0; i < bytesCount; ++i) {
             ++bytes[i];

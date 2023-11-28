@@ -24,8 +24,8 @@ describe("BigInt", () => {
 
             expect(rows.length).to.eq(1);
 
-            const row = rows[0];
-            expect(row.Numeric).to.eq(42n);
+            const row = rows[0]!;
+            expect(row['Numeric']).to.eq(42n);
         });
     });
 });

@@ -1,6 +1,6 @@
 import { Column, ColumnDefinition } from "../column.js";
-import Database from "../Database.js";
-import { ColumnType, Value, ValueMap } from "../types.js";
+import { Database } from "../Database.js";
+import { ColumnType, ColumnTypes, Value, ValueMap } from "../types.js";
 import { readBigInt } from "./bigint.js";
 import { readBinary } from "./binary.js";
 import { readByte } from "./byte.js";
@@ -18,30 +18,30 @@ import { readRepID } from "./repid.js";
 import { readText } from "./text.js";
 
 const readFnByColType: {
-    [type in Exclude<ColumnType, ColumnType.Boolean>]:
+    [type in Exclude<ColumnType, typeof ColumnTypes.Boolean>]:
         | ((buffer: Buffer, column: Column, database: Database) => ValueMap[type])
         | undefined;
 } = {
-    [ColumnType.BigInt]: readBigInt,
-    [ColumnType.Binary]: readBinary,
-    [ColumnType.Byte]: readByte,
-    [ColumnType.Complex]: readComplexOrLong,
-    [ColumnType.Currency]: readCurrency,
-    [ColumnType.DateTime]: readDateTime,
-    [ColumnType.DateTimeExtended]: readDateTimeExtended,
-    [ColumnType.Double]: readDouble,
-    [ColumnType.Float]: readFloat,
-    [ColumnType.Integer]: readInteger,
-    [ColumnType.Long]: readComplexOrLong,
-    [ColumnType.Text]: readText,
-    [ColumnType.Memo]: readMemo,
-    [ColumnType.Numeric]: readNumeric,
-    [ColumnType.OLE]: readOLE,
-    [ColumnType.RepID]: readRepID,
+    [ColumnTypes.BigInt]: readBigInt,
+    [ColumnTypes.Binary]: readBinary,
+    [ColumnTypes.Byte]: readByte,
+    [ColumnTypes.Complex]: readComplexOrLong,
+    [ColumnTypes.Currency]: readCurrency,
+    [ColumnTypes.DateTime]: readDateTime,
+    [ColumnTypes.DateTimeExtended]: readDateTimeExtended,
+    [ColumnTypes.Double]: readDouble,
+    [ColumnTypes.Float]: readFloat,
+    [ColumnTypes.Integer]: readInteger,
+    [ColumnTypes.Long]: readComplexOrLong,
+    [ColumnTypes.Text]: readText,
+    [ColumnTypes.Memo]: readMemo,
+    [ColumnTypes.Numeric]: readNumeric,
+    [ColumnTypes.OLE]: readOLE,
+    [ColumnTypes.RepID]: readRepID,
 };
 
-export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Database): Value | undefined {
-    if (column.type === ColumnType.Boolean) {
+export function readFieldValue(buffer: Buffer, column: ColumnDefinition, database: Database): Value | undefined {
+    if (column.type === ColumnTypes.Boolean) {
         throw new Error("readFieldValue does not handle type boolean");
     }
 
@@ -50,5 +50,5 @@ export function readFieldValue(buffer: Buffer, column: ColumnDefinition, db: Dat
         return `Column type ${column.type} is currently not supported`;
     }
 
-    return read(buffer, column, db);
+    return read(buffer, column, database);
 }

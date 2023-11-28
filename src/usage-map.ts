@@ -1,16 +1,16 @@
 import { getBitmapValue } from "./util.js";
-import Database from "./Database.js";
-import PageType, { assertPageType } from "./PageType.js";
+import { Database } from "./Database.js";
+import { PageType, assertPageType } from "./PageType.js";
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/HACKING#L556-L622
  */
-export function findMapPages(buffer: Buffer, db: Database): number[] {
+export function findMapPages(buffer: Buffer, database: Database): number[] {
     switch (buffer[0]) {
         case 0x00:
             return findMapPages0(buffer);
         case 0x01:
-            return findMapPages1(buffer, db);
+            return findMapPages1(buffer, database);
         default:
             throw new Error("Unknown usage map type");
     }
@@ -28,8 +28,8 @@ function findMapPages0(buffer: Buffer): number[] {
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/map.c#L44-L84
  */
-function findMapPages1(buffer: Buffer, db: Database): number[] {
-    const bitmapLength = (db.format.pageSize - 4) * 8;
+function findMapPages1(buffer: Buffer, database: Database): number[] {
+    const bitmapLength = (database.format.pageSize - 4) * 8;
     const mapCount = Math.floor((buffer.length - 1) / 4);
 
     const pages: number[] = [];
@@ -39,7 +39,7 @@ function findMapPages1(buffer: Buffer, db: Database): number[] {
             continue;
         }
 
-        const pageBuffer = db.getPage(page);
+        const pageBuffer = database.getPage(page);
         assertPageType(pageBuffer, PageType.PageUsageBitmaps);
 
         const bitmap = pageBuffer.slice(4);
