@@ -1,5 +1,5 @@
 import { GENERAL_97_SORT_ORDER } from "../SortOrder.js";
-import { CodecType, JetFormat } from "./types.js";
+import { CodecType, type JetFormat } from "./types.js";
 
 export const jet3Format: JetFormat = {
     codecType: CodecType.JET,

@@ -1,4 +1,4 @@
-import { SortOrder } from "../types.js";
+import type { SortOrder } from "../types.js";
 
 export interface JetFormat {
     codecType: CodecType;

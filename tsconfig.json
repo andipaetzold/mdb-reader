@@ -5,7 +5,8 @@
         "module": "Node16",
         "moduleResolution": "node16",
         "declaration": true,
-        "declarationDir": "lib/types"
+        "declarationDir": "lib/types",
+        "verbatimModuleSyntax": true
     },
     "files": ["src/index.ts"]
 }

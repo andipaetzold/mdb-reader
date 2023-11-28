@@ -1,8 +1,8 @@
-import { CodecHandler } from "../index.js";
+import type { CodecHandler } from "../index.js";
 import { decryptRC4 } from "../../crypto/index.js";
 import { isEmptyBuffer } from "../../util.js";
 import { createIdentityHandler } from "./identity.js";
-import { DecryptPage } from "../types.js";
+import type { DecryptPage } from "../types.js";
 import { getPageEncodingKey } from "../util.js";
 
 const KEY_OFFSET = 0x3e; // 62

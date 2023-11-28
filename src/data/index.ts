@@ -1,6 +1,6 @@
-import { Column, ColumnDefinition } from "../column.js";
+import type { Column, ColumnDefinition } from "../column.js";
 import { Database } from "../Database.js";
-import { ColumnType, ColumnTypes, Value, ValueMap } from "../types.js";
+import { type ColumnType, ColumnTypes, type Value, type ValueMap } from "../types.js";
 import { readBigInt } from "./bigint.js";
 import { readBinary } from "./binary.js";
 import { readByte } from "./byte.js";

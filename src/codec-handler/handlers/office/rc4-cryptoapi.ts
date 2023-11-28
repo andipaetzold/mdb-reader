@@ -1,11 +1,11 @@
 import { createRC4Decrypter, decryptRC4, hash } from "../../../crypto/index.js";
 import { fixBufferLength, intToBuffer, roundToFullByte } from "../../../util.js";
-import { CodecHandler, DecryptPage } from "../../types.js";
+import type { CodecHandler, DecryptPage } from "../../types.js";
 import { getPageEncodingKey } from "../../util.js";
-import { CryptoAlgorithm, CRYPTO_ALGORITHMS } from "./CryptoAlgorithm.js";
-import { EncryptionHeader, parseEncryptionHeader } from "./EncryptionHeader.js";
+import { type CryptoAlgorithm, CRYPTO_ALGORITHMS } from "./CryptoAlgorithm.js";
+import { type EncryptionHeader, parseEncryptionHeader } from "./EncryptionHeader.js";
 import { parseEncryptionVerifier } from "./EncryptionVerifier.js";
-import { HashAlgorithm, HASH_ALGORITHMS } from "./HashAlgorithm.js";
+import { type HashAlgorithm, HASH_ALGORITHMS } from "./HashAlgorithm.js";
 
 const VALID_CRYPTO_ALGORITHMS: CryptoAlgorithm[] = [CRYPTO_ALGORITHMS.RC4];
 const VALID_HASH_ALGORITHMS: HashAlgorithm[] = [HASH_ALGORITHMS.SHA1];

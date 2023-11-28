@@ -1,4 +1,4 @@
-import { JetFormat } from "./JetFormat/index.js";
+import type { JetFormat } from "./JetFormat/index.js";
 import { decodeWindows1252 } from "./dependencies/iconv-lite/index.js";
 
 /**

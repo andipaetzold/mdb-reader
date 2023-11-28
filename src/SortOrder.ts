@@ -1,4 +1,4 @@
-import { SortOrder } from "./types.js";
+import type { SortOrder } from "./types.js";
 
 const GENERAL_SORT_ORDER_VALUE = 1033;
 

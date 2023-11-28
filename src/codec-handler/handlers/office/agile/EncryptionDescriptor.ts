@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import { EncryptionDescriptor } from "./types.js";
+import type { EncryptionDescriptor } from "./types.js";
 
 const xmlParser = new XMLParser({
     ignoreAttributes: false,

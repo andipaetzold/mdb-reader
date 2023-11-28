@@ -1,4 +1,4 @@
-import { CodecHandler } from "./index.js";
+import type { CodecHandler } from "./index.js";
 import { getJetFormat } from "../JetFormat/index.js";
 import { CodecType } from "../JetFormat/types.js";
 import { createIdentityHandler } from "./handlers/identity.js";

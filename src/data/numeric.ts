@@ -1,5 +1,5 @@
 import { addArray, multiplyArray, toArray } from "../array.js";
-import { Column } from "../column.js";
+import type { Column } from "../column.js";
 import { buildValue } from "./util.js";
 
 const MAX_PRECISION = 40;

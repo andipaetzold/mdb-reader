@@ -1,4 +1,4 @@
-import { Column } from "../column.js";
+import type { Column } from "../column.js";
 import { Database } from "../Database.js";
 
 /**

@@ -3,7 +3,7 @@ import { createIdentityHandler } from "../identity.js";
 import { createAgileCodecHandler } from "./agile/index.js";
 import { EncryptionHeaderFlags, isFlagSet } from "./EncryptionHeader.js";
 import { createRC4CryptoAPICodecHandler } from "./rc4-cryptoapi.js";
-import { CodecHandler } from "../../types.js";
+import type { CodecHandler } from "../../types.js";
 
 const MAX_PASSWORD_LENGTH = 255;
 const CRYPT_STRUCTURE_OFFSET = 0x299;
@@ -41,27 +41,26 @@ export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, passwor
 
         case "4.2":
         case "3.2":
-        case "2.2":
-            {
-                const flags = encryptionProviderBuffer.readInt32LE(4);
-                if (isFlagSet(flags, EncryptionHeaderFlags.FCRYPTO_API_FLAG)) {
-                    if (isFlagSet(flags, EncryptionHeaderFlags.FAES_FLAG)) {
-                        // Standard Encryption
-                        throw new Error("Not implemented yet");
-                    } else {
-                        try {
-                            // RC4 CryptoAPI Encryption
-                            return createRC4CryptoAPICodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
-                        } catch (e) {
-                            // Non Standard Encryption
-                        }
-
-                        throw new Error("Not implemented yet");
-                    }
+        case "2.2": {
+            const flags = encryptionProviderBuffer.readInt32LE(4);
+            if (isFlagSet(flags, EncryptionHeaderFlags.FCRYPTO_API_FLAG)) {
+                if (isFlagSet(flags, EncryptionHeaderFlags.FAES_FLAG)) {
+                    // Standard Encryption
+                    throw new Error("Not implemented yet");
                 } else {
-                    throw new Error("Unknown encryption");
+                    try {
+                        // RC4 CryptoAPI Encryption
+                        return createRC4CryptoAPICodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
+                    } catch (e) {
+                        // Non Standard Encryption
+                    }
+
+                    throw new Error("Not implemented yet");
                 }
+            } else {
+                throw new Error("Unknown encryption");
             }
+        }
 
         case "1.1":
             // RC4 Encryption: 1.1

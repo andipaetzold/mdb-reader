@@ -1,10 +1,10 @@
-import { CodecHandler, VerifyPassword } from "../../../index.js";
+import type { CodecHandler, VerifyPassword } from "../../../index.js";
 import { blockDecrypt, deriveKey, hash } from "../../../../crypto/index.js";
 import { fixBufferLength, roundToFullByte } from "../../../../util.js";
-import { DecryptPage } from "../../../types.js";
+import type { DecryptPage } from "../../../types.js";
 import { getPageEncodingKey } from "../../../util.js";
 import { parseEncryptionDescriptor } from "./EncryptionDescriptor.js";
-import { PasswordKeyEncryptor } from "./types.js";
+import type { PasswordKeyEncryptor } from "./types.js";
 
 const ENC_VERIFIER_INPUT_BLOCK = [0xfe, 0xa7, 0xd2, 0x76, 0x3b, 0x4b, 0x9e, 0x79];
 const ENC_VERIFIER_VALUE_BLOCK = [0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e];

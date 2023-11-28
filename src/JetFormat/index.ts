@@ -6,7 +6,7 @@ import { jet17Format } from "./Jet17Format.js";
 import { jet3Format } from "./Jet3Format.js";
 import { jet4Format } from "./Jet4Format.js";
 import { msisamFormat } from "./MSISAMFormat.js";
-import { JetFormat } from "./types.js";
+import type { JetFormat } from "./types.js";
 
 export type { JetFormat } from "./types.js";
 

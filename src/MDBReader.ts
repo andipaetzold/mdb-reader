@@ -1,8 +1,8 @@
 import { Database } from "./Database.js";
 import { PageType, assertPageType } from "./PageType.js";
-import { SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
+import { type SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
 import { Table } from "./Table.js";
-import { SortOrder } from "./types.js";
+import type { SortOrder } from "./types.js";
 
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
