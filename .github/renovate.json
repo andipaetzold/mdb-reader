@@ -1,6 +1,6 @@
 {
     "extends": ["config:js-lib", ":semanticCommitScopeDisabled"],
-    "baseBranches": ["next"],
+    "baseBranches": ["main"],
     "packageRules": [
         {
             "matchDepTypes": ["devDependencies"],
