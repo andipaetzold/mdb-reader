@@ -79,3 +79,10 @@ jobs:
             - name: Build (examples/browser)
               run: npm run build
               working-directory: examples/browser
+
+            - name: Install dependencies (examples/sveltekit)
+              run: npm ci
+              working-directory: examples/sveltekit
+            - name: Check & Build (examples/sveltekit)
+              run: npm run check && npm run build
+              working-directory: examples/sveltekit
