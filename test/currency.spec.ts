@@ -14,10 +14,10 @@ describe("Currency", () => {
             buffer = readFileSync(path);
         });
 
-        it("getData(): returns correct currency data", () => {
+        it("getData(): returns correct currency data",async () => {
             const reader = new MDBReader(buffer);
-            const table = reader.getTable("Table");
-            const rows = table.getData();
+            const table = await reader.getTable("Table");
+            const rows = await table.getData();
 
             expect(rows.length).to.eq(1);
 

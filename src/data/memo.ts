@@ -9,7 +9,7 @@ const TYPE_OTHER_PAGES = 0x00;
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/data.c#L690-L776
  */
-export function readMemo(buffer: Buffer, _col: Column, database: Database): string {
+export async function readMemo(buffer: Buffer, _col: Column, database: Database): Promise<string> {
     const memoLength = buffer.readUIntLE(0, 3);
 
     const type = buffer.readUInt8(3);
@@ -21,7 +21,7 @@ export function readMemo(buffer: Buffer, _col: Column, database: Database): stri
 
         case TYPE_OTHER_PAGE: {
             const pageRow = buffer.readUInt32LE(4);
-            const rowBuffer = database.findPageRow(pageRow);
+            const rowBuffer = await database.findPageRow(pageRow);
             const compressedText = rowBuffer.slice(0, memoLength);
             return uncompressText(compressedText, database.format);
         }
@@ -30,7 +30,7 @@ export function readMemo(buffer: Buffer, _col: Column, database: Database): stri
             let pageRow = buffer.readInt32LE(4);
             let memoDataBuffer = Buffer.alloc(0);
             do {
-                const rowBuffer = database.findPageRow(pageRow);
+                const rowBuffer = await database.findPageRow(pageRow);
 
                 if (memoDataBuffer.length + rowBuffer.length - 4 > memoLength) {
                     break;

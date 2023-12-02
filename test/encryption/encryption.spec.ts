@@ -20,7 +20,7 @@ describe("Encryption", () => {
         it("should be able to read a page", function () {
             this.timeout(5000); // node 20 in CI is slow
             const reader = new MDBReader(buffer, { password });
-            expect(reader.getTableNames()).to.deep.eq(["Table1"]);
+            expect(reader.getTableNames()).to.eventually.deep.eq(["Table1"]);
         });
     });
 

@@ -1,16 +1,26 @@
-import { createHash } from "../environment/index.js";
+import { webcrypto } from "../environment/index.js";
 import { fixBufferLength } from "../util.js";
 
-export function hash(algorithm: string, buffers: Buffer[], length?: number): Buffer {
-    const digest = createHash(algorithm);
+const algorithmMap: Record<string, string | undefined> = {
+    sha1: "SHA-1",
+    sha256: "SHA-256",
+    sha384: "SHA-384",
+    sha512: "SHA-512",
+};
 
-    for (const buffer of buffers) {
-        digest.update(buffer);
+export async function hash(algorithm: string, buffers: Buffer[], length?: number): Promise<Buffer> {
+    const webcryptoAlgorithm = algorithmMap[algorithm.toLowerCase()];
+    if (!webcryptoAlgorithm) {
+        throw new Error(`Unknown hashing algorithm: "${algorithm}"`);
     }
 
-    const result = digest.digest();
-    if (length !== undefined) {
-        return fixBufferLength(result, length);
+    const concatBuffer = Buffer.concat(buffers);
+    const result = await webcrypto.subtle.digest(webcryptoAlgorithm, concatBuffer);
+    const resultAsBuffer = Buffer.from(result);
+
+    if (length === undefined) {
+        return resultAsBuffer;
     }
-    return result;
+
+    return fixBufferLength(resultAsBuffer, length);
 }

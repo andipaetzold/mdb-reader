@@ -16,9 +16,9 @@ describe("empty", () => {
                 buffer = readFileSync(filename);
             });
 
-            it("should have no tables", () => {
+            it("should have no tables", async () => {
                 const reader = new MDBReader(buffer);
-                const tableNames = reader.getTableNames();
+                const tableNames = await reader.getTableNames();
                 expect(tableNames).to.deep.eq([]);
             });
         });

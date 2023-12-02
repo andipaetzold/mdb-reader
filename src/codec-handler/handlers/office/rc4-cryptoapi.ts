@@ -21,17 +21,17 @@ export function createRC4CryptoAPICodecHandler(
     const encryptionHeader = parseEncryptionHeader(headerBuffer, VALID_CRYPTO_ALGORITHMS, VALID_HASH_ALGORITHMS);
     const encryptionVerifier = parseEncryptionVerifier(encryptionProvider, encryptionHeader.cryptoAlgorithm);
 
-    const baseHash = hash("sha1", [encryptionVerifier.salt, password]);
-
-    const decryptPage: DecryptPage = (pageBuffer, pageIndex) => {
+    const decryptPage: DecryptPage = async (pageBuffer, pageIndex) => {
+        const baseHash = await hash("sha1", [encryptionVerifier.salt, password]);
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageIndex);
-        const encryptionKey = getEncryptionKey(encryptionHeader, baseHash, pageEncodingKey);
+        const encryptionKey = await getEncryptionKey(encryptionHeader, baseHash, pageEncodingKey);
         return decryptRC4(encryptionKey, pageBuffer);
     };
     return {
         decryptPage,
-        verifyPassword: () => {
-            const encryptionKey = getEncryptionKey(encryptionHeader, baseHash, intToBuffer(0));
+        verifyPassword: async () => {
+            const baseHash = await hash("sha1", [encryptionVerifier.salt, password]);
+            const encryptionKey = await getEncryptionKey(encryptionHeader, baseHash, intToBuffer(0));
 
             const rc4Decrypter = createRC4Decrypter(encryptionKey);
 
@@ -41,15 +41,15 @@ export function createRC4CryptoAPICodecHandler(
                 encryptionVerifier.encryptionVerifierHashSize
             );
 
-            const testHash = fixBufferLength(hash("sha1", [verifier]), encryptionVerifier.encryptionVerifierHashSize);
+            const testHash = fixBufferLength(await hash("sha1", [verifier]), encryptionVerifier.encryptionVerifierHashSize);
 
             return verifierHash.equals(testHash);
         },
     };
 }
 
-function getEncryptionKey(header: EncryptionHeader, baseHash: Buffer, data: Buffer): Buffer {
-    const key = hash("sha1", [baseHash, data], roundToFullByte(header.keySize));
+async function getEncryptionKey(header: EncryptionHeader, baseHash: Buffer, data: Buffer): Promise<Buffer> {
+    const key = await hash("sha1", [baseHash, data], roundToFullByte(header.keySize));
     if (header.keySize === 40) {
         return key.slice(0, roundToFullByte(128));
     }

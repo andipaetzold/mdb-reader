@@ -1,9 +1,9 @@
-import { createDecipheriv } from "../environment/index.js";
+import { webcrypto } from "../environment/index.js";
 import type { Cipher } from "./types.js";
 
-export function blockDecrypt(cipher: Cipher, key: Buffer, iv: Buffer, data: Buffer): Buffer {
-    const algorithm = `${cipher.algorithm}-${key.length * 8}-${cipher.chaining.slice(-3)}`;
-    const decipher = createDecipheriv(algorithm, key, iv);
-    decipher.setAutoPadding(false);
-    return decipher.update(data);
+export async function blockDecrypt(cipher: Cipher, key: Buffer, iv: Buffer, encryptedData: Buffer): Promise<Buffer> {
+    const algorithm = `${cipher.algorithm}-${cipher.chaining.slice(-3)}`.toUpperCase();
+    const importedKey = await webcrypto.subtle.importKey("raw", key, algorithm, false, ["decrypt"]);
+    const result = await webcrypto.subtle.decrypt({ name: algorithm, iv }, importedKey, encryptedData);
+    return Buffer.from(result);
 }

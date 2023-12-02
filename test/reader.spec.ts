@@ -2,7 +2,10 @@ import { resolve } from "path";
 import { readFileSync } from "fs";
 import MDBReader from "../src/index.js";
 import forEach from "mocha-each";
-import { expect } from "chai";
+import chai from "chai";
+import chaiAsPromised from "chai-as-promised";
+chai.use(chaiAsPromised);
+const { expect } = chai;
 
 describe("MDBReader", () => {
     forEach([
@@ -21,22 +24,22 @@ describe("MDBReader", () => {
         });
 
         describe("getTable()", () => {
-            it("returns table", () => {
+            it("returns table", async () => {
                 const reader = new MDBReader(buffer);
-                const table = reader.getTable("Table1");
+                const table = await reader.getTable("Table1");
                 expect(table.name).to.eq("Table1");
                 expect(table.rowCount).to.eq(2);
             });
 
-            it("throws error for unknown table", () => {
+            it("throws error for unknown table", async () => {
                 const reader = new MDBReader(buffer);
-                expect(() => reader.getTable("unknown")).to.throw();
+                await expect(reader.getTable("unknown")).to.eventually.be.rejected;
             });
         });
 
-        it("getTableNames()", () => {
+        it("getTableNames()", async () => {
             const reader = new MDBReader(buffer);
-            const tableNames = reader.getTableNames();
+            const tableNames = await reader.getTableNames();
             expect(tableNames).to.deep.eq(["Table1", "Table2", "Table3", "Table4"]);
         });
 
