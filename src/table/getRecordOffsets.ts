@@ -1,4 +1,4 @@
-import { Database } from "../Database.js";
+import type { Database } from "../Database.js";
 
 export type RecordOffset = [start: number, end: number];
 export function getRecordOffsets(database: Database, pageBuffer: Buffer): RecordOffset[] {

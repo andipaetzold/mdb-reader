@@ -1,5 +1,5 @@
 import type { Column } from "../index.js";
-import { Database } from "../Database.js";
+import type { Database } from "../Database.js";
 import { uncompressText } from "../unicodeCompression.js";
 
 const TYPE_THIS_PAGE = 0x80;

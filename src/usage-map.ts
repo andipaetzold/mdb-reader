@@ -1,5 +1,5 @@
 import { getBitmapValue } from "./util.js";
-import { Database } from "./Database.js";
+import type { Database } from "./Database.js";
 import { PageType, assertPageType } from "./PageType.js";
 
 /**

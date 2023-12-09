@@ -1,4 +1,4 @@
-import { Database } from "../Database.js";
+import type { Database } from "../Database.js";
 import type { ColumnDefinition } from "../column.js";
 import { readFieldValue } from "../data/index.js";
 import { ColumnTypes, type Value } from "../types.js";

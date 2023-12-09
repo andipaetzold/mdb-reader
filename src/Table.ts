@@ -1,4 +1,4 @@
-import { Database } from "./Database.js";
+import type { Database } from "./Database.js";
 import { PageType, assertPageType } from "./PageType.js";
 import type { Column } from "./column.js";
 import { getColumnDefinitions } from "./table/getColumnDefinitions.js";

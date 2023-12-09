@@ -1,5 +1,5 @@
 import type { Column, ColumnDefinition } from "../column.js";
-import { Database } from "../Database.js";
+import type { Database } from "../Database.js";
 import { type ColumnType, ColumnTypes, type Value, type ValueMap } from "../types.js";
 import { readBigInt } from "./bigint.js";
 import { readBinary } from "./binary.js";

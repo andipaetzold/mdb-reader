@@ -1,5 +1,5 @@
 import type { Column } from "../index.js";
-import { Database } from "../Database.js";
+import type { Database } from "../Database.js";
 import { uncompressText } from "../unicodeCompression.js";
 
 export function readText(buffer: Buffer, _col: Column, database: Database): string {

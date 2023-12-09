@@ -1,4 +1,4 @@
-import { Database } from "./Database.js";
+import { createDatabase } from "./Database.js";
 import { PageType, assertPageType } from "./PageType.js";
 import { createTable } from "./Table.js";
 import { type SysObject, isSysObject, SysObjectTypes, getSysObjects } from "./SysObject.js";
@@ -11,7 +11,7 @@ export interface Options {
 export async function createMDBReader(buffer: Buffer, { password }: Options | undefined = {}): Promise<MDBReader> {
     assertPageType(buffer, PageType.DatabaseDefinitionPage);
 
-    const database = new Database(buffer, password ?? "");
+    const database = await createDatabase(buffer, password ?? "");
     await database.verifyPassword();
     const sysObjects = await getSysObjects(database);
 

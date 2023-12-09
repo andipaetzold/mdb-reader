@@ -1,4 +1,4 @@
-import { Database } from "../Database.js";
+import type { Database } from "../Database.js";
 import { PageType, assertPageType } from "../PageType.js";
 
 export async function getDataPage(name: string, database: Database, firstDefinitionPage: number, page: number) {
