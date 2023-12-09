@@ -1,11 +1,8 @@
 import { Database } from "./Database.js";
 import { PageType, assertPageType } from "./PageType.js";
 import { createTable } from "./Table.js";
-import { type SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
+import { type SysObject, isSysObject, SysObjectTypes, getSysObjects } from "./SysObject.js";
 import type { MDBReader, SortOrder, Table } from "./types.js";
-
-const MSYS_OBJECTS_TABLE = "MSysObjects";
-const MSYS_OBJECTS_PAGE = 2;
 
 export interface Options {
     password?: string | undefined;
@@ -43,7 +40,7 @@ export async function createMDBReader(buffer: Buffer, { password }: Options | un
             for (const sysObject of sysObjects) {
                 switch (sysObject.objectType) {
                     case SysObjectTypes.Table: {
-                        if ((isSystemObject(sysObject) && systemTables) || (!isSystemObject(sysObject) && normalTables)) {
+                        if ((isSysObject(sysObject) && systemTables) || (!isSysObject(sysObject) && normalTables)) {
                             filteredSysObjects.push(sysObject);
                         }
                         break;
@@ -73,26 +70,4 @@ export async function createMDBReader(buffer: Buffer, { password }: Options | un
             return await createTable(name, database, sysObject.tablePage);
         },
     };
-}
-
-async function getSysObjects(database: Database): Promise<SysObject[]> {
-    const table = await createTable(MSYS_OBJECTS_TABLE, database, MSYS_OBJECTS_PAGE);
-    const tableData = await table.getData<{
-        Id: number;
-        Name: string;
-        Type: number;
-        Flags: number;
-    }>({
-        columns: ["Id", "Name", "Type", "Flags"],
-    });
-
-    return tableData.map((mSysObject) => {
-        const objectType = mSysObject.Type & 0x7f;
-        return {
-            objectName: mSysObject.Name,
-            objectType: isSysObjectType(objectType) ? objectType : null,
-            tablePage: mSysObject.Id & 0x00ffffff,
-            flags: mSysObject.Flags,
-        };
-    });
 }
