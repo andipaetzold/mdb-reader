@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../src/index.js";
+import { createMDBReader } from "../src/index.js";
 import forEach from "mocha-each";
 import { expect } from "chai";
 
@@ -20,7 +20,7 @@ describe("Numeric", () => {
              * @see https://github.com/jahlborn/jackcess/blob/3f75e95a21d9a9e3486519511cdd6178e3c2e3e4/src/test/java/com/healthmarketscience/jackcess/DatabaseTest.java#L471-L516
              */
             it("getData(): returns correct numeric data", async () => {
-                const reader = new MDBReader(buffer);
+                const reader = await createMDBReader(buffer);
                 const table = await reader.getTable("test");
                 const rows = await table.getData();
 

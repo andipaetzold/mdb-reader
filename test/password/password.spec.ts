@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../../src/index.js";
+import { createMDBReader } from "../../src/index.js";
 import { expect } from "chai";
 import forEach from "mocha-each";
 
@@ -23,9 +23,9 @@ describe("Password", () => {
             buffer = readFileSync(path);
         });
 
-        it("should read the password", function () {
+        it("should read the password", async function () {
             this.timeout(5000); // node 20 in CI is slow
-            const reader = new MDBReader(buffer, { password });
+            const reader = await createMDBReader(buffer, { password });
             expect(reader.getPassword()).to.eq(result);
         });
     });

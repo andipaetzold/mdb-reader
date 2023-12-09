@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../src/index.js";
+import { createMDBReader } from "../src/index.js";
 import { expect } from "chai";
 
 const files = ["V2000/empty.mdb", "V2003/empty.mdb", "V2007/empty.accdb", "V2010/empty.accdb", "V2016/empty.accdb"];
@@ -17,7 +17,7 @@ describe("empty", () => {
             });
 
             it("should have no tables", async () => {
-                const reader = new MDBReader(buffer);
+                const reader = await createMDBReader(buffer);
                 const tableNames = await reader.getTableNames();
                 expect(tableNames).to.deep.eq([]);
             });

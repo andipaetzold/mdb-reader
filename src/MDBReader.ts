@@ -1,9 +1,8 @@
 import { Database } from "./Database.js";
 import { PageType, assertPageType } from "./PageType.js";
 import { createTable } from "./Table.js";
-import { memoPromise } from "./util.js";
 import { type SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
-import type { SortOrder, Table } from "./types.js";
+import type { MDBReader, SortOrder, Table } from "./types.js";
 
 const MSYS_OBJECTS_TABLE = "MSysObjects";
 const MSYS_OBJECTS_PAGE = 2;
@@ -12,93 +11,64 @@ export interface Options {
     password?: string | undefined;
 }
 
-export default class MDBReader {
-    #buffer: Buffer;
-    #database: Database;
+export async function createMDBReader(buffer: Buffer, { password }: Options | undefined = {}): Promise<MDBReader> {
+    assertPageType(buffer, PageType.DatabaseDefinitionPage);
 
-    /**
-     * @param buffer Buffer of the database.
-     */
-    constructor(buffer: Buffer, { password }: Options | undefined = {}) {
-        this.#buffer = buffer;
+    const database = new Database(buffer, password ?? "");
+    await database.verifyPassword();
+    const sysObjects = await getSysObjects(database);
 
-        assertPageType(this.#buffer, PageType.DatabaseDefinitionPage);
+    return {
+        getCreationDate(): Date | null {
+            return database.getCreationDate();
+        },
+        getPassword(): string | null {
+            return database.getPassword();
+        },
 
-        this.#database = new Database(this.#buffer, password ?? "");
-    }
+        getDefaultSortOrder(): SortOrder {
+            return database.getDefaultSortOrder();
+        },
 
-    #getSysObjects = memoPromise(() => getSysObjects(this.#database));
-
-    /**
-     * Date when the database was created
-     */
-    getCreationDate(): Date | null {
-        return this.#database.getCreationDate();
-    }
-
-    /**
-     * Database password
-     */
-    getPassword(): string | null {
-        return this.#database.getPassword();
-    }
-
-    /**
-     * Default sort order
-     */
-    getDefaultSortOrder(): Readonly<SortOrder> {
-        return this.#database.getDefaultSortOrder();
-    }
-
-    /**
-     * Returns an array of table names.
-     *
-     * @param normalTables Includes user tables. Default true.
-     * @param systemTables Includes system tables. Default false.
-     * @param linkedTables Includes linked tables. Default false.
-     */
-    async getTableNames({
-        normalTables = true,
-        systemTables = false,
-        linkedTables = false,
-    }: {
-        normalTables?: boolean | undefined;
-        systemTables?: boolean | undefined;
-        linkedTables?: boolean | undefined;
-    } = {}): Promise<string[]> {
-        const filteredSysObjects: SysObject[] = [];
-        for (const sysObject of await this.#getSysObjects()) {
-            if (sysObject.objectType === SysObjectTypes.Table) {
-                if (!isSystemObject(sysObject)) {
-                    if (normalTables) {
+        async getTableNames({
+            normalTables = true,
+            systemTables = false,
+            linkedTables = false,
+        }: {
+            normalTables?: boolean | undefined;
+            systemTables?: boolean | undefined;
+            linkedTables?: boolean | undefined;
+        } = {}): Promise<string[]> {
+            const filteredSysObjects: SysObject[] = [];
+            for (const sysObject of sysObjects) {
+                if (sysObject.objectType === SysObjectTypes.Table) {
+                    if (!isSystemObject(sysObject)) {
+                        if (normalTables) {
+                            filteredSysObjects.push(sysObject);
+                        }
+                    } else if (systemTables) {
                         filteredSysObjects.push(sysObject);
                     }
-                } else if (systemTables) {
+                } else if (sysObject.objectType === SysObjectTypes.LinkedTable && linkedTables) {
                     filteredSysObjects.push(sysObject);
                 }
-            } else if (sysObject.objectType === SysObjectTypes.LinkedTable && linkedTables) {
-                filteredSysObjects.push(sysObject);
             }
-        }
 
-        return filteredSysObjects.map((o) => o.objectName);
-    }
+            return filteredSysObjects.map((o) => o.objectName);
+        },
 
-    /**
-     * Returns a table by its name.
-     *
-     * @param name Name of the table. Case sensitive.
-     */
-    async getTable(name: string): Promise<Table> {
-        const sysObjects = await this.#getSysObjects();
-        const sysObject = sysObjects.filter((o) => o.objectType === SysObjectTypes.Table).find((o) => o.objectName === name);
+        async getTable(name: string): Promise<Table> {
+            const sysObject = sysObjects
+                .filter((o) => o.objectType === SysObjectTypes.Table)
+                .find((o) => o.objectName === name);
 
-        if (!sysObject) {
-            throw new Error(`Could not find table with name ${name}`);
-        }
+            if (!sysObject) {
+                throw new Error(`Could not find table with name ${name}`);
+            }
 
-        return await createTable(name, this.#database, sysObject.tablePage);
-    }
+            return await createTable(name, database, sysObject.tablePage);
+        },
+    };
 }
 
 async function getSysObjects(database: Database): Promise<SysObject[]> {

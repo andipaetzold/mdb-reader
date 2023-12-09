@@ -27,14 +27,14 @@ export class Database {
         this.#buffer.copy(this.#databaseDefinitionPage, 0, 0, this.#format.pageSize);
         decryptHeader(this.#databaseDefinitionPage, this.#format);
         this.#codecHandler = createCodecHandler(this.#databaseDefinitionPage, password);
-
-        // if (!this.#codecHandler.verifyPassword()) {
-        //     throw new Error("Wrong password");
-        // }
     }
 
     get format(): JetFormat {
         return this.#format;
+    }
+
+    verifyPassword(): Promise<boolean> {
+        return this.#codecHandler.verifyPassword();
     }
 
     getPassword(): string | null {
@@ -86,7 +86,7 @@ export class Database {
         return readDateTime(creationDateBuffer);
     }
 
-    getDefaultSortOrder(): Readonly<SortOrder> {
+    getDefaultSortOrder(): SortOrder {
         const value = this.#databaseDefinitionPage.readUInt16LE(
             this.#format.databaseDefinitionPage.defaultSortOrder.offset + 3
         );
@@ -102,7 +102,7 @@ export class Database {
             );
         }
 
-        return Object.freeze({ value, version });
+        return { value, version };
     }
 
     async getPage(page: number): Promise<Buffer> {

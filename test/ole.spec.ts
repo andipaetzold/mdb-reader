@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import MDBReader from "../src/index.js";
+import { createMDBReader } from "../src/index.js";
 import { resolve } from "path";
 
 describe("OLE", () => {
@@ -11,7 +11,7 @@ describe("OLE", () => {
     });
 
     it("reads ole data ", async () => {
-        const reader = new MDBReader(buffer);
+        const reader = await createMDBReader(buffer);
         const table = await reader.getTable("Table1");
         await table.getData();
         // TODO: check for correct values

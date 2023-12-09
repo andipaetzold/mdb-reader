@@ -49,6 +49,43 @@ export interface SortOrder {
     version: number;
 }
 
+export type MDBReader = {
+    /**
+     * Date when the database was created
+     */
+    getCreationDate(): Date | null;
+
+    /**
+     * Database password
+     */
+    getPassword(): string | null;
+
+    /**
+     * Default sort order
+     */
+    getDefaultSortOrder(): SortOrder;
+
+    /**
+     * Returns an array of table names.
+     *
+     * @param normalTables Includes user tables. Default true.
+     * @param systemTables Includes system tables. Default false.
+     * @param linkedTables Includes linked tables. Default false.
+     */
+    getTableNames(options?: {
+        normalTables?: boolean | undefined;
+        systemTables?: boolean | undefined;
+        linkedTables?: boolean | undefined;
+    }): Promise<string[]>;
+
+    /**
+     * Returns a table by its name.
+     *
+     * @param name Name of the table. Case sensitive.
+     */
+    getTable(name: string): Promise<Table>;
+};
+
 export type Table = {
     get name(): string;
     get rowCount(): number;

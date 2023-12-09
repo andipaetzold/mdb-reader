@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader, { type Table } from "../src/index.js";
+import { createMDBReader, type Table } from "../src/index.js";
 import { expect } from "chai";
 import forEach from "mocha-each";
 
@@ -22,7 +22,7 @@ describe("Table", () => {
         });
 
         it("getData()", async () => {
-            const reader = new MDBReader(buffer);
+            const reader = await createMDBReader(buffer);
             const table = await reader.getTable("Table1");
             const rows = await table.getData();
 
@@ -53,7 +53,7 @@ describe("Table", () => {
 
         describe("getColumns()", () => {
             it("returns correct data types", async () => {
-                const reader = new MDBReader(buffer);
+                const reader = await createMDBReader(buffer);
                 const table = await reader.getTable("Table1");
                 const columns = table.getColumns();
 
@@ -88,7 +88,7 @@ describe("Table", () => {
             });
 
             it("can handle many columns", async () => {
-                const reader = new MDBReader(buffer);
+                const reader = await createMDBReader(buffer);
                 const table = await reader.getTable("Table2");
                 const columns = table.getColumns();
 
@@ -102,7 +102,7 @@ describe("Table", () => {
         });
 
         it("getColumnNames()", async () => {
-            const reader = new MDBReader(buffer);
+            const reader = await createMDBReader(buffer);
             const table = await reader.getTable("Table1");
             const columnNames = await table.getColumnNames();
 
@@ -117,7 +117,7 @@ describe("Table", () => {
 
             before(async () => {
                 const buffer = readFileSync(path);
-                const reader = new MDBReader(buffer);
+                const reader = await createMDBReader(buffer);
                 table = await reader.getTable("Asset Items");
             });
 
@@ -174,7 +174,7 @@ describe("Table", () => {
             it("with offset column indices due to a column deletion", async () => {
                 const withDeletedColPath = resolve("test/data/V2016/withdeletedcol.accdb");
                 const buffer = readFileSync(withDeletedColPath);
-                const reader = new MDBReader(buffer);
+                const reader = await createMDBReader(buffer);
                 const withDeletedColTable = await reader.getTable("Table1");
 
                 expect(await withDeletedColTable.getData()).to.deep.eq([
@@ -187,7 +187,7 @@ describe("Table", () => {
             it("with offset column indices due to a column insertion", async () => {
                 const withInsertedColPath = resolve("test/data/V2016/withinsertedcol.accdb");
                 const buffer = readFileSync(withInsertedColPath);
-                const reader = new MDBReader(buffer);
+                const reader = await createMDBReader(buffer);
                 const withInsertedColTable = await reader.getTable("Table1");
 
                 expect(await withInsertedColTable.getData()).to.deep.eq([{ col1: true, col2: true, col3: false }]);

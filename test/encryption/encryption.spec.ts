@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../../src/index.js";
+import { createMDBReader } from "../../src/index.js";
 import forEach from "mocha-each";
 import { expect } from "chai";
 
@@ -17,9 +17,9 @@ describe("Encryption", () => {
             buffer = readFileSync(path);
         });
 
-        it("should be able to read a page", function () {
+        it("should be able to read a page", async function () {
             this.timeout(5000); // node 20 in CI is slow
-            const reader = new MDBReader(buffer, { password });
+            const reader = await createMDBReader(buffer, { password });
             expect(reader.getTableNames()).to.eventually.deep.eq(["Table1"]);
         });
     });
@@ -33,8 +33,8 @@ describe("Encryption", () => {
             buffer = readFileSync(path);
         });
 
-        it("should throw for wrong password", () => {
-            expect(() => new MDBReader(buffer, { password: "wrong-password" })).to.throw;
+        it("should throw for wrong password", async () => {
+            expect(() => createMDBReader(buffer, { password: "wrong-password" })).to.throw;
         });
     });
 });

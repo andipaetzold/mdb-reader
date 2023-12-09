@@ -52,16 +52,16 @@ To decrypt databases, this library requires a few dependencies:
 
 ```javascript
 import { readFileSync } from "fs";
-import MDBReader from "mdb-reader";
+import { createMDBReader } from "mdb-reader";
 
 const buffer = readFileSync("database.mdb");
-const reader = new MDBReader(buffer);
+const reader = await createMDBReader(buffer);
 
-reader.getTableNames(); // ['Cats', 'Dogs', 'Cars']
+await reader.getTableNames(); // ['Cats', 'Dogs', 'Cars']
 
-const table = reader.getTable("Cats");
+const table = await reader.getTable("Cats");
 table.getColumnNames(); // ['id', 'name', 'color']
-table.getData(); // [{id: 5, name: 'Ashley', color: 'black'}, ...]
+await table.getData(); // [{id: 5, name: 'Ashley', color: 'black'}, ...]
 ```
 
 ## Examples
@@ -75,17 +75,7 @@ table.getData(); // [{id: 5, name: 'Ashley', color: 'black'}, ...]
 ### MDBReader
 
 ```typescript
-class MDBReader {
-    /**
-     * @param buffer Buffer of the database.
-     */
-    constructor(
-        buffer: Buffer,
-        options?: {
-            password?: string;
-        }
-    );
-
+interface MDBReader {
     /**
      * Date when the database was created
      */
@@ -116,14 +106,14 @@ class MDBReader {
         normalTables: boolean;
         systemTables: boolean;
         linkedTables: boolean;
-    }): string[];
+    }): Promise<string[]>;
 
     /**
      * Returns a table by its name.
      *
      * @param name Name of the table. Case sensitive.
      */
-    getTable(name: string): Table;
+    getTable(name: string): Promise<Table>;
 }
 ```
 
@@ -178,7 +168,7 @@ class Table {
         columns?: ReadonlyArray<TColumn>;
         rowOffset?: number;
         rowLimit?: number;
-    }): TRow[];
+    }): Promise<TRow[]>;
 }
 ```
 
