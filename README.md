@@ -66,6 +66,12 @@ table.getColumnNames(); // ['id', 'name', 'color']
 table.getData(); // [{id: 5, name: 'Ashley', color: 'black'}, ...]
 ```
 
+## Examples
+
+- [`browser`](examples/browser) - Running in the browser with parcel
+- [`to-json`](examples/to-json) - CLI script that accepts a database file name and outputs the data as JSON
+- [`sveltekit`](examples/sveltekit) - Running with SvelteKit
+
 ## API
 
 ### MDBReader
