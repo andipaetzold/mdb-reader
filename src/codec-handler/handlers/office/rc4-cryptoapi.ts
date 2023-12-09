@@ -10,19 +10,19 @@ import { type HashAlgorithm, HASH_ALGORITHMS } from "./HashAlgorithm.js";
 const VALID_CRYPTO_ALGORITHMS: CryptoAlgorithm[] = [CRYPTO_ALGORITHMS.RC4];
 const VALID_HASH_ALGORITHMS: HashAlgorithm[] = [HASH_ALGORITHMS.SHA1];
 
-export function createRC4CryptoAPICodecHandler(
+export async function createRC4CryptoAPICodecHandler(
     encodingKey: Buffer,
     encryptionProvider: Buffer,
     password: Buffer
-): CodecHandler {
+): Promise<CodecHandler> {
     const headerLength = encryptionProvider.readInt32LE(8);
     const headerBuffer = encryptionProvider.slice(12, 12 + headerLength);
 
     const encryptionHeader = parseEncryptionHeader(headerBuffer, VALID_CRYPTO_ALGORITHMS, VALID_HASH_ALGORITHMS);
     const encryptionVerifier = parseEncryptionVerifier(encryptionProvider, encryptionHeader.cryptoAlgorithm);
 
+    const baseHash = await hash("sha1", [encryptionVerifier.salt, password]);
     const decryptPage: DecryptPage = async (pageBuffer, pageIndex) => {
-        const baseHash = await hash("sha1", [encryptionVerifier.salt, password]);
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageIndex);
         const encryptionKey = await getEncryptionKey(encryptionHeader, baseHash, pageEncodingKey);
         return decryptRC4(encryptionKey, pageBuffer);
@@ -30,7 +30,6 @@ export function createRC4CryptoAPICodecHandler(
     return {
         decryptPage,
         verifyPassword: async () => {
-            const baseHash = await hash("sha1", [encryptionVerifier.salt, password]);
             const encryptionKey = await getEncryptionKey(encryptionHeader, baseHash, intToBuffer(0));
 
             const rc4Decrypter = createRC4Decrypter(encryptionKey);

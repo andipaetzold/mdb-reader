@@ -19,7 +19,7 @@ export async function createDatabase(buffer: Buffer, password: string) {
     const databaseDefinitionPage = Buffer.alloc(format.pageSize);
     buffer.copy(databaseDefinitionPage, 0, 0, format.pageSize);
     decryptHeader(databaseDefinitionPage, format);
-    const codecHandler = createCodecHandler(databaseDefinitionPage, password);
+    const codecHandler = await createCodecHandler(databaseDefinitionPage, password);
 
     async function getPage(page: number): Promise<Buffer> {
         if (page === 0) {

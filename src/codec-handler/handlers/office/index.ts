@@ -13,7 +13,7 @@ const CRYPT_STRUCTURE_OFFSET = 0x299;
 const KEY_OFFSET = 0x3e;
 const KEY_SIZE = 4;
 
-export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, password: string): CodecHandler {
+export async function createOfficeCodecHandler(databaseDefinitionPage: Buffer, password: string): Promise<CodecHandler> {
     const encodingKey = databaseDefinitionPage.slice(KEY_OFFSET, KEY_OFFSET + KEY_SIZE);
 
     if (isEmptyBuffer(encodingKey)) {
@@ -33,7 +33,7 @@ export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, passwor
     switch (version) {
         case "4.4":
             // Agile Encryption: 4.4
-            return createAgileCodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
+            return await createAgileCodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
 
         case "4.3":
         case "3.3":
