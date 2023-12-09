@@ -41,16 +41,20 @@ export async function createMDBReader(buffer: Buffer, { password }: Options | un
         } = {}): Promise<string[]> {
             const filteredSysObjects: SysObject[] = [];
             for (const sysObject of sysObjects) {
-                if (sysObject.objectType === SysObjectTypes.Table) {
-                    if (!isSystemObject(sysObject)) {
-                        if (normalTables) {
+                switch (sysObject.objectType) {
+                    case SysObjectTypes.Table: {
+                        if ((isSystemObject(sysObject) && systemTables) || (!isSystemObject(sysObject) && normalTables)) {
                             filteredSysObjects.push(sysObject);
                         }
-                    } else if (systemTables) {
-                        filteredSysObjects.push(sysObject);
+                        break;
                     }
-                } else if (sysObject.objectType === SysObjectTypes.LinkedTable && linkedTables) {
-                    filteredSysObjects.push(sysObject);
+
+                    case SysObjectTypes.LinkedTable: {
+                        if (linkedTables) {
+                            filteredSysObjects.push(sysObject);
+                        }
+                        break;
+                    }
                 }
             }
 
