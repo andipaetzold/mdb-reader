@@ -9,5 +9,6 @@
             "groupSlug": "dev-dependencies"
         }
     ],
+    "ignoreDeps": ["parcel"],
     "ignorePaths": ["**/node_modules/**"]
 }
