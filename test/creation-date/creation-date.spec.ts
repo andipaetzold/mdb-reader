@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../../src/index.js";
+import { createMDBReader } from "../../src/index.js";
 import forEach from "mocha-each";
 import { expect } from "chai";
 
@@ -17,8 +17,8 @@ describe("Creation Date", () => {
             buffer = readFileSync(path);
         });
 
-        it("should read the creation date", () => {
-            const reader = new MDBReader(buffer);
+        it("should read the creation date", async () => {
+            const reader = await createMDBReader(buffer);
             const expected = date === null ? null : new Date(Date.parse(date));
             expect(reader.getCreationDate()).to.deep.eq(expected);
         });

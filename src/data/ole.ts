@@ -1,10 +1,10 @@
 import type { Column } from "../column.js";
-import { Database } from "../Database.js";
+import type { Database } from "../Database.js";
 
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/src/libmdb/data.c#L626-L688
  */
-export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffer {
+export async function readOLE(buffer: Buffer, _col: Column, database: Database): Promise<Buffer> {
     const memoLength = buffer.readUIntLE(0, 3);
 
     const bitmask = buffer.readUInt8(3);
@@ -15,7 +15,7 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
     } else if (bitmask & 0x40) {
         // single page
         const pageRow = buffer.readUInt32LE(4);
-        const rowBuffer = database.findPageRow(pageRow);
+        const rowBuffer = await database.findPageRow(pageRow);
         return rowBuffer.slice(0, memoLength);
     } else if (bitmask === 0) {
         // multi page
@@ -23,7 +23,7 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
 
         let memoDataBuffer = Buffer.alloc(0);
         do {
-            const rowBuffer = database.findPageRow(pageRow);
+            const rowBuffer = await database.findPageRow(pageRow);
 
             if (memoDataBuffer.length + rowBuffer.length - 4 > memoLength) {
                 break;

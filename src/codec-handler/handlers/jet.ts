@@ -15,13 +15,13 @@ export function createJetCodecHandler(databaseDefinitionPage: Buffer): CodecHand
         return createIdentityHandler();
     }
 
-    const decryptPage: DecryptPage = (pageBuffer, pageIndex) => {
+    const decryptPage: DecryptPage = async (pageBuffer, pageIndex) => {
         const pagekey = getPageEncodingKey(encodingKey, pageIndex);
         return decryptRC4(pagekey, pageBuffer);
     };
 
     return {
         decryptPage,
-        verifyPassword: () => true, // TODO
+        verifyPassword: async () => true, // TODO
     };
 }

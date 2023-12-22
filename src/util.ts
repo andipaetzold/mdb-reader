@@ -58,3 +58,4 @@ export function fixBufferLength(buffer: Buffer, length: number, padByte = 0): Bu
 export function isInRange(from: number, to: number, value: number): boolean {
     return from <= value && value <= to;
 }
+

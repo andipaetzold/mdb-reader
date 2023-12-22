@@ -1,5 +1,5 @@
 import type { Column, ColumnDefinition } from "../column.js";
-import { Database } from "../Database.js";
+import type { Database } from "../Database.js";
 import { type ColumnType, ColumnTypes, type Value, type ValueMap } from "../types.js";
 import { readBigInt } from "./bigint.js";
 import { readBinary } from "./binary.js";
@@ -19,7 +19,7 @@ import { readText } from "./text.js";
 
 const readFnByColType: {
     [type in Exclude<ColumnType, typeof ColumnTypes.Boolean>]:
-        | ((buffer: Buffer, column: Column, database: Database) => ValueMap[type])
+        | ((buffer: Buffer, column: Column, database: Database) => ValueMap[type] | Promise<ValueMap[type]>)
         | undefined;
 } = {
     [ColumnTypes.BigInt]: readBigInt,
@@ -40,7 +40,11 @@ const readFnByColType: {
     [ColumnTypes.RepID]: readRepID,
 };
 
-export function readFieldValue(buffer: Buffer, column: ColumnDefinition, database: Database): Value | undefined {
+export async function readFieldValue(
+    buffer: Buffer,
+    column: ColumnDefinition,
+    database: Database
+): Promise<Value | undefined> {
     if (column.type === ColumnTypes.Boolean) {
         throw new Error("readFieldValue does not handle type boolean");
     }
@@ -50,5 +54,5 @@ export function readFieldValue(buffer: Buffer, column: ColumnDefinition, databas
         return `Column type ${column.type} is currently not supported`;
     }
 
-    return read(buffer, column, database);
+    return await read(buffer, column, database);
 }

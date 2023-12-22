@@ -1,3 +1,5 @@
+import type { Column } from "./column.js";
+
 export const ColumnTypes = {
     Boolean: "boolean",
     Byte: "byte",
@@ -18,7 +20,7 @@ export const ColumnTypes = {
     DateTimeExtended: "datetimextended",
 } as const;
 
-export type ColumnType = typeof ColumnTypes[keyof typeof ColumnTypes];
+export type ColumnType = (typeof ColumnTypes)[keyof typeof ColumnTypes];
 
 export type ValueMap = {
     [ColumnTypes.Binary]: Buffer;
@@ -46,3 +48,61 @@ export interface SortOrder {
     value: number;
     version: number;
 }
+
+export type MDBReader = {
+    /**
+     * Date when the database was created
+     */
+    getCreationDate(): Date | null;
+
+    /**
+     * Database password
+     */
+    getPassword(): string | null;
+
+    /**
+     * Default sort order
+     */
+    getDefaultSortOrder(): SortOrder;
+
+    /**
+     * Returns an array of table names.
+     *
+     * @param normalTables Includes user tables. Default true.
+     * @param systemTables Includes system tables. Default false.
+     * @param linkedTables Includes linked tables. Default false.
+     */
+    getTableNames(options?: {
+        normalTables?: boolean | undefined;
+        systemTables?: boolean | undefined;
+        linkedTables?: boolean | undefined;
+    }): Promise<string[]>;
+
+    /**
+     * Returns a table by its name.
+     *
+     * @param name Name of the table. Case sensitive.
+     */
+    getTable(name: string): Promise<Table>;
+};
+
+export type Table = {
+    get name(): string;
+    get rowCount(): number;
+    get columnCount(): number;
+
+    getColumn(name: string): Column;
+    getColumns(): Column[];
+    getColumnNames(): string[];
+
+    getData<
+        TRow extends {
+            [column in TColumn]: Value;
+        },
+        TColumn extends string = string
+    >(options?: {
+        columns?: ReadonlyArray<string>;
+        rowOffset?: number;
+        rowLimit?: number;
+    }): Promise<TRow[]>;
+};

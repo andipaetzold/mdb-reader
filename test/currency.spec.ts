@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../src/index.js";
+import { createMDBReader } from "../src/index.js";
 import forEach from "mocha-each";
 import { expect } from "chai";
 
@@ -14,10 +14,10 @@ describe("Currency", () => {
             buffer = readFileSync(path);
         });
 
-        it("getData(): returns correct currency data", () => {
-            const reader = new MDBReader(buffer);
-            const table = reader.getTable("Table");
-            const rows = table.getData();
+        it("getData(): returns correct currency data",async () => {
+            const reader = await createMDBReader(buffer);
+            const table = await reader.getTable("Table");
+            const rows = await table.getData();
 
             expect(rows.length).to.eq(1);
 

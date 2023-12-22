@@ -5,14 +5,14 @@ import { createIdentityHandler } from "./handlers/identity.js";
 import { createJetCodecHandler } from "./handlers/jet.js";
 import { createOfficeCodecHandler } from "./handlers/office/index.js";
 
-export function createCodecHandler(databaseDefinitionPage: Buffer, password: string): CodecHandler {
+export async function createCodecHandler(databaseDefinitionPage: Buffer, password: string): Promise<CodecHandler> {
     const format = getJetFormat(databaseDefinitionPage);
     switch (format.codecType) {
         case CodecType.JET:
             return createJetCodecHandler(databaseDefinitionPage);
 
         case CodecType.OFFICE:
-            return createOfficeCodecHandler(databaseDefinitionPage, password);
+            return await createOfficeCodecHandler(databaseDefinitionPage, password);
 
         default:
             return createIdentityHandler();

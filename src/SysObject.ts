@@ -1,3 +1,6 @@
+import type { Database } from "./Database.js";
+import { createTable } from "./Table.js";
+
 /**
  * @see https://github.com/brianb/mdbtools/blob/d6f5745d949f37db969d5f424e69b54f0da60b9b/include/mdbtools.h#L73-L87
  */
@@ -14,7 +17,7 @@ export const SysObjectTypes = {
     DatabaseProperty: 0x0b,
 } satisfies Record<string, number>;
 
-export type SysObjectType = typeof SysObjectTypes[keyof typeof SysObjectTypes];
+export type SysObjectType = (typeof SysObjectTypes)[keyof typeof SysObjectTypes];
 
 export function isSysObjectType(typeValue: number): boolean {
     return Object.values(SysObjectTypes).includes(typeValue);
@@ -38,6 +41,30 @@ const SYSTEM_OBJECT_FLAGS = SYSTEM_OBJECT_FLAG | ALT_SYSTEM_OBJECT_FLAG;
 /**
  * @see https://github.com/jahlborn/jackcess/blob/3f75e95a21d9a9e3486519511cdd6178e3c2e3e4/src/main/java/com/healthmarketscience/jackcess/impl/DatabaseImpl.java#L194-L202
  */
-export function isSystemObject(o: Pick<SysObject, "flags">): boolean {
+export function isSysObject(o: Pick<SysObject, "flags">): boolean {
     return (o.flags & SYSTEM_OBJECT_FLAGS) !== 0;
+}
+
+const MSYS_OBJECTS_TABLE = "MSysObjects";
+const MSYS_OBJECTS_PAGE = 2;
+export async function getSysObjects(database: Database): Promise<SysObject[]> {
+    const table = await createTable(MSYS_OBJECTS_TABLE, database, MSYS_OBJECTS_PAGE);
+    const tableData = await table.getData<{
+        Id: number;
+        Name: string;
+        Type: number;
+        Flags: number;
+    }>({
+        columns: ["Id", "Name", "Type", "Flags"],
+    });
+
+    return tableData.map((mSysObject) => {
+        const objectType = mSysObject.Type & 0x7f;
+        return {
+            objectName: mSysObject.Name,
+            objectType: isSysObjectType(objectType) ? objectType : null,
+            tablePage: mSysObject.Id & 0x00ffffff,
+            flags: mSysObject.Flags,
+        };
+    });
 }
