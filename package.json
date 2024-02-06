@@ -59,7 +59,7 @@
         "mocha": "10.2.0",
         "mocha-each": "2.0.1",
         "rimraf": "5.0.5",
-        "semantic-release": "22.0.12",
+        "semantic-release": "23.0.1",
         "ts-node": "10.9.2",
         "typescript": "5.3.3"
     },
