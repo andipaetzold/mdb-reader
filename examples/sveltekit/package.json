@@ -11,13 +11,13 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "3.2.2",
-		"@sveltejs/kit": "2.5.15",
+		"@sveltejs/kit": "2.5.18",
 		"@sveltejs/vite-plugin-svelte": "3.1.1",
 		"svelte": "4.2.18",
-		"svelte-check": "3.8.0",
+		"svelte-check": "3.8.5",
 		"tslib": "2.6.3",
-		"typescript": "5.4.5",
-		"vite": "5.3.1",
+		"typescript": "5.5.4",
+		"vite": "5.3.5",
 		"vite-plugin-node-polyfills": "0.22.0"
 	},
 	"type": "module",
