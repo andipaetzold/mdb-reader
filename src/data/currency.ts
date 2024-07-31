@@ -21,7 +21,7 @@ export function readCurrency(buffer: Buffer): string {
             bytes[i] = ~bytes[i]!;
         }
         for (let i = 0; i < bytesCount; ++i) {
-            ++bytes[i];
+            ++bytes[i]!;
             if (bytes[i] != 0) {
                 break;
             }

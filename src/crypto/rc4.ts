@@ -22,7 +22,7 @@ export function createRC4Decrypter(key: Buffer): (data: Buffer) => Buffer {
             i = (i + 1) % 256;
             j = (j + S[i]!) % 256;
             [S[i], S[j]] = [S[j]!, S[i]!];
-            resultBuffer[k] ^= S[(S[i]! + S[j]!) % 256]!;
+            resultBuffer[k]! ^= S[(S[i]! + S[j]!) % 256]!;
         }
 
         return resultBuffer;
