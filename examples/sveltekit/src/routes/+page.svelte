@@ -3,7 +3,7 @@
 
 	let { form } = $props();
 
-	let files: FileList = $state();
+	let files: FileList | undefined = $state();
 </script>
 
 <form method="post" enctype="multipart/form-data">
@@ -14,7 +14,7 @@
 {#if form?.files}
 	<h2>Uploaded Files:</h2>
 	{#each form.files as file}
-		<p>
+		<section>
 			{file.name}
 			{#if file.tableNames.length}
 				<ul>
@@ -23,14 +23,14 @@
 					{/each}
 				</ul>
 			{/if}
-		</p>
+		</section>
 	{/each}
 {/if}
 
 {#if files}
 	<h2>Selected Files:</h2>
 	{#each files as file}
-		<p>
+		<section>
 			{file.name}:
 			{#await getTableNames(file) then tableNames}
 				<ul>
@@ -39,6 +39,6 @@
 					{/each}
 				</ul>
 			{/await}
-		</p>
+		</section>
 	{/each}
 {/if}
