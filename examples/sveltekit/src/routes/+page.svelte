@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { getTableNames } from '$lib/database';
 
-	export let form;
+	let { form } = $props();
 
-	let files: FileList;
+	let files: FileList = $state();
 </script>
 
 <form method="post" enctype="multipart/form-data">
