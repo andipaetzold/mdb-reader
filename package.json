@@ -51,7 +51,7 @@
         "@types/chai": "5.0.1",
         "@types/mocha": "10.0.10",
         "@types/mocha-each": "2.0.4",
-        "@types/node": "18.19.67",
+        "@types/node": "18.19.68",
         "@typescript-eslint/eslint-plugin": "7.18.0",
         "@typescript-eslint/parser": "7.18.0",
         "chai": "5.1.2",
