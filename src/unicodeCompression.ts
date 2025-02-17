@@ -22,15 +22,17 @@ export function uncompressText(buffer: Buffer, format: Pick<JetFormat, "textEnco
     const uncompressedBuffer = Buffer.alloc((buffer.length - curPos) * 2);
     let uncompressedBufferPos = 0;
     while (curPos < buffer.length) {
-        const curByte = buffer.readUInt8(curPos++);
-        if (curByte === 0) {
+        if (buffer.readUInt8(curPos) === 0) {
             compressedMode = !compressedMode;
+            curPos++;
         } else if (compressedMode) {
-            uncompressedBuffer[uncompressedBufferPos++] = curByte;
+            uncompressedBuffer[uncompressedBufferPos++] = buffer.readUInt8(curPos++);
             uncompressedBuffer[uncompressedBufferPos++] = 0;
         } else if (buffer.length - curPos >= 2) {
-            uncompressedBuffer[uncompressedBufferPos++] = curByte;
             uncompressedBuffer[uncompressedBufferPos++] = buffer.readUInt8(curPos++);
+            uncompressedBuffer[uncompressedBufferPos++] = buffer.readUInt8(curPos++);
+        } else {
+            break;
         }
     }
 
