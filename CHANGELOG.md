@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0...v3.0.1) (2025-02-17)
+
+
+### Bug Fixes
+
+* do not skip last char when decompressing text where the last characters are uncompressed ([#360](https://github.com/andipaetzold/mdb-reader/issues/360)) ([30bea44](https://github.com/andipaetzold/mdb-reader/commit/30bea4459df70d2162d6cd90127812fa37313e5b))
+
 # [3.0.0](https://github.com/andipaetzold/mdb-reader/compare/v2.2.6...v3.0.0) (2023-11-28)
 
 
