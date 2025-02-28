@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/andipaetzold/mdb-reader/compare/v3.0.1...v3.1.0) (2025-02-28)
+
+
+### Features
+
+* support `fast-xml-parser` v5 ([505ce6b](https://github.com/andipaetzold/mdb-reader/commit/505ce6b6042daa2797e0b6a2d03c4525bb1e25e3))
+
 ## [3.0.1](https://github.com/andipaetzold/mdb-reader/compare/v3.0.0...v3.0.1) (2025-02-17)
 
 
