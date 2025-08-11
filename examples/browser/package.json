@@ -11,7 +11,7 @@
         "mdb-reader": "3.1.0"
     },
     "devDependencies": {
-        "events": "^3.3.0",
+        "events": "3.3.0",
         "parcel": "2.15.4",
         "process": "0.11.10",
         "rimraf": "6.0.1",
