@@ -1,4 +1,4 @@
-import { getTableNames } from "$lib/database";
+import { getTableNames } from "$lib/database.js";
 import type { Actions } from "@sveltejs/kit";
 
 export const actions = {
