@@ -6,7 +6,7 @@ on:
 jobs:
     build-test:
         name: Build & Test
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         strategy:
             matrix:
                 node: ["18.0.0", "18", "20.0.0", "20", "22.11.0", "22", "24.11.0", "24"]
@@ -31,7 +31,7 @@ jobs:
 
     release:
         name: Release
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         needs: build-test
         # https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md#node-project-configuration
         permissions:
@@ -62,7 +62,7 @@ jobs:
 
     examples:
         name: Examples
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
 
         steps:
             - uses: actions/checkout@v6
