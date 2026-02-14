@@ -1,26 +1,26 @@
 import { Database } from "../Database.js";
 import type { Value } from "../types.js";
 import { Table } from "../Table.js";
+import { getMSysObjectsTable } from "../systemTables.js";
 
-const MSYS_OBJECTS_TABLE = "MSysObjects";
-const MSYS_OBJECTS_PAGE = 2;
 const MSYS_COMPLEX_COLUMNS_TABLE = "MSysComplexColumns";
 
-/**
- * Column names in MSysComplexColumns (Jackcess / Access).
- * Casing may vary; we try exact match first.
- */
-const COL_COMPLEX_TYPE_OBJECT_ID = "ComplexTypeObjectID";
-const COL_CONCEPTUAL_TABLE_ID = "ConceptualTableID";
-const COL_FLAT_TABLE_ID = "FlatTableID";
-/** ACCDB: column definition stores this; matches row in MSysComplexColumns. */
-const COL_COMPLEX_ID = "ComplexID";
-const COL_COLUMN_NAME = "ColumnName";
+const COLUMN_NAMES = {
+    complexTypeId: "ComplexTypeObjectID",
+    /** ACCDB: column definition stores this; matches row in MSysComplexColumns. */
+    conceptualTableId: "ConceptualTableID",
+    /** Flat table ID. */
+    flatTableId: "FlatTableID",
+    /** Complex ID. */
+    complexId: "ComplexID",
+    /** Column name. */
+    columnName: "ColumnName",
+} as const;
 
-export interface ResolvedFlatTable {
-    flatTableName: string;
-    flatTableFirstPage: number;
-}
+export type ResolvedFlatTable = {
+    tableName: string;
+    firstPage: number;
+};
 
 /**
  * Resolves (complexTypeId, tableDefinitionPage) to the flat table that stores
@@ -33,56 +33,68 @@ export function resolveFlatTableForComplexColumn(
     database: Database,
     complexTypeId: number,
     tableDefinitionPage: number,
-    columnName?: string,
-): ResolvedFlatTable | null {
-    try {
-        const msysObjects = new Table(MSYS_OBJECTS_TABLE, database, MSYS_OBJECTS_PAGE);
-        const msysObjectsData = msysObjects.getData<{ Id: number; Name: string }>({
-            columns: ["Id", "Name"],
-        });
+    columnName: string,
+): ResolvedFlatTable {
+    const msysObjectsData = getMSysObjectsTable(database).getData<{ Id: number; Name: string }>({
+        columns: ["Id", "Name"],
+    });
+    const complexColsData = getComplexColumnsData(database);
+    const tableDefPageMasked = tableDefinitionPage & 0x00ffffff;
 
-        const complexColRow = msysObjectsData.find((r) => r.Name === MSYS_COMPLEX_COLUMNS_TABLE);
-        if (!complexColRow) {
-            return null;
+    for (const row of complexColsData) {
+        const rowFlatTableId = row[COLUMN_NAMES.flatTableId];
+        const rowConceptualTableId = row[COLUMN_NAMES.conceptualTableId];
+
+        const tableMatch = rowConceptualTableId != null && (rowConceptualTableId as number) === tableDefPageMasked;
+        if (!rowFlatTableId || !tableMatch) {
+            continue;
         }
 
-        const msysComplexColumnsPage = complexColRow.Id & 0x00ffffff;
-        const msysComplexColumns = new Table(MSYS_COMPLEX_COLUMNS_TABLE, database, msysComplexColumnsPage);
-        const complexColsData = msysComplexColumns.getData<Record<string, Value>>();
+        // compare complex type id
+        const rowComplexTypeId = row[COLUMN_NAMES.complexTypeId];
+        const complexTypeIdMatch = typeof rowComplexTypeId === "number" && rowComplexTypeId === complexTypeId;
 
-        const tableDefPageMasked = tableDefinitionPage & 0x00ffffff;
+        // compare complex id
+        const rowComplexId = row[COLUMN_NAMES.complexId];
+        const complexIdMatch = typeof rowComplexId === "number" && rowComplexId === complexTypeId;
 
-        for (const row of complexColsData) {
-            const rowComplexTypeId = row[COL_COMPLEX_TYPE_OBJECT_ID];
-            const rowComplexId = row[COL_COMPLEX_ID];
-            const rowConceptualTableId = row[COL_CONCEPTUAL_TABLE_ID];
-            const rowFlatTableId = row[COL_FLAT_TABLE_ID];
-            const rowColumnName = row[COL_COLUMN_NAME];
+        // compare column name
+        const rowColumnName = row[COLUMN_NAMES.columnName];
+        const columnNameMatch =
+            typeof rowColumnName === "string" && String(rowColumnName).toLowerCase() === columnName.toLowerCase();
 
-            const tableMatch = rowConceptualTableId != null && (rowConceptualTableId as number) === tableDefPageMasked;
-            const complexMatch =
-                (rowComplexTypeId != null && (rowComplexTypeId as number) === complexTypeId) ||
-                (rowComplexId != null && (rowComplexId as number) === complexTypeId);
-            const columnNameMatch =
-                columnName != null &&
-                rowColumnName != null &&
-                String(rowColumnName).toLowerCase() === columnName.toLowerCase();
-
-            if (tableMatch && rowFlatTableId != null && (complexMatch || columnNameMatch)) {
-                const flatTableId = (rowFlatTableId as number) & 0x00ffffff;
-                const flatTableRow = msysObjectsData.find((r) => (r.Id & 0x00ffffff) === flatTableId);
-                if (!flatTableRow) {
-                    return null;
-                }
-                return {
-                    flatTableName: flatTableRow.Name,
-                    flatTableFirstPage: flatTableId,
-                };
-            }
+        if (!complexTypeIdMatch && !complexIdMatch && !columnNameMatch) {
+            continue;
         }
 
-        return null;
-    } catch {
-        return null;
+        const flatTableId = (rowFlatTableId as number) & 0x00ffffff;
+        const flatTableRow = msysObjectsData.find((r) => (r.Id & 0x00ffffff) === flatTableId);
+        if (!flatTableRow) {
+            throw new Error(`Flat table not found for complex column ${columnName}`);
+        }
+
+        return {
+            tableName: flatTableRow.Name,
+            firstPage: flatTableId,
+        };
     }
+
+    throw new Error(`Flat table not found for complex column ${columnName}`);
+}
+
+function getMsysComplexColumnsPage(database: Database): number {
+    const msysObjectsData = getMSysObjectsTable(database).getData<{ Id: number; Name: string }>({
+        columns: ["Id", "Name"],
+    });
+    const complexColRow = msysObjectsData.find((r) => r.Name === MSYS_COMPLEX_COLUMNS_TABLE);
+    if (!complexColRow) {
+        throw new Error(`MSysComplexColumns table not found in MSysObjects table`);
+    }
+    return complexColRow.Id & 0x00ffffff;
+}
+
+function getComplexColumnsData(database: Database): Record<string, Value>[] {
+    const msysComplexColumnsPage = getMsysComplexColumnsPage(database);
+    const msysComplexColumns = new Table(MSYS_COMPLEX_COLUMNS_TABLE, database, msysComplexColumnsPage);
+    return msysComplexColumns.getData<Record<string, Value>>();
 }
