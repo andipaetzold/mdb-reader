@@ -54,6 +54,11 @@ export interface JetFormat {
             fixedIndexOffset: number;
 
             entrySize: number;
+
+            /**
+             * Offset of the 4-byte complex type ID in the column definition. Omit if not supported.
+             */
+            complexIdOffset?: number;
         };
         columnNames: {
             /**

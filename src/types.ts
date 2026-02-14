@@ -20,12 +20,25 @@ export const ColumnTypes = {
 
 export type ColumnType = typeof ColumnTypes[keyof typeof ColumnTypes];
 
+/**
+ * Decoded attachment item for Complex (attachment) columns.
+ * Matches Jackcess Attachment semantics (FileName, FileType, FileData, etc.).
+ */
+export type Attachment = {
+    name: string;
+    type: string;
+    data: Buffer;
+    url?: string;
+    timestamp?: Date;
+    flags?: number;
+}
+
 export type ValueMap = {
     [ColumnTypes.Binary]: Buffer;
     [ColumnTypes.BigInt]: bigint;
     [ColumnTypes.Boolean]: boolean;
     [ColumnTypes.Byte]: number;
-    [ColumnTypes.Complex]: number;
+    [ColumnTypes.Complex]: Attachment[];
     [ColumnTypes.Currency]: string;
     [ColumnTypes.DateTime]: Date;
     [ColumnTypes.DateTimeExtended]: string;

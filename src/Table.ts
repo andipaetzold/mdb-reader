@@ -181,6 +181,16 @@ export class Table {
                 column.scale = columnBuffer.readUInt8(12);
             }
 
+            if (type === ColumnTypes.Complex) {
+                const complexIdOffset = this.#database.format.tableDefinitionPage.columnsDefinition.complexIdOffset;
+                if (complexIdOffset !== undefined) {
+                    column.complexTypeId = columnBuffer.readInt32LE(complexIdOffset);
+                    column.tableDefinitionPage = this.#firstDefinitionPage;
+                } else {
+                    throw new Error("Complex columns are not supported");
+                }
+            }
+
             columns.push(column);
 
             curDefinitionPos += this.#database.format.tableDefinitionPage.columnsDefinition.entrySize;

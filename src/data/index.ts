@@ -4,7 +4,8 @@ import { type ColumnType, ColumnTypes, type Value, type ValueMap } from "../type
 import { readBigInt } from "./bigint.js";
 import { readBinary } from "./binary.js";
 import { readByte } from "./byte.js";
-import { readComplexOrLong } from "./complexOrLong.js";
+import { readComplex } from "./complex.js";
+import { readLong } from "./long.js";
 import { readCurrency } from "./currency.js";
 import { readDateTime } from "./datetime.js";
 import { readDateTimeExtended } from "./datetimextended.js";
@@ -25,14 +26,14 @@ const readFnByColType: {
     [ColumnTypes.BigInt]: readBigInt,
     [ColumnTypes.Binary]: readBinary,
     [ColumnTypes.Byte]: readByte,
-    [ColumnTypes.Complex]: readComplexOrLong,
+    [ColumnTypes.Complex]: readComplex,
     [ColumnTypes.Currency]: readCurrency,
     [ColumnTypes.DateTime]: readDateTime,
     [ColumnTypes.DateTimeExtended]: readDateTimeExtended,
     [ColumnTypes.Double]: readDouble,
     [ColumnTypes.Float]: readFloat,
     [ColumnTypes.Integer]: readInteger,
-    [ColumnTypes.Long]: readComplexOrLong,
+    [ColumnTypes.Long]: readLong,
     [ColumnTypes.Text]: readText,
     [ColumnTypes.Memo]: readMemo,
     [ColumnTypes.Numeric]: readNumeric,

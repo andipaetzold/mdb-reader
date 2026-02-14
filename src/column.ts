@@ -35,6 +35,18 @@ export interface ColumnDefinition extends Column {
     index: number;
     variableIndex: number;
     fixedIndex: number;
+
+    /**
+     * Only set for type = 'complex'. Complex type ID from column definition; used to resolve
+     * the flat table via MSysComplexColumns.
+     */
+    complexTypeId?: number;
+
+    /**
+     * Only set for type = 'complex'. First table definition page of the owning table;
+     * used to match ConceptualTableID in MSysComplexColumns.
+     */
+    tableDefinitionPage?: number;
 }
 
 const columnTypeMap: Record<number, ColumnType> = {
