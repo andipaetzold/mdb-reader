@@ -226,7 +226,7 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | binary           | `Buffer`        |
 | boolean          | `boolean`       |
 | byte             | `number`        |
-| complex          | `number`        |
+| complex          | `Attachment[]`  |
 | currency         | `string`        |
 | datetime         | `Date`          |
 | datetimeextended | `string`        |
@@ -239,6 +239,21 @@ The data types returned by `Table.getData()` depends on the column type. Null va
 | ole              | `Buffer`        |
 | repid            | `string`        |
 | text             | `string`        |
+
+### Attachment (complex columns)
+
+Columns of type `complex` (attachment fields) return an array of `Attachment` objects. The type is exported from the library. Each item has:
+
+| Property    | Type     | Description                                         |
+| ----------- | -------- | --------------------------------------------------- |
+| `name`      | `string` | Original file name.                                 |
+| `type`      | `string` | File extension / MIME type (e.g. `"pdf"`, `"jpg"`). |
+| `data`      | `Buffer` | Decoded file bytes (raw content, no OLE wrapper).   |
+| `url`       | `string` | Optional URL if the attachment was linked.          |
+| `timestamp` | `Date`   | Optional modification timestamp.                    |
+| `flags`     | `number` | Optional flags.                                     |
+
+Only `name`, `type`, and `data` are always present; the rest are set when stored in the database.
 
 ## Development
 

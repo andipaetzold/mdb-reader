@@ -52,6 +52,9 @@ export const jet4Format: JetFormat = {
             sizeOffset: 23,
 
             entrySize: 25,
+
+            /** Jet 4 complex column type ID (4 bytes). See Jackcess OFFSET_COLUMN_COMPLEX_ID. */
+            complexIdOffset: 9,
         },
         columnNames: {
             nameLengthSize: 2,
