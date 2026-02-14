@@ -23,10 +23,9 @@ const ATTACHMENT_TYPE_COLUMN_NAMES: ReadonlySet<string> = new Set(Object.values(
  * collects matching rows, and decodes each attachment's FileData.
  * Returns [] if resolution fails or column has no complexTypeId/tableDefinitionPage.
  */
-export function readComplex(buffer: Buffer, column: Column, database: Database): Attachment[] {
-    const def = column as ColumnDefinition;
-    const complexTypeId = def.complexTypeId;
-    const tableDefinitionPage = def.tableDefinitionPage;
+export function readComplex(buffer: Buffer, column: ColumnDefinition, database: Database): Attachment[] {
+    const complexTypeId = column.complexTypeId;
+    const tableDefinitionPage = column.tableDefinitionPage;
 
     if (complexTypeId === undefined || tableDefinitionPage === undefined) {
         throw new Error("Complex column is not valid");
@@ -41,7 +40,7 @@ export function readComplex(buffer: Buffer, column: Column, database: Database):
         database,
         complexTypeId,
         tableDefinitionPage,
-        def.name,
+        column.name,
     );
     const flatTable = new Table(flatTableName, database, flatTableFirstPage);
     const columns = flatTable.getColumns();
@@ -57,12 +56,12 @@ export function readComplex(buffer: Buffer, column: Column, database: Database):
     const matchingRows = flatData.filter((row) => row[fkColumn.name] === fk);
 
     return matchingRows.map((row) => {
-        const rawData = row[COLUMN_NAMES.data];
+        const data = row[COLUMN_NAMES.data];
 
         const attachment: Attachment = {
             name: row[COLUMN_NAMES.name] as string,
             type: row[COLUMN_NAMES.type] as string,
-            data: Buffer.isBuffer(rawData) ? decodeAttachmentFileData(rawData) : Buffer.alloc(0),
+            data: Buffer.isBuffer(data) ? decodeAttachmentFileData(data) : Buffer.alloc(0),
         };
 
         const url = row[COLUMN_NAMES.url];
