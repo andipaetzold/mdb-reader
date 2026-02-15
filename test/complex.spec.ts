@@ -5,7 +5,7 @@ import type { Attachment } from "../src/types.js";
 import forEach from "mocha-each";
 import { expect } from "chai";
 
-describe.only("Complex", () => {
+describe("Complex", () => {
     forEach([["V2016/attachments.accdb"]]).describe("%s", (filename) => {
         const path = resolve("test/data", filename);
 
