@@ -3,7 +3,7 @@ import { Database } from "../../Database.js";
 import { Table } from "../../Table.js";
 import type { Attachment, Value } from "../../types.js";
 import { ColumnTypes } from "../../types.js";
-import { decodeAttachmentFileData } from "../attachment.js";
+import { decodeAttachmentFileData } from "./attachment.js";
 import { resolveFlatTableForComplexColumn } from "./utils.js";
 
 type FlatTableData = {
@@ -66,12 +66,12 @@ export function readComplex(buffer: Buffer, column: ColumnDefinition, database: 
         const matchingRows = flatData.filter((row) => row[foreignKeyColumn.name] === foreignKey);
 
         return matchingRows.map((row) => {
-            const data = row.FileData;
+            console.log(row.FileName);
 
             const attachment: Attachment = {
                 name: row.FileName,
                 type: row.FileType,
-                data: decodeAttachmentFileData(data),
+                data: decodeAttachmentFileData(row.FileData),
             };
 
             if (row.FileURL) {

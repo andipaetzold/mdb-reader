@@ -1,12 +1,14 @@
 import { inflateSync } from "node:zlib";
 
 const WRAPPER_HEADER_SIZE = 8;
-const DATA_TYPE_RAW = 0;
-const DATA_TYPE_COMPRESSED = 1;
+
+const DATA_TYPES = {
+    RAW: 0,
+    COMPRESSED: 1,
+} as const;
 
 /**
  * Decodes attachment FileData as stored in Access (OLE wrapper with optional deflate).
- * See Jackcess AttachmentColumnInfoImpl.decodeData().
  *
  * Layout: 8-byte header (4-byte type flag: 0=raw, 1=compressed; 4-byte length), then
  * content. If compressed, content is deflate-compressed. Content then has a
@@ -14,6 +16,7 @@ const DATA_TYPE_COMPRESSED = 1;
  * the actual file bytes.
  */
 export function decodeAttachmentFileData(buffer: Buffer): Buffer {
+    console.group('decodeAttachmentFileData')
     if (buffer.length < WRAPPER_HEADER_SIZE) {
         throw new Error("Unknown encoded attachment data format");
     }
@@ -21,16 +24,22 @@ export function decodeAttachmentFileData(buffer: Buffer): Buffer {
     const dataLen = buffer.readInt32LE(4);
     let content = buffer.subarray(WRAPPER_HEADER_SIZE);
 
-    if (typeFlag === DATA_TYPE_COMPRESSED) {
-        content = inflateSync(content);
-    } else if (typeFlag !== DATA_TYPE_RAW) {
-        throw new Error(`Unknown encoded attachment data type ${typeFlag}`);
+    switch (typeFlag) {
+        case DATA_TYPES.COMPRESSED:
+            content = inflateSync(content);
+            break;
+        case DATA_TYPES.RAW:
+            // do nothing
+            break;
+        default:
+            throw new Error(`Unknown encoded attachment data type ${typeFlag}`);
     }
 
     if (content.length < 4) {
         throw new Error("Invalid attachment content header");
     }
     const headerLen = content.readInt32LE(0);
+    console.log('headerLen', headerLen)
     if (headerLen < 4 || headerLen > content.length) {
         throw new Error("Invalid attachment header length");
     }
@@ -38,5 +47,6 @@ export function decodeAttachmentFileData(buffer: Buffer): Buffer {
     if (headerLen >= payloadEnd) {
         throw new Error("Invalid attachment header length");
     }
+    console.groupEnd()
     return content.subarray(headerLen, payloadEnd);
 }
