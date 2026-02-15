@@ -6,19 +6,10 @@ import { ColumnTypes } from "../../types.js";
 import { decodeAttachmentFileData } from "../attachment.js";
 import { resolveFlatTableForComplexColumn } from "./utils.js";
 
-const COLUMN_NAMES = {
-    name: "FileName",
-    type: "FileType",
-    data: "FileData",
-    url: "FileURL",
-    timestamp: "FileTimeStamp",
-    flags: "FileFlags",
-} as const;
-
 type FlatTableData = {
     FileName: string;
     FileType: string;
-    FileData?: Buffer;
+    FileData: Buffer;
     FileURL?: string;
     FileTimeStamp?: Date;
     FileFlags?: number;
@@ -27,7 +18,14 @@ type FlatTableData = {
     [key: string]: Value;
 };
 /** Known attachment type column names; the FK column is the Long that is not one of these. */
-const ATTACHMENT_TYPE_COLUMN_NAMES: ReadonlySet<string> = new Set(Object.values(COLUMN_NAMES));
+const ATTACHMENT_TYPE_COLUMN_NAMES: ReadonlySet<string> = new Set([
+    "FileName",
+    "FileType",
+    "FileData",
+    "FileURL",
+    "FileTimeStamp",
+    "FileFlags",
+]);
 
 /**
  * Reads a Complex (attachment) column: resolves the complex value FK to the flat table,
@@ -73,7 +71,7 @@ export function readComplex(buffer: Buffer, column: ColumnDefinition, database: 
             const attachment: Attachment = {
                 name: row.FileName,
                 type: row.FileType,
-                data: Buffer.isBuffer(data) ? decodeAttachmentFileData(data) : Buffer.alloc(0),
+                data: decodeAttachmentFileData(data),
             };
 
             if (row.FileURL) {
