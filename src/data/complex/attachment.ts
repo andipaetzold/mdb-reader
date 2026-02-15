@@ -1,4 +1,4 @@
-import { inflateSync } from "node:zlib";
+import { environment } from "../../environment/index.js";
 
 const WRAPPER_HEADER_SIZE = 8;
 
@@ -16,7 +16,6 @@ const DATA_TYPES = {
  * the actual file bytes.
  */
 export function decodeAttachmentFileData(buffer: Buffer): Buffer {
-    console.group('decodeAttachmentFileData')
     if (buffer.length < WRAPPER_HEADER_SIZE) {
         throw new Error("Unknown encoded attachment data format");
     }
@@ -26,7 +25,7 @@ export function decodeAttachmentFileData(buffer: Buffer): Buffer {
 
     switch (typeFlag) {
         case DATA_TYPES.COMPRESSED:
-            content = inflateSync(content);
+            content = environment.inflate(content);
             break;
         case DATA_TYPES.RAW:
             // do nothing
@@ -39,7 +38,6 @@ export function decodeAttachmentFileData(buffer: Buffer): Buffer {
         throw new Error("Invalid attachment content header");
     }
     const headerLen = content.readInt32LE(0);
-    console.log('headerLen', headerLen)
     if (headerLen < 4 || headerLen > content.length) {
         throw new Error("Invalid attachment header length");
     }
@@ -47,6 +45,5 @@ export function decodeAttachmentFileData(buffer: Buffer): Buffer {
     if (headerLen >= payloadEnd) {
         throw new Error("Invalid attachment header length");
     }
-    console.groupEnd()
     return content.subarray(headerLen, payloadEnd);
 }

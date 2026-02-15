@@ -33,16 +33,18 @@ const ATTACHMENT_TYPE_COLUMN_NAMES: ReadonlySet<string> = new Set([
  */
 export function readComplex(buffer: Buffer, column: ColumnDefinition, database: Database): Attachment[] {
     try {
-        const complexTypeId = column.complexTypeId;
-        const tableDefinitionPage = column.tableDefinitionPage;
+        const complexTypeId = column.complex?.typeId;
+        const tableDefinitionPage = column.complex?.tableDefinitionPage;
 
         if (complexTypeId === undefined || tableDefinitionPage === undefined) {
             throw new Error("Complex column is not valid");
         }
         const complexColumnDefinition: ComplexColumnDefinition = {
             ...column,
-            complexTypeId,
-            tableDefinitionPage,
+            complex: {
+                typeId: complexTypeId,
+                tableDefinitionPage,
+            },
         };
 
         const foreignKey = buffer.readInt32LE(0);
@@ -66,8 +68,6 @@ export function readComplex(buffer: Buffer, column: ColumnDefinition, database: 
         const matchingRows = flatData.filter((row) => row[foreignKeyColumn.name] === foreignKey);
 
         return matchingRows.map((row) => {
-            console.log(row.FileName);
-
             const attachment: Attachment = {
                 name: row.FileName,
                 type: row.FileType,

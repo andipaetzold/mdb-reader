@@ -1,5 +1,5 @@
 import { Database } from "../../Database.js";
-import { getComplexColumnsData } from "./complesColumnsData.js";
+import { getComplexColumnsData } from "./complexColumnsData.js";
 import { getMSysObjectsTable } from "../../systemTables.js";
 import type { ComplexColumnDefinition } from "../../column.js";
 import { maskTableId } from "../../util.js";
@@ -19,7 +19,7 @@ export function resolveFlatTableForComplexColumn(database: Database, column: Com
         columns: ["Id", "Name"],
     });
     const complexColsData = getComplexColumnsData(database);
-    const tableDefPageMasked = maskTableId(column.tableDefinitionPage);
+    const tableDefPageMasked = maskTableId(column.complex.tableDefinitionPage);
 
     for (const row of complexColsData) {
         const rowFlatTableId = row.FlatTableID;
@@ -34,8 +34,8 @@ export function resolveFlatTableForComplexColumn(database: Database, column: Com
         }
 
         const complexTypeIdMatch =
-            typeof row.ComplexTypeObjectID === "number" && row.ComplexTypeObjectID === column.complexTypeId;
-        const complexIdMatch = typeof row.ComplexID === "number" && row.ComplexID === column.complexTypeId;
+            typeof row.ComplexTypeObjectID === "number" && row.ComplexTypeObjectID === column.complex.typeId;
+        const complexIdMatch = typeof row.ComplexID === "number" && row.ComplexID === column.complex.typeId;
         const columnNameMatch =
             typeof row.ColumnName === "string" && row.ColumnName.toLowerCase() === column.name.toLowerCase();
 

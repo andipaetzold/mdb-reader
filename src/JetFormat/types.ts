@@ -58,7 +58,7 @@ export interface JetFormat {
             /**
              * Offset of the 4-byte complex type ID in the column definition. Omit if not supported.
              */
-            complexIdOffset?: number;
+            complexTypeIdOffset?: number;
         };
         columnNames: {
             /**
