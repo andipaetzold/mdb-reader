@@ -49,6 +49,11 @@ export interface ColumnDefinition extends Column {
     tableDefinitionPage?: number;
 }
 
+export type ComplexColumnDefinition = ColumnDefinition & {
+    complexTypeId: number;
+    tableDefinitionPage: number;
+};
+
 const columnTypeMap: Record<number, ColumnType> = {
     0x01: ColumnTypes.Boolean,
     0x02: ColumnTypes.Byte,
