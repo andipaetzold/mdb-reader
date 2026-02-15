@@ -1,6 +1,7 @@
 import type { Database } from "../../Database.js";
 import { getMSysObjectsTable } from "../../systemTables.js";
 import { Table } from "../../Table.js";
+import { maskTableId } from "../../util.js";
 
 export type ComplexColumnsData = {
     ComplexTypeObjectID?: number;
@@ -20,7 +21,7 @@ function getMsysComplexColumnsPage(database: Database): number {
     if (!complexColRow) {
         throw new Error(`MSysComplexColumns table not found in MSysObjects table`);
     }
-    return complexColRow.Id & 0x00ffffff;
+    return maskTableId(complexColRow.Id);
 }
 
 export function getComplexColumnsData(database: Database): ComplexColumnsData[] {

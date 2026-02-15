@@ -2,6 +2,7 @@ import { Database } from "../../Database.js";
 import { getComplexColumnsData } from "./complesColumnsData.js";
 import { getMSysObjectsTable } from "../../systemTables.js";
 import type { ComplexColumnDefinition } from "../../column.js";
+import { maskTableId } from "../../util.js";
 
 export type ResolvedFlatTable = {
     tableName: string;
@@ -18,7 +19,7 @@ export function resolveFlatTableForComplexColumn(database: Database, column: Com
         columns: ["Id", "Name"],
     });
     const complexColsData = getComplexColumnsData(database);
-    const tableDefPageMasked = maskId(column.tableDefinitionPage);
+    const tableDefPageMasked = maskTableId(column.tableDefinitionPage);
 
     for (const row of complexColsData) {
         const rowFlatTableId = row.FlatTableID;
@@ -42,8 +43,8 @@ export function resolveFlatTableForComplexColumn(database: Database, column: Com
             continue;
         }
 
-        const flatTableId = maskId(rowFlatTableId);
-        const flatTableRow = msysObjectsData.find((r) => maskId(r.Id) === flatTableId);
+        const flatTableId = maskTableId(rowFlatTableId);
+        const flatTableRow = msysObjectsData.find((r) => maskTableId(r.Id) === flatTableId);
         if (!flatTableRow) {
             throw new Error(`Flat table not found for complex column ${column.name}`);
         }
@@ -55,8 +56,4 @@ export function resolveFlatTableForComplexColumn(database: Database, column: Com
     }
 
     throw new Error(`Flat table not found for complex column ${column.name}`);
-}
-
-function maskId(id: number): number {
-    return id & 0x00ffffff;
 }

@@ -4,6 +4,7 @@ import { type SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from 
 import { Table } from "./Table.js";
 import type { SortOrder } from "./types.js";
 import { getMSysObjectsTable } from "./systemTables.js";
+import { maskTableId } from "./util.js";
 
 export interface Options {
     password?: string | undefined;
@@ -38,7 +39,7 @@ export default class MDBReader {
             return {
                 objectName: mSysObject.Name,
                 objectType: isSysObjectType(objectType) ? objectType : null,
-                tablePage: mSysObject.Id & 0x00ffffff,
+                tablePage: maskTableId(mSysObject.Id),
                 flags: mSysObject.Flags,
             };
         });
