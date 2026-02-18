@@ -52,7 +52,7 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
 
                 pageRow = rowBuffer.readUInt32LE(0);
 
-                const newChunk = rowBuffer.slice(4, rowBuffer.length);
+                const newChunk = rowBuffer.subarray(4, rowBuffer.length);
                 newChunk.copy(result, offset);
                 offset += newChunk.length;
             } while (pageRow !== 0);

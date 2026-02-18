@@ -48,7 +48,7 @@ const columnTypeMap: Record<number, ColumnType> = {
     0x08: ColumnTypes.DateTime,
     0x09: ColumnTypes.Binary,
     0x0a: ColumnTypes.Text,
-    0x0b: ColumnTypes.Long,
+    0x0b: ColumnTypes.OLE,
     0x0c: ColumnTypes.Memo,
     0x0f: ColumnTypes.RepID,
     0x10: ColumnTypes.Numeric,
