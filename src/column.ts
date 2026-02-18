@@ -35,7 +35,19 @@ export interface ColumnDefinition extends Column {
     index: number;
     variableIndex: number;
     fixedIndex: number;
+
+    complex?: {
+        typeId: number;
+        tableDefinitionPage: number;
+    };
 }
+
+export type ComplexColumnDefinition = ColumnDefinition & {
+    complex: {
+        typeId: number;
+        tableDefinitionPage: number;
+    };
+};
 
 const columnTypeMap: Record<number, ColumnType> = {
     0x01: ColumnTypes.Boolean,

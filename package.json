@@ -41,7 +41,8 @@
     "dependencies": {
         "browserify-aes": "^1.0.0",
         "create-hash": "^1.0.0",
-        "fast-xml-parser": "^4.0.0 || ^5.0.0"
+        "fast-xml-parser": "^4.0.0 || ^5.0.0",
+        "pako": "^2.0.0"
     },
     "devDependencies": {
         "@semantic-release/changelog": "6.0.3",
@@ -52,6 +53,7 @@
         "@types/mocha": "10.0.10",
         "@types/mocha-each": "2.0.4",
         "@types/node": "18.19.78",
+        "@types/pako": "2.0.4",
         "@typescript-eslint/eslint-plugin": "7.18.0",
         "@typescript-eslint/parser": "7.18.0",
         "chai": "6.0.1",

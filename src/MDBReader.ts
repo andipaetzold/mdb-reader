@@ -3,9 +3,8 @@ import { PageType, assertPageType } from "./PageType.js";
 import { type SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
 import { Table } from "./Table.js";
 import type { SortOrder } from "./types.js";
-
-const MSYS_OBJECTS_TABLE = "MSysObjects";
-const MSYS_OBJECTS_PAGE = 2;
+import { getMSysObjectsTable } from "./systemTables.js";
+import { maskTableId } from "./util.js";
 
 export interface Options {
     password?: string | undefined;
@@ -26,7 +25,7 @@ export default class MDBReader {
 
         this.#database = new Database(this.#buffer, password ?? "");
 
-        const mSysObjectsTable = new Table(MSYS_OBJECTS_TABLE, this.#database, MSYS_OBJECTS_PAGE).getData<{
+        const mSysObjectsTable = getMSysObjectsTable(this.#database).getData<{
             Id: number;
             Name: string;
             Type: number;
@@ -40,7 +39,7 @@ export default class MDBReader {
             return {
                 objectName: mSysObject.Name,
                 objectType: isSysObjectType(objectType) ? objectType : null,
-                tablePage: mSysObject.Id & 0x00ffffff,
+                tablePage: maskTableId(mSysObject.Id),
                 flags: mSysObject.Flags,
             };
         });

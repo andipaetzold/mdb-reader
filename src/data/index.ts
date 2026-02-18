@@ -1,10 +1,10 @@
-import type { Column, ColumnDefinition } from "../column.js";
+import type { ColumnDefinition } from "../column.js";
 import { Database } from "../Database.js";
 import { type ColumnType, ColumnTypes, type Value, type ValueMap } from "../types.js";
 import { readBigInt } from "./bigint.js";
 import { readBinary } from "./binary.js";
 import { readByte } from "./byte.js";
-import { readComplex } from "./complex.js";
+import { readComplex } from "./complex/index.js";
 import { readCurrency } from "./currency.js";
 import { readDateTime } from "./datetime.js";
 import { readDateTimeExtended } from "./datetimextended.js";
@@ -20,7 +20,7 @@ import { readLong } from "./long.js";
 
 const readFnByColType: {
     [type in Exclude<ColumnType, typeof ColumnTypes.Boolean>]:
-        | ((buffer: Buffer, column: Column, database: Database) => ValueMap[type])
+        | ((buffer: Buffer, column: ColumnDefinition, database: Database) => ValueMap[type])
         | undefined;
 } = {
     [ColumnTypes.BigInt]: readBigInt,

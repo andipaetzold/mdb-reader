@@ -67,7 +67,7 @@ export class Table {
 
         this.#columnCount = this.#definitionBuffer.readUInt16LE(this.#database.format.tableDefinitionPage.columnCountOffset);
         this.#variableColumnCount = this.#definitionBuffer.readUInt16LE(
-            this.#database.format.tableDefinitionPage.variableColumnCountOffset
+            this.#database.format.tableDefinitionPage.variableColumnCountOffset,
         );
         // this.#fixedColumnCount = this.#columnCount - this.#variableColumnCount;
 
@@ -75,12 +75,12 @@ export class Table {
         //     this.#database.format.tableDefinitionPage.logicalIndexCountOffset
         // );
         this.#realIndexCount = this.#definitionBuffer.readInt32LE(
-            this.#database.format.tableDefinitionPage.realIndexCountOffset
+            this.#database.format.tableDefinitionPage.realIndexCountOffset,
         );
 
         // Usage Map
         const usageMapBuffer = this.#database.findPageRow(
-            this.#definitionBuffer.readUInt32LE(this.#database.format.tableDefinitionPage.usageMapOffset)
+            this.#definitionBuffer.readUInt32LE(this.#database.format.tableDefinitionPage.usageMapOffset),
         );
         this.#dataPages = findMapPages(usageMapBuffer, this.#database);
     }
@@ -137,23 +137,23 @@ export class Table {
         for (let i = 0; i < this.#columnCount; ++i) {
             const columnBuffer = this.#definitionBuffer.slice(
                 curDefinitionPos,
-                curDefinitionPos + this.#database.format.tableDefinitionPage.columnsDefinition.entrySize
+                curDefinitionPos + this.#database.format.tableDefinitionPage.columnsDefinition.entrySize,
             );
 
             const type = getColumnType(
                 this.#definitionBuffer.readUInt8(
-                    curDefinitionPos + this.#database.format.tableDefinitionPage.columnsDefinition.typeOffset
-                )
+                    curDefinitionPos + this.#database.format.tableDefinitionPage.columnsDefinition.typeOffset,
+                ),
             );
 
             const nameLength = this.#definitionBuffer.readUIntLE(
                 namesCursorPos,
-                this.#database.format.tableDefinitionPage.columnNames.nameLengthSize
+                this.#database.format.tableDefinitionPage.columnNames.nameLengthSize,
             );
             namesCursorPos += this.#database.format.tableDefinitionPage.columnNames.nameLengthSize;
             const name = uncompressText(
                 this.#definitionBuffer.slice(namesCursorPos, namesCursorPos + nameLength),
-                this.#database.format
+                this.#database.format,
             );
             namesCursorPos += nameLength;
 
@@ -162,23 +162,35 @@ export class Table {
                 type,
                 index: columnBuffer.readUInt8(this.#database.format.tableDefinitionPage.columnsDefinition.indexOffset),
                 variableIndex: columnBuffer.readUInt8(
-                    this.#database.format.tableDefinitionPage.columnsDefinition.variableIndexOffset
+                    this.#database.format.tableDefinitionPage.columnsDefinition.variableIndexOffset,
                 ),
                 size:
                     type === ColumnTypes.Boolean
                         ? 0
                         : columnBuffer.readUInt16LE(this.#database.format.tableDefinitionPage.columnsDefinition.sizeOffset),
                 fixedIndex: columnBuffer.readUInt16LE(
-                    this.#database.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset
+                    this.#database.format.tableDefinitionPage.columnsDefinition.fixedIndexOffset,
                 ),
                 ...parseColumnFlags(
-                    columnBuffer.readUInt8(this.#database.format.tableDefinitionPage.columnsDefinition.flagsOffset)
+                    columnBuffer.readUInt8(this.#database.format.tableDefinitionPage.columnsDefinition.flagsOffset),
                 ),
             };
 
             if (type === ColumnTypes.Numeric) {
                 column.precision = columnBuffer.readUInt8(11);
                 column.scale = columnBuffer.readUInt8(12);
+            }
+
+            if (type === ColumnTypes.Complex) {
+                const complexTypeIdOffset = this.#database.format.tableDefinitionPage.columnsDefinition.complexTypeIdOffset;
+                if (complexTypeIdOffset !== undefined) {
+                    column.complex = {
+                        typeId: columnBuffer.readInt32LE(complexTypeIdOffset),
+                        tableDefinitionPage: this.#firstDefinitionPage,
+                    };
+                } else {
+                    throw new Error("Complex columns are not supported");
+                }
             }
 
             columns.push(column);
@@ -210,7 +222,7 @@ export class Table {
                   rowOffset?: number | undefined;
                   rowLimit?: number | undefined;
               }
-            | undefined = {}
+            | undefined = {},
     ): TRow[] {
         const columnDefinitions = this.#getColumnDefinitions();
 
@@ -287,7 +299,7 @@ export class Table {
     #getDataFromPage(
         pageBuffer: Buffer,
         recordOffsets: RecordOffset[],
-        columns: ReadonlyArray<ColumnDefinition>
+        columns: ReadonlyArray<ColumnDefinition>,
     ): { [column: string]: Value }[] {
         const lastColumnIndex = Math.max(...columns.map((c) => c.index), 0);
         const data: { [column: string]: Value }[] = [];
@@ -341,7 +353,7 @@ export class Table {
 
             const nullMask = pageBuffer.slice(
                 recordEnd - bitmaskSize + 1,
-                recordEnd - bitmaskSize + 1 + roundToFullByte(lastColumnIndex + 1)
+                recordEnd - bitmaskSize + 1 + roundToFullByte(lastColumnIndex + 1),
             );
             let fixedColumnsFound = 0;
 

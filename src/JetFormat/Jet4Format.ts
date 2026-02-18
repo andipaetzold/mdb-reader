@@ -52,6 +52,8 @@ export const jet4Format: JetFormat = {
             sizeOffset: 23,
 
             entrySize: 25,
+
+            complexTypeIdOffset: 9,
         },
         columnNames: {
             nameLengthSize: 2,
