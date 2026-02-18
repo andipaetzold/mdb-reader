@@ -41,12 +41,7 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
             let offset = 0;
             do {
                 const rowBuffer = database.findPageRow(pageRow);
-
-                if (result.length + rowBuffer.length - 4 > length) {
-                    break;
-                }
-
-                if (rowBuffer.length === 0) {
+                if (rowBuffer.length <= 4) {
                     break;
                 }
 
