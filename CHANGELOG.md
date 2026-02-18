@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/andipaetzold/mdb-reader/compare/v3.1.1...v3.2.0) (2026-02-18)
+
+
+### Features
+
+* support for attachment columns ([#392](https://github.com/andipaetzold/mdb-reader/issues/392)) ([825540a](https://github.com/andipaetzold/mdb-reader/commit/825540a4ef991e7ae090ac4f33a5d031ddd31498))
+
 ## [3.1.1](https://github.com/andipaetzold/mdb-reader/compare/v3.1.0...v3.1.1) (2026-02-18)
 
 
