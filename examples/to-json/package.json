@@ -3,6 +3,6 @@
     "version": "0.0.0",
     "main": "src/index.mjs",
     "dependencies": {
-        "mdb-reader": "3.1.0"
+        "mdb-reader": "3.2.0"
     }
 }

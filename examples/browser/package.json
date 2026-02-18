@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "buffer": "6.0.3",
-        "mdb-reader": "3.1.0"
+        "mdb-reader": "3.2.0"
     },
     "devDependencies": {
         "events": "3.3.0",
