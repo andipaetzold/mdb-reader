@@ -1,14 +1,14 @@
 import { expect } from "chai";
-import { readComplexOrLong } from "./complexOrLong.js";
+import { readComplex } from "./complex.js";
 
-describe("Complex Or Long", () => {
-    it("can read coomplex or long", () => {
+describe("Complex", () => {
+    it("can read coomplex", () => {
         const value = 1234567890;
 
         const buffer = Buffer.alloc(4);
         buffer.writeInt32LE(value);
 
-        const result = readComplexOrLong(buffer);
+        const result = readComplex(buffer);
         expect(result).to.eq(value);
     });
 });
