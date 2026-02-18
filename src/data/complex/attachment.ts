@@ -1,7 +1,5 @@
 import { environment } from "../../environment/index.js";
 
-const WRAPPER_HEADER_SIZE = 8;
-
 const DATA_TYPES = {
     RAW: 0,
     COMPRESSED: 1,
@@ -9,19 +7,19 @@ const DATA_TYPES = {
 
 /**
  * Decodes attachment FileData as stored in Access (OLE wrapper with optional deflate).
- *
- * Layout: 8-byte header (4-byte type flag: 0=raw, 1=compressed; 4-byte length), then
- * content. If compressed, content is deflate-compressed. Content then has a
- * length-prefixed header (4-byte header length, then headerLen-4 bytes to skip), then
- * the actual file bytes.
  */
 export function decodeAttachmentFileData(buffer: Buffer): Buffer {
-    if (buffer.length < WRAPPER_HEADER_SIZE) {
+    /**
+     * 0-3: type flag; 0=raw, 1=compressed
+     * 4-7: length
+     * 8-end: content
+     */
+    if (buffer.length < 8) {
         throw new Error("Unknown encoded attachment data format");
     }
     const typeFlag = buffer.readInt32LE(0);
     const dataLen = buffer.readInt32LE(4);
-    let content = buffer.subarray(WRAPPER_HEADER_SIZE);
+    let content = buffer.subarray(8);
 
     switch (typeFlag) {
         case DATA_TYPES.COMPRESSED:
