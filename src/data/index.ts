@@ -5,7 +5,6 @@ import { readBigInt } from "./bigint.js";
 import { readBinary } from "./binary.js";
 import { readByte } from "./byte.js";
 import { readComplex } from "./complex/index.js";
-import { readLong } from "./long.js";
 import { readCurrency } from "./currency.js";
 import { readDateTime } from "./datetime.js";
 import { readDateTimeExtended } from "./datetimextended.js";
@@ -17,6 +16,7 @@ import { readNumeric } from "./numeric.js";
 import { readOLE } from "./ole.js";
 import { readRepID } from "./repid.js";
 import { readText } from "./text.js";
+import { readLong } from "./long.js";
 
 const readFnByColType: {
     [type in Exclude<ColumnType, typeof ColumnTypes.Boolean>]:
