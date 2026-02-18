@@ -1,3 +1,11 @@
+## [3.1.1](https://github.com/andipaetzold/mdb-reader/compare/v3.1.0...v3.1.1) (2026-02-18)
+
+
+### Bug Fixes
+
+* correctly read multi-page OLE columns ([fbc3268](https://github.com/andipaetzold/mdb-reader/commit/fbc3268feb0a0f4589da01e873227923e3d39cf5))
+* read OLE columns as `Buffer` ([d348d81](https://github.com/andipaetzold/mdb-reader/commit/d348d81004f762f0dddd19bbb0e1d778af74571c))
+
 # [3.1.0](https://github.com/andipaetzold/mdb-reader/compare/v3.0.1...v3.1.0) (2025-02-28)
 
 
