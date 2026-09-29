@@ -28,12 +28,18 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
         }
         case TYPES.OTHER_PAGE: {
             // single page
+            if (buffer.length < 8) {
+                return Buffer.alloc(0);
+            }
             const pageRow = buffer.readUInt32LE(4);
             const rowBuffer = database.findPageRow(pageRow);
-            return rowBuffer.slice(0, length);
+            return rowBuffer.slice(0, Math.min(rowBuffer.length, length));
         }
         case TYPES.OTHER_PAGES: {
             // multi page
+            if (buffer.length < 8) {
+                return Buffer.alloc(0);
+            }
             let pageRow = buffer.readInt32LE(4);
             
             const result = Buffer.alloc(length);
@@ -52,7 +58,7 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
                 offset += newChunk.length;
             } while (pageRow !== 0);
 
-            return result.subarray(0, length);
+            return result.subarray(0, Math.min(offset, length));
         }
         default: {
             throw new Error(`Unknown OLE type ${type}`);
