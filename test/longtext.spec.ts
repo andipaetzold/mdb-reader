@@ -12,21 +12,25 @@ describe("LongText", () => {
         expect(data[0]!['LongText']).to.have.length(5000);
     });
 
-    it("handles corrupted or truncated memo pointers without throwing bounds error", () => {
+    it("throws error for corrupted or truncated memo pointers by default", () => {
         const path = resolve("test/data/V2016/longtext.accdb");
-        const buffer = readFileSync(path);
-        // Truncate the buffer so memo pointers point out of bounds
-        const truncatedBuffer = buffer.subarray(0, Math.floor(buffer.length / 2));
-        try {
-            const reader = new MDBReader(truncatedBuffer);
-            const tables = reader.getTableNames();
-            if (tables.includes("Table1")) {
-                const data = reader.getTable("Table1").getData();
-                expect(Array.isArray(data)).to.be.true;
-            }
-        } catch (e: any) {
-            // Should not crash with ERR_BUFFER_OUT_OF_BOUNDS / RangeError
-            expect(e?.code).to.not.equal("ERR_BUFFER_OUT_OF_BOUNDS");
-        }
+        const buffer = Buffer.from(readFileSync(path));
+        const corruptedBuffer = Buffer.from(buffer);
+        // Page 91 contains part of the chained memo pointer data
+        corruptedBuffer.fill(0, 91 * 4096 + 8, 92 * 4096);
+        const reader = new MDBReader(corruptedBuffer);
+        expect(() => {
+            reader.getTable("Table1").getData();
+        }).to.throw();
+    });
+
+    it("falls back to empty string for corrupted memo pointers when ignoreCorruptValues is true", () => {
+        const path = resolve("test/data/V2016/longtext.accdb");
+        const buffer = Buffer.from(readFileSync(path));
+        const corruptedBuffer = Buffer.from(buffer);
+        corruptedBuffer.fill(0, 91 * 4096 + 8, 92 * 4096);
+        const reader = new MDBReader(corruptedBuffer);
+        const data = reader.getTable("Table1").getData({ ignoreCorruptValues: true });
+        expect(Array.isArray(data)).to.be.true;
     });
 });
