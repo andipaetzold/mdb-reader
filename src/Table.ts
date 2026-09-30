@@ -214,6 +214,7 @@ export class Table {
      * @param columns Columns to be returned. Defaults to all columns.
      * @param rowOffset Index of the first row to be returned. 0-based. Defaults to 0.
      * @param rowLimit Maximum number of rows to be returned. Defaults to Infinity.
+     * @param ignoreCorruptValues If true, corrupted/truncated memo/OLE values fallback to empty values instead of throwing. Defaults to false.
      */
     getData<TRow extends { [column in TColumn]: Value }, TColumn extends string = string>(
         options:
@@ -221,6 +222,7 @@ export class Table {
                   columns?: ReadonlyArray<string> | undefined;
                   rowOffset?: number | undefined;
                   rowLimit?: number | undefined;
+                  ignoreCorruptValues?: boolean | undefined;
               }
             | undefined = {},
     ): TRow[] {
@@ -249,7 +251,7 @@ export class Table {
             }
 
             const recordOffsetsToLoad = recordOffsets.slice(rowsToSkip, rowsToSkip + rowsToRead);
-            const recordsOnPage = this.#getDataFromPage(pageBuffer, recordOffsetsToLoad, columns);
+            const recordsOnPage = this.#getDataFromPage(pageBuffer, recordOffsetsToLoad, columns, options);
 
             data.push(...recordsOnPage);
 
@@ -300,6 +302,7 @@ export class Table {
         pageBuffer: Buffer,
         recordOffsets: RecordOffset[],
         columns: ReadonlyArray<ColumnDefinition>,
+        options?: { ignoreCorruptValues?: boolean | undefined } | undefined,
     ): { [column: string]: Value }[] {
         const lastColumnIndex = Math.max(...columns.map((c) => c.index), 0);
         const data: { [column: string]: Value }[] = [];
@@ -389,7 +392,7 @@ export class Table {
                 if (column.type === ColumnTypes.Boolean) {
                     value = value === undefined;
                 } else if (value !== null) {
-                    value = readFieldValue(pageBuffer.slice(start, start + size), column, this.#database);
+                    value = readFieldValue(pageBuffer.slice(start, start + size), column, this.#database, options);
                 }
 
                 recordValues[column.name] = value as Value;
