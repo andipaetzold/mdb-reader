@@ -12,7 +12,8 @@ export function readCurrency(buffer: Buffer): string {
 
     let product: ReadonlyArray<number> = toArray(0, MAX_PRECISION);
     let multiplier: ReadonlyArray<number> = toArray(1, MAX_PRECISION);
-    const bytes = buffer.slice(0, bytesCount);
+    // Negating the value must not mutate caller storage.
+    const bytes = Buffer.from(buffer.subarray(0, bytesCount));
 
     let negative = false;
     if (bytes[bytesCount - 1]! & 0x80) {
