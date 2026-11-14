@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/andipaetzold/mdb-reader/compare/v3.2.0...v3.2.1) (2026-11-14)
+
+
+### Bug Fixes
+
+* preserve caller buffers when decoding negative values ([#425](https://github.com/andipaetzold/mdb-reader/issues/425)) ([f0ae007](https://github.com/andipaetzold/mdb-reader/commit/f0ae0073150d421691db7b1248d1c566f788ba7d))
+
 # [3.2.0](https://github.com/andipaetzold/mdb-reader/compare/v3.1.1...v3.2.0) (2026-02-18)
 
 
