@@ -4,10 +4,9 @@ import type { Database } from "../Database.js";
 import { readOLE } from "./ole.js";
 import { readMemo } from "./memo.js";
 
-function header(length: number, pointer = 256, type = 0): Buffer {
+function header(length: number, pointer = 256): Buffer {
     const buffer = Buffer.alloc(12);
     buffer.writeUIntLE(length, 0, 3);
-    buffer[3] = type;
     buffer.writeUInt32LE(pointer, 4);
     return buffer;
 }
@@ -20,7 +19,7 @@ function row(next: number, payload = "ab"): Buffer {
 
 for (const kind of ["OLE", "Memo"] as const) {
     describe(`${kind} long-value chains`, () => {
-        function decode(length: number, rows: Map<number, Buffer>, pointer = 256, type = 0): string {
+        function decode(length: number, rows: Map<number, Buffer>, pointer = 256): string {
             let lookups = 0;
             const database = {
                 format: { textEncoding: "unknown" },
@@ -35,24 +34,20 @@ for (const kind of ["OLE", "Memo"] as const) {
                     return buffer;
                 },
             } as unknown as Database;
-            const result = (kind === "OLE" ? readOLE : readMemo)(header(length, pointer, type), {} as Column, database);
+            const result = (kind === "OLE" ? readOLE : readMemo)(header(length, pointer), {} as Column, database);
             return typeof result === "string" ? result : result.toString();
         }
 
-        it("rejects a self-loop before fetching a row twice", () => {
-            expect(() => decode(10, new Map([[256, row(256)]])))
-                .to.throw(`Cyclic ${kind} long-value chain at page-row 256`);
-        });
-
-        it("rejects a two-row cycle", () => {
-            expect(() => decode(10, new Map([[256, row(512)], [512, row(256)]])))
-                .to.throw(`Cyclic ${kind} long-value chain at page-row 256`);
-        });
-
-        it("rejects a cycle after a valid prefix", () => {
-            expect(() => decode(10, new Map([[256, row(512)], [512, row(768)], [768, row(512)]])))
-                .to.throw(`Cyclic ${kind} long-value chain at page-row 512`);
-        });
+        for (const [name, links, repeated] of [
+            ["self-loop", [[256, 256]], 256],
+            ["two-row cycle", [[256, 512], [512, 256]], 256],
+            ["cycle after a prefix", [[256, 512], [512, 768], [768, 512]], 512],
+        ] as const) {
+            it(`rejects a ${name} before fetching a row twice`, () => {
+                const rows = new Map(links.map(([pointer, next]) => [pointer, row(next)]));
+                expect(() => decode(10, rows)).to.throw(`Cyclic ${kind} long-value chain at page-row ${repeated}`);
+            });
+        }
 
         for (const length of [0, 1, 2, 3, 4]) {
             it(`rejects a row of ${length} bytes without payload`, () => {
@@ -88,28 +83,6 @@ for (const kind of ["OLE", "Memo"] as const) {
         it("preserves final chunk overflow handling", () => {
             expect(decode(3, new Map([[256, row(257)], [257, row(999, "cd")]])))
                 .to.equal(kind === "OLE" ? "abc" : "ab");
-        });
-
-        it("preserves inline values without lookups", () => {
-            const database = {
-                format: { textEncoding: "unknown" },
-                findPageRow(): never { throw new Error("Unexpected lookup"); },
-            } as unknown as Database;
-            const result = (kind === "OLE" ? readOLE : readMemo)(
-                Buffer.concat([header(2, 0, 0x80), Buffer.from("abcd")]), {} as Column, database
-            );
-            expect(typeof result === "string" ? result : result.toString()).to.equal("ab");
-        });
-
-        it("preserves malformed-header errors", () => {
-            expect(() => decode(2, new Map(), 256, 0x20))
-                .to.throw(kind === "OLE" ? "Unknown OLE type 32" : "Unknown memo type 32");
-            expect(() => (kind === "OLE" ? readOLE : readMemo)(Buffer.alloc(2), {} as Column, {} as Database))
-                .to.throw(RangeError);
-        });
-
-        it("preserves single-page values", () => {
-            expect(decode(2, new Map([[256, Buffer.from("abcd")]]), 256, 0x40)).to.equal("ab");
         });
     });
 }

@@ -30,12 +30,9 @@ describe("OLE", () => {
             import { readFileSync } from "node:fs";
             import { strict as assert } from "node:assert";
             import MDBReader from ${JSON.stringify(new URL("../src/index.js", import.meta.url).href)};
-            import { Database } from ${JSON.stringify(new URL("../src/Database.js", import.meta.url).href)};
             const buffer = Buffer.from(readFileSync(${JSON.stringify(resolve("test/data/V2007/ole.accdb"))}));
-            const database = new Database(buffer, "");
-            const page = database.getPage(136);
-            const rowOffset = page.readUInt16LE(database.format.dataPage.recordCountOffset + 2);
-            buffer.writeUInt32LE(136 * 256, 136 * database.format.pageSize + rowOffset);
+            const rowOffset = buffer.readUInt16LE(136 * 4096 + 14);
+            buffer.writeUInt32LE(136 * 256, 136 * 4096 + rowOffset);
             assert.throws(() => new MDBReader(buffer).getTable("Table1").getData(), {
                 message: "Cyclic OLE long-value chain at page-row 34816"
             });
