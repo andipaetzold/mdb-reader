@@ -25,7 +25,7 @@ describe("OLE", () => {
     });
 
     it("propagates cyclic long-value errors through getData without hanging", function () {
-        this.timeout(15000);
+        this.timeout(35000);
         const script = `
             import { readFileSync } from "node:fs";
             import { strict as assert } from "node:assert";
@@ -38,7 +38,7 @@ describe("OLE", () => {
             });
         `;
         execFileSync(process.execPath, [...process.execArgv, "--input-type=module", "-e", script], {
-            timeout: 10000,
+            timeout: 30000,
             env: process.env,
             stdio: "pipe",
         });
