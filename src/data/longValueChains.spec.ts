@@ -4,9 +4,9 @@ import type { Database } from "../Database.js";
 import { readMemo } from "./memo.js";
 import { readOLE } from "./ole.js";
 
-function header(pointer: number): Buffer {
+function header(pointer: number, length = 100): Buffer {
     const buffer = Buffer.alloc(12);
-    buffer.writeUIntLE(100, 0, 3);
+    buffer.writeUIntLE(length, 0, 3);
     buffer.writeUInt32LE(pointer, 4);
     return buffer;
 }
@@ -26,11 +26,7 @@ function database(rows: Map<number, Buffer>): Database {
             if (++lookups > 20) {
                 throw new Error("Lookup limit exceeded");
             }
-            const buffer = rows.get(pointer);
-            if (!buffer) {
-                throw new Error(`Unexpected pointer ${pointer}`);
-            }
-            return buffer;
+            return rows.get(pointer)!;
         },
     } as unknown as Database;
 }
@@ -45,8 +41,7 @@ for (const [name, read] of [["memo", readMemo], ["OLE", readOLE]] as const) {
             ["unsigned pointer cycle", [[0x80000100, row(0x80000100)]], 0x80000100],
         ] as const) {
             it(`rejects ${label}`, () => {
-                const db = database(new Map(rows));
-                expect(() => read(header(rows[0][0]), column, db)).to.throw(
+                expect(() => read(header(rows[0][0]), column, database(new Map(rows)))).to.throw(
                     `Corrupted ${name} chain: repeated page/row pointer ${repeated}`,
                 );
             });
@@ -54,10 +49,8 @@ for (const [name, read] of [["memo", readMemo], ["OLE", readOLE]] as const) {
 
         it("reads distinct rows on the same page and permits independent reads", () => {
             const db = database(new Map([[256, row(257, "a")], [257, row(0, "b")]]));
-            const input = header(256);
-            input.writeUIntLE(2, 0, 3);
             for (let i = 0; i < 2; i++) {
-                const result = read(input, column, db);
+                const result = read(header(256, 2), column, db);
                 expect(Buffer.isBuffer(result) ? result.toString("ascii") : result).to.equal("ab");
             }
         });
@@ -65,12 +58,10 @@ for (const [name, read] of [["memo", readMemo], ["OLE", readOLE]] as const) {
 }
 
 describe("pointer-only memo chains", () => {
-    for (const rows of [
-        [[256, row(256, "")]],
-        [[256, row(257, "")], [257, row(256, "")]],
-    ] as const) {
-        it(`rejects a ${rows.length}-row cycle`, () => {
-            expect(() => readMemo(header(256), {} as Column, database(new Map(rows)))).to.throw(
+    for (const next of [[256], [257, 256]]) {
+        it(`rejects a ${next.length}-row cycle`, () => {
+            const rows = new Map(next.map((pointer, i) => [256 + i, row(pointer, "")]));
+            expect(() => readMemo(header(256), {} as Column, database(rows))).to.throw(
                 "Corrupted memo chain: repeated page/row pointer 256",
             );
         });
