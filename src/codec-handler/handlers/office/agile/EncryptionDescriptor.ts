@@ -22,7 +22,11 @@ export function parseEncryptionDescriptor(buffer: Buffer): EncryptionDescriptor 
     const keyData = parsedXML.encryption.keyData;
     const keyEncryptor = parsedXML.encryption.keyEncryptors.keyEncryptor["p:encryptedKey"];
 
-    const spinCount = validateSpinCount(keyEncryptor.spinCount);
+    const { spinCount } = keyEncryptor;
+    // MS-OFFCRYPTO section 2.3.4.10 limits spinCount to 10,000,000.
+    if (typeof spinCount !== "number" || !Number.isInteger(spinCount) || spinCount < 0 || spinCount > 10_000_000) {
+        throw new Error("Invalid spinCount " + String(spinCount));
+    }
 
     return {
         keyData: {
@@ -57,15 +61,6 @@ export function parseEncryptionDescriptor(buffer: Buffer): EncryptionDescriptor 
             },
         },
     };
-}
-
-function validateSpinCount(value: unknown): number {
-    // MS-OFFCRYPTO section 2.3.4.10 limits spinCount to 10,000,000.
-    if (typeof value !== "number" || !Number.isInteger(value) || value < 0 || value > 10_000_000) {
-        throw new Error("Invalid spinCount " + String(value));
-    }
-
-    return value;
 }
 
 interface XMLEncryptionProvider {
