@@ -34,15 +34,20 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
         }
         case TYPES.OTHER_PAGES: {
             // multi page
-            let pageRow = buffer.readInt32LE(4);
+            let pageRow = buffer.readUInt32LE(4);
+            const visited = new Set<number>();
             
             const result = Buffer.alloc(length);
             
             let offset = 0;
-            do {
+            while (offset < length) {
+                if (visited.has(pageRow)) {
+                    throw new Error(`Cyclic OLE long-value chain at page-row ${pageRow}`);
+                }
+                visited.add(pageRow);
                 const rowBuffer = database.findPageRow(pageRow);
                 if (rowBuffer.length <= 4) {
-                    break;
+                    throw new Error("Invalid OLE long-value row: no payload");
                 }
 
                 pageRow = rowBuffer.readUInt32LE(0);
@@ -50,7 +55,10 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
                 const newChunk = rowBuffer.subarray(4);
                 newChunk.copy(result, offset);
                 offset += newChunk.length;
-            } while (pageRow !== 0);
+                if (pageRow === 0) {
+                    break;
+                }
+            }
 
             return result.subarray(0, length);
         }

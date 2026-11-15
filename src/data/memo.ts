@@ -27,23 +27,31 @@ export function readMemo(buffer: Buffer, _col: Column, database: Database): stri
         }
 
         case TYPE_OTHER_PAGES: {
-            let pageRow = buffer.readInt32LE(4);
+            let pageRow = buffer.readUInt32LE(4);
+            const visited = new Set<number>();
             let memoDataBuffer = Buffer.alloc(0);
-            do {
+            while (memoDataBuffer.length < memoLength) {
+                if (visited.has(pageRow)) {
+                    throw new Error(`Cyclic Memo long-value chain at page-row ${pageRow}`);
+                }
+                visited.add(pageRow);
                 const rowBuffer = database.findPageRow(pageRow);
+
+                if (rowBuffer.length <= 4) {
+                    throw new Error("Invalid Memo long-value row: no payload");
+                }
 
                 if (memoDataBuffer.length + rowBuffer.length - 4 > memoLength) {
                     break;
                 }
 
-                if (rowBuffer.length === 0) {
-                    break;
-                }
-
                 memoDataBuffer = Buffer.concat([memoDataBuffer, rowBuffer.slice(4)]);
 
-                pageRow = rowBuffer.readInt32LE(0);
-            } while (pageRow !== 0);
+                pageRow = rowBuffer.readUInt32LE(0);
+                if (pageRow === 0) {
+                    break;
+                }
+            }
 
             const compressedText = memoDataBuffer.slice(0, memoLength);
             return uncompressText(compressedText, database.format);
