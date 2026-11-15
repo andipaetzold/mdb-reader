@@ -34,7 +34,7 @@ describe("Encryption", () => {
         });
 
         it("should throw for wrong password", () => {
-            expect(() => new MDBReader(buffer, { password: "wrong-password" })).to.throw;
+            expect(() => new MDBReader(buffer, { password: "wrong-password" })).to.throw("Wrong password");
         });
     });
 });
