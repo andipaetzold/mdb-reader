@@ -41,9 +41,21 @@ const readFnByColType: {
     [ColumnTypes.RepID]: readRepID,
 };
 
-export function readFieldValue(buffer: Buffer, column: ColumnDefinition, database: Database): Value | undefined {
+export function readFieldValue(
+    buffer: Buffer,
+    column: ColumnDefinition,
+    database: Database,
+    options?: { ignoreCorruptValues?: boolean | undefined } | undefined,
+): Value | undefined {
     if (column.type === ColumnTypes.Boolean) {
         throw new Error("readFieldValue does not handle type boolean");
+    }
+
+    if (column.type === ColumnTypes.Memo) {
+        return readMemo(buffer, column, database, options);
+    }
+    if (column.type === ColumnTypes.OLE) {
+        return readOLE(buffer, column, database, options);
     }
 
     const read = readFnByColType[column.type];
