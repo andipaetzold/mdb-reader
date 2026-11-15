@@ -8,6 +8,8 @@ const xmlParser = new XMLParser({
 });
 
 const RESERVED_VALUE = 0x40;
+// MS-OFFCRYPTO section 2.3.4.10 limits spinCount to 10,000,000.
+const MAX_SPIN_COUNT = 10_000_000;
 
 export function parseEncryptionDescriptor(buffer: Buffer): EncryptionDescriptor {
     const reservedValue = buffer.readInt16LE(4);
@@ -23,8 +25,7 @@ export function parseEncryptionDescriptor(buffer: Buffer): EncryptionDescriptor 
     const keyEncryptor = parsedXML.encryption.keyEncryptors.keyEncryptor["p:encryptedKey"];
 
     const { spinCount } = keyEncryptor;
-    // MS-OFFCRYPTO section 2.3.4.10 limits spinCount to 10,000,000.
-    if (typeof spinCount !== "number" || !Number.isInteger(spinCount) || spinCount < 0 || spinCount > 10_000_000) {
+    if (typeof spinCount !== "number" || !Number.isInteger(spinCount) || spinCount < 0 || spinCount > MAX_SPIN_COUNT) {
         throw new Error("Invalid spinCount " + String(spinCount));
     }
 
