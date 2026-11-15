@@ -35,11 +35,17 @@ export function readOLE(buffer: Buffer, _col: Column, database: Database): Buffe
         case TYPES.OTHER_PAGES: {
             // multi page
             let pageRow = buffer.readInt32LE(4);
+            const visited = new Set<number>();
             
             const result = Buffer.alloc(length);
             
             let offset = 0;
             do {
+                pageRow = pageRow >>> 0;
+                if (visited.has(pageRow)) {
+                    throw new Error(`Corrupted OLE chain: repeated page/row pointer ${pageRow}`);
+                }
+                visited.add(pageRow);
                 const rowBuffer = database.findPageRow(pageRow);
                 if (rowBuffer.length <= 4) {
                     break;

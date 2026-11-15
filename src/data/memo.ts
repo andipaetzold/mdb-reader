@@ -28,8 +28,14 @@ export function readMemo(buffer: Buffer, _col: Column, database: Database): stri
 
         case TYPE_OTHER_PAGES: {
             let pageRow = buffer.readInt32LE(4);
+            const visited = new Set<number>();
             let memoDataBuffer = Buffer.alloc(0);
             do {
+                pageRow = pageRow >>> 0;
+                if (visited.has(pageRow)) {
+                    throw new Error(`Corrupted memo chain: repeated page/row pointer ${pageRow}`);
+                }
+                visited.add(pageRow);
                 const rowBuffer = database.findPageRow(pageRow);
 
                 if (memoDataBuffer.length + rowBuffer.length - 4 > memoLength) {
