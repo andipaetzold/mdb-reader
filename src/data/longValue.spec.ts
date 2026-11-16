@@ -42,10 +42,11 @@ for (const kind of ["OLE", "Memo"] as const) {
             ["self-loop", [[256, 256]], 256],
             ["two-row cycle", [[256, 512], [512, 256]], 256],
             ["cycle after a prefix", [[256, 512], [512, 768], [768, 512]], 512],
+            ["unsigned pointer cycle", [[0x80000100, 0x80000100]], 0x80000100],
         ] as const) {
             it(`rejects a ${name} before fetching a row twice`, () => {
                 const rows = new Map(links.map(([pointer, next]) => [pointer, row(next)]));
-                expect(() => decode(10, rows)).to.throw(`Cyclic ${kind} long-value chain at page-row ${repeated}`);
+                expect(() => decode(10, rows, links[0][0])).to.throw(`Cyclic ${kind} long-value chain at page-row ${repeated}`);
             });
         }
 
@@ -73,6 +74,26 @@ for (const kind of ["OLE", "Memo"] as const) {
         it("reads distinct rows on the same page", () => {
             expect(decode(6, new Map([[256, row(257)], [257, row(258, "cd")], [258, row(0, "ef")]])))
                 .to.equal("abcdef");
+        });
+
+        it("permits independent reads of the same chain", () => {
+            const rows = new Map([[256, row(257)], [257, row(0, "cd")]]);
+            let lookups = 0;
+            const database = {
+                format: { textEncoding: "unknown" },
+                findPageRow(pageRow: number): Buffer {
+                    if (++lookups > 4) {
+                        throw new Error("Lookup limit exceeded");
+                    }
+                    return rows.get(pageRow)!;
+                },
+            } as unknown as Database;
+            const read = kind === "OLE" ? readOLE : readMemo;
+            for (let i = 0; i < 2; i++) {
+                const result = read(header(4), {} as Column, database);
+                expect(typeof result === "string" ? result : result.toString()).to.equal("abcd");
+            }
+            expect(lookups).to.equal(4);
         });
 
         it("reads initial and continuation pointers as unsigned", () => {
