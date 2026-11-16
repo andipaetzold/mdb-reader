@@ -27,11 +27,10 @@ export function readMemo(buffer: Buffer, _col: Column, database: Database): stri
         }
 
         case TYPE_OTHER_PAGES: {
-            let pageRow = buffer.readInt32LE(4);
+            let pageRow = buffer.readUInt32LE(4);
             const visited = new Set<number>();
             let memoDataBuffer = Buffer.alloc(0);
             do {
-                pageRow = pageRow >>> 0;
                 if (visited.has(pageRow)) {
                     throw new Error(`Corrupted memo chain: repeated page/row pointer ${pageRow}`);
                 }
@@ -48,7 +47,7 @@ export function readMemo(buffer: Buffer, _col: Column, database: Database): stri
 
                 memoDataBuffer = Buffer.concat([memoDataBuffer, rowBuffer.slice(4)]);
 
-                pageRow = rowBuffer.readInt32LE(0);
+                pageRow = rowBuffer.readUInt32LE(0);
             } while (pageRow !== 0);
 
             const compressedText = memoDataBuffer.slice(0, memoLength);
