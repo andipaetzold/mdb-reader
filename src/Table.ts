@@ -45,7 +45,12 @@ export class Table {
         // Concat all table definition pages
         let nextDefinitionPage = this.#firstDefinitionPage;
         let buffer: Buffer | undefined;
+        const visitedDefinitionPages = new Set<number>();
         while (nextDefinitionPage > 0) {
+            if (visitedDefinitionPages.has(nextDefinitionPage)) {
+                throw new Error(`Cyclic table definition for table "${name}": repeated page ${nextDefinitionPage}`);
+            }
+            visitedDefinitionPages.add(nextDefinitionPage);
             const curBuffer = this.#database.getPage(nextDefinitionPage);
             assertPageType(curBuffer, PageType.TableDefinition);
 
