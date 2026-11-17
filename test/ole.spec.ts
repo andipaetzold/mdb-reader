@@ -1,3 +1,5 @@
+import { expect } from "chai";
+import { createHash } from "node:crypto";
 import { readFileSync } from "fs";
 import MDBReader from "../src/index.js";
 import { resolve } from "path";
@@ -10,10 +12,22 @@ describe("OLE", () => {
         buffer = readFileSync(path);
     });
 
-    it("reads ole data ", () => {
+    it("reads complete ole data", () => {
         const reader = new MDBReader(buffer);
-        const table = reader.getTable("Table1");
-        table.getData();
-        // TODO: check for correct values
+        const data = reader.getTable("Table1").getData();
+        expect(data).to.have.length(11);
+        const payload = data.find((entry) => entry["ID"] === 2)?.["ole_data"];
+        expect(Buffer.isBuffer(payload)).to.equal(true);
+        expect(payload).to.have.length(94602);
+        expect(createHash("sha256").update(payload as Buffer).digest("hex"))
+            .to.equal("334e3631b06b696ac63fe0dd484109c9f9e75cf58c3655e08ede032d557071dc");
+    });
+
+    it("rejects cyclic OLE data through getData", () => {
+        const rowOffset = buffer.readUInt16LE(136 * 4096 + 14);
+        buffer.writeUInt32LE(136 * 256, 136 * 4096 + rowOffset);
+
+        expect(() => new MDBReader(buffer).getTable("Table1").getData())
+            .to.throw("Cyclic OLE long-value chain at page-row 34816");
     });
 });

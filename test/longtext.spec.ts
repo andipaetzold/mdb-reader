@@ -4,6 +4,15 @@ import { resolve } from "path";
 import MDBReader from "../src/index.js";
 
 describe("LongText", () => {
+    it("rejects a pointer-only cycle", () => {
+        const buffer = readFileSync(resolve("test/data/V2016/longtext.accdb"));
+        const page = 91 * 4096;
+        buffer.writeUInt16LE(4092, page + 14);
+        buffer.writeUInt32LE(91 << 8, page + 4092);
+        const table = new MDBReader(buffer).getTable("Table1");
+        expect(() => table.getData()).to.throw("Invalid Memo long-value row: no payload");
+    });
+
     it("multiple pages", () => {
         const path = resolve("test/data/V2016/longtext.accdb");
         const buffer = readFileSync(path);
