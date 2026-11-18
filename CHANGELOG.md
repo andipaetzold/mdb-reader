@@ -1,3 +1,12 @@
+## [3.2.2](https://github.com/andipaetzold/mdb-reader/compare/v3.2.1...v3.2.2) (2026-11-18)
+
+
+### Bug Fixes
+
+* **data:** prevent cyclic OLE and Memo reads ([#433](https://github.com/andipaetzold/mdb-reader/issues/433)) ([2f2158a](https://github.com/andipaetzold/mdb-reader/commit/2f2158a6c322d86e986fd3158d5ccc2410753922))
+* **encryption:** bound agile spin counts before key derivation ([#431](https://github.com/andipaetzold/mdb-reader/issues/431)) ([16b02db](https://github.com/andipaetzold/mdb-reader/commit/16b02dbc5b93a1a9ee29cfdc7364436438b831ba))
+* **table:** reject cyclic table definition chains ([#430](https://github.com/andipaetzold/mdb-reader/issues/430)) ([a5045d0](https://github.com/andipaetzold/mdb-reader/commit/a5045d0dfda7e7fc4977aa07bbc3dbfcda4eeb81))
+
 ## [3.2.1](https://github.com/andipaetzold/mdb-reader/compare/v3.2.0...v3.2.1) (2026-11-14)
 
 
