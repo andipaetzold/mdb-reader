@@ -29,36 +29,119 @@ jobs:
             - name: Test
               run: npm test
 
-    release:
-        name: Release
+    release-please:
+        name: Release Please
         runs-on: ubuntu-22.04
         needs: build-test
-        # https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md#node-project-configuration
+        if: github.ref == 'refs/heads/main'
         permissions:
-            contents: write # to be able to publish a GitHub release
-            issues: write # to be able to comment on released issues
-            pull-requests: write # to be able to comment on released pull requests
-            id-token: write # to enable use of OIDC for npm provenance
+            contents: write
+            issues: write
+            pull-requests: write
+        outputs:
+            release_created: ${{ steps.release.outputs.release_created }}
+            tag_name: ${{ steps.release.outputs.tag_name }}
         steps:
             - uses: actions/checkout@v7
               with:
-                  fetch-depth: 0
+                  ref: ${{ github.sha }}
+                  fetch-depth: 2
+                  persist-credentials: false
 
-            - name: Use node ${{ matrix.node }}
-              uses: actions/setup-node@v7.0.0
+            - name: Check for a pending release at this commit
+              id: release_gate
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  manifest=.release-please-manifest.json
+                  read_version() {
+                      if git cat-file -e "$1:$manifest" 2>/dev/null; then
+                          if ! git show "$1:$manifest" | jq -ers 'select(length == 1) | .[0]["."] | strings | select(length > 0)'; then
+                              echo "::error::Invalid root release version in $1:$manifest" >&2
+                              return 1
+                          fi
+                      fi
+                  }
+
+                  previous_version=$(read_version HEAD^)
+                  current_version=$(read_version HEAD)
+                  release_eligible=false
+                  if [[ -n "$previous_version" && -n "$current_version" && "$previous_version" != "$current_version" ]]; then
+                      # The Node strategy includes the package name in the PR branch even when tags omit it.
+                      release_eligible=$(
+                          gh api --method GET --paginate "/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" |
+                              jq -s --arg sha "$GITHUB_SHA" --arg repo "$GITHUB_REPOSITORY" '
+                                  any(.[][];
+                                      .merge_commit_sha == $sha and .merged_at != null and
+                                      .base.repo.full_name == $repo and .base.ref == "main" and
+                                      .head.repo.full_name == $repo and
+                                      .head.ref == "release-please--branches--main--components--mdb-reader" and
+                                      any(.labels[]?; .name == "autorelease: pending")
+                                  )'
+                      )
+                  fi
+                  echo "release_eligible=$release_eligible" >> "$GITHUB_OUTPUT"
+
+            - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+              id: release
               with:
-                  cache: "npm"
-                  node-version-file: ".nvmrc"
-            - name: Node version
-              run: node --version
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  target-branch: main
+                  skip-github-release: ${{ steps.release_gate.outputs.release_eligible != 'true' }}
+                  skip-github-pull-request: ${{ steps.release_gate.outputs.release_eligible == 'true' }}
+
+    update-next-release-preview:
+        name: Update Next Release Preview
+        runs-on: ubuntu-22.04
+        needs: release-please
+        if: needs.release-please.outputs.release_created == 'true'
+        permissions:
+            contents: write
+            issues: write
+            pull-requests: write
+        steps:
+            # A push can skip its preview update while the previous release is still pending.
+            - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  target-branch: main
+                  skip-github-release: true
+
+    publish-npm:
+        name: Publish to npm
+        runs-on: ubuntu-22.04
+        needs: release-please
+        if: needs.release-please.outputs.release_created == 'true'
+        permissions:
+            contents: read
+            id-token: write
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: refs/tags/${{ needs.release-please.outputs.tag_name }}
+                  persist-credentials: false
+
+            - name: Setup node
+              uses: actions/setup-node@v7
+              with:
+                  node-version: "^24.11.0" # Node 24.11.0 includes npm 11.6.1.
+                  registry-url: https://registry.npmjs.org
+                  package-manager-cache: false
+
+            - name: Verify tagged source commit
+              shell: bash
+              run: |
+                  tag_sha=$(git rev-parse HEAD)
+                  if [[ "$tag_sha" != "$GITHUB_SHA" ]]; then
+                      echo "::error::Release tag points to $tag_sha, expected workflow commit $GITHUB_SHA"
+                      exit 1
+                  fi
 
             - name: Install dependencies
               run: npm ci
-            - name: Release
-              run: npm run semantic-release
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - name: Publish to npm
+              run: npm publish
 
     examples:
         name: Examples
@@ -70,7 +153,6 @@ jobs:
             - name: Setup node
               uses: actions/setup-node@v7
               with:
-                  node-version: ${{ matrix.node }}
                   cache: "npm"
 
             - name: Install dependencies (examples/browser)

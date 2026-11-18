@@ -45,8 +45,6 @@
         "pako": "^2.0.0"
     },
     "devDependencies": {
-        "@semantic-release/changelog": "6.0.3",
-        "@semantic-release/git": "10.0.1",
         "@tsconfig/node18": "18.2.4",
         "@tsconfig/strictest": "2.0.5",
         "@types/chai": "5.0.1",
@@ -61,7 +59,6 @@
         "mocha": "11.1.0",
         "mocha-each": "2.0.1",
         "rimraf": "6.0.1",
-        "semantic-release": "24.2.3",
         "ts-node": "10.9.2",
         "typescript": "5.8.2"
     },
@@ -84,7 +81,6 @@
         "test:esm": "npm run test:esm:node && npm run test:esm:browser",
         "test:esm:node": "node --input-type=module -e \"import MDBReader from './lib/node/index.js';\"",
         "test:esm:browser": "node --input-type=module -e \"import MDBReader from './lib/browser/index.js';\"",
-        "lint": "eslint . --ext .ts",
-        "semantic-release": "semantic-release"
+        "lint": "eslint . --ext .ts"
     }
 }
