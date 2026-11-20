@@ -8,6 +8,9 @@ jobs:
 
         steps:
             - uses: actions/checkout@v7
+            - uses: actions/setup-node@v7
+              with:
+                  node-version-file: ".nvmrc"
             - uses: preactjs/compressed-size-action@v2
               with:
                   pattern: "**/lib/**/*.js"
