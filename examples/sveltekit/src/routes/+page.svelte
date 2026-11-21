@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getTableNames } from '$lib/database';
+	import { getTableNames } from '#lib/database.ts';
 
 	let { form } = $props();
 
