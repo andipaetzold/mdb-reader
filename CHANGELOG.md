@@ -1,3 +1,5 @@
+# Changelog
+
 ## [3.2.2](https://github.com/andipaetzold/mdb-reader/compare/v3.2.1...v3.2.2) (2026-11-18)
 
 
