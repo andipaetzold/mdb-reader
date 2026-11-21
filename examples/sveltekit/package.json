@@ -23,6 +23,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"mdb-reader": "3.2.0"
+		"mdb-reader": "3.2.2"
 	}
 }
