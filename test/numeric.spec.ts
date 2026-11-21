@@ -1,11 +1,10 @@
+import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 import MDBReader from "../src/index.js";
-import forEach from "mocha-each";
-import { expect } from "chai";
 
 describe("Numeric", () => {
-    forEach([["V2000/numeric.mdb"], ["V2003/numeric.mdb"], ["V2007/numeric.accdb"], ["V2010/numeric.accdb"]]).describe(
+    describe.each([["V2000/numeric.mdb"], ["V2003/numeric.mdb"], ["V2007/numeric.accdb"], ["V2010/numeric.accdb"]])(
         "%s",
         (filename) => {
             const path = resolve("test/data", filename);
@@ -24,15 +23,15 @@ describe("Numeric", () => {
                 const table = reader.getTable("test");
                 const rows = table.getData();
 
-                expect(rows.length).to.eq(1);
+                expect(rows.length).toBe(1);
 
                 const row = rows[0]!;
-                expect(row['col2']).to.eq("1");
-                expect(row['col3']).to.eq("0");
-                expect(row['col4']).to.eq("0");
-                expect(row['col5']).to.eq("4");
-                expect(row['col6']).to.eq("-1");
-                expect(row['col7']).to.eq("1");
+                expect(row['col2']).toBe("1");
+                expect(row['col3']).toBe("0");
+                expect(row['col4']).toBe("0");
+                expect(row['col5']).toBe("4");
+                expect(row['col6']).toBe("-1");
+                expect(row['col7']).toBe("1");
             });
         }
     );

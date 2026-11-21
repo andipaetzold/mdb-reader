@@ -22,7 +22,6 @@ export function readNumeric(buffer: Buffer, column: Pick<Column, "scale" | "prec
     return buildValue(
         product,
         // Scale is always set for numeric columns
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         column.scale!,
         negative
     );

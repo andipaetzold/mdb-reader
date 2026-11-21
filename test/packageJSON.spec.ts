@@ -1,6 +1,5 @@
+import { describe, it, expect } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
-import { it } from "mocha";
-import { expect } from "chai";
 
 function getPathsFromPackageJSON(): string[] {
     const packageJSON = JSON.parse(readFileSync("package.json", "utf-8"));
@@ -24,7 +23,7 @@ describe("package.json", () => {
         const paths = getPathsFromPackageJSON();
 
         for (const path of paths) {
-            expect(existsSync(path), `Path ${path} does not exist`).to.be.true;
+            expect(existsSync(path), `Path ${path} does not exist`).toBe(true);
         }
     });
 });

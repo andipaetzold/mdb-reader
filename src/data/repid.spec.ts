@@ -1,10 +1,9 @@
+import { describe, it, expect } from "vitest";
 import { readRepID } from "./repid.js";
-import forEach from "mocha-each";
-import { expect } from "chai";
 
 describe("RepID", () => {
     // hexbuffer from v1.0.6 results, expectedResult from Access UI
-    forEach([
+    it.each([
         [
             [0x9c, 0xd8, 0x5c, 0xf7, 0xdb, 0xf0, 0x9f, 0x40, 0xb6, 0x47, 0xf5, 0x00, 0xa8, 0x83, 0x16, 0xf0],
             "F75CD89C-F0DB-409F-B647-F500A88316F0",
@@ -29,8 +28,8 @@ describe("RepID", () => {
             [0x99, 0xbb, 0xf7, 0x5c, 0x9e, 0x3f, 0x54, 0x49, 0xa5, 0x09, 0x5f, 0x96, 0xa2, 0x2b, 0x1d, 0x70],
             "5CF7BB99-3F9E-4954-A509-5F96A22B1D70",
         ],
-    ]).it("reads numeric value", (hexbuffer, expectedResult) => {
+    ])("reads numeric value", (hexbuffer, expectedResult) => {
         const result = readRepID(Buffer.from(hexbuffer));
-        expect(result).to.eq((expectedResult as string).toLowerCase());
+        expect(result).toBe((expectedResult as string).toLowerCase());
     });
 });

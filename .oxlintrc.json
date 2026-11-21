@@ -1,0 +1,96 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "plugins": [
+        "typescript"
+    ],
+    "jsPlugins": [
+        "./lint-rules.js"
+    ],
+    "categories": {
+        "correctness": "error"
+    },
+    "ignorePatterns": [
+        "node_modules",
+        "lib",
+        "**/.svelte-kit",
+        "**/build",
+        "**/dist"
+    ],
+    "rules": {
+        "no-unused-vars": [
+            "warn",
+            {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_",
+                "ignoreRestSiblings": true
+            }
+        ],
+        "no-restricted-imports": [
+            "error",
+            "assert",
+            "buffer",
+            "child_process",
+            "cluster",
+            "crypto",
+            "dgram",
+            "dns",
+            "domain",
+            "events",
+            "freelist",
+            "fs",
+            "http",
+            "https",
+            "module",
+            "net",
+            "os",
+            "path",
+            "punycode",
+            "querystring",
+            "readline",
+            "repl",
+            "smalloc",
+            "stream",
+            "string_decoder",
+            "sys",
+            "timers",
+            "tls",
+            "tracing",
+            "tty",
+            "url",
+            "util",
+            "vm",
+            "zlib"
+        ],
+        "project/no-runtime-enum": "error",
+        "typescript/ban-ts-comment": "error",
+        "typescript/ban-types": "error",
+        "typescript/no-duplicate-enum-values": "error",
+        "typescript/no-explicit-any": "error",
+        "typescript/no-extra-non-null-assertion": "error",
+        "typescript/no-misused-new": "error",
+        "typescript/no-namespace": "error",
+        "typescript/no-non-null-asserted-optional-chain": "error",
+        "typescript/no-this-alias": "error",
+        "typescript/no-unnecessary-type-constraint": "error",
+        "typescript/no-unsafe-declaration-merging": "error",
+        "typescript/no-var-requires": "error",
+        "typescript/prefer-as-const": "error",
+        "typescript/prefer-namespace-keyword": "error",
+        "typescript/triple-slash-reference": "error"
+    },
+    "overrides": [
+        {
+            "files": [
+                "src/**/*.spec.ts",
+                "src/environment/*.ts",
+                "test/**",
+                "typings/**",
+                "examples/**"
+            ],
+            "rules": {
+                "no-restricted-imports": "off"
+            }
+        }
+    ]
+}

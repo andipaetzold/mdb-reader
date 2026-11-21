@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import { readCurrency } from "./currency.js";
 
 describe("readCurrency", () => {
@@ -18,10 +18,10 @@ describe("readCurrency", () => {
             buffer.writeBigInt64LE(scaledValue);
             const snapshot = Buffer.from(buffer);
 
-            expect(readCurrency(buffer)).to.eq(expected);
-            expect(buffer).to.deep.eq(snapshot);
-            expect(readCurrency(buffer)).to.eq(expected);
-            expect(buffer).to.deep.eq(snapshot);
+            expect(readCurrency(buffer)).toBe(expected);
+            expect(buffer).toEqual(snapshot);
+            expect(readCurrency(buffer)).toBe(expected);
+            expect(buffer).toEqual(snapshot);
         });
     }
 
@@ -31,9 +31,9 @@ describe("readCurrency", () => {
         const buffer = parent.subarray(5, 13);
         const snapshot = Buffer.from(parent);
 
-        expect(readCurrency(buffer)).to.eq("-42.0000");
-        expect(parent).to.deep.eq(snapshot);
-        expect(readCurrency(buffer)).to.eq("-42.0000");
-        expect(parent).to.deep.eq(snapshot);
+        expect(readCurrency(buffer)).toBe("-42.0000");
+        expect(parent).toEqual(snapshot);
+        expect(readCurrency(buffer)).toBe("-42.0000");
+        expect(parent).toEqual(snapshot);
     });
 });

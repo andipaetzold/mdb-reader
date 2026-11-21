@@ -125,7 +125,6 @@ export class Table {
 
         columnDefinitions.sort((a, b) => a.index - b.index);
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         return columnDefinitions.map(({ index, variableIndex, fixedIndex, ...rest }) => rest);
     }
 

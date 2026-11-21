@@ -51,7 +51,7 @@ export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, passwor
                     try {
                         // RC4 CryptoAPI Encryption
                         return createRC4CryptoAPICodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
-                    } catch (e) {
+                    } catch {
                         // Non Standard Encryption
                     }
 

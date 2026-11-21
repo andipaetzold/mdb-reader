@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import { readByte } from "./byte.js";
 
 describe("Byte", () => {
@@ -9,6 +9,6 @@ describe("Byte", () => {
         buffer.writeUInt8(value);
 
         const result = readByte(buffer);
-        expect(result).to.eq(value);
+        expect(result).toBe(value);
     });
 });

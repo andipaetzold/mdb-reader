@@ -1,10 +1,9 @@
+import { describe, it, expect } from "vitest";
 import { doCarry, multiplyArray } from "./array.js";
-import forEach from "mocha-each";
-import { expect } from "chai";
 
 describe("array", () => {
     describe("doCarry", () => {
-        forEach([
+        it.each([
             [
                 [0, 0, 0],
                 [0, 0, 0],
@@ -17,11 +16,11 @@ describe("array", () => {
                 [9, 9, 9],
                 [9, 9, 9],
             ],
-        ]).it("does not carry if all < 10: %s", (input, output) => {
-            expect(doCarry(input)).to.deep.eq(output);
+        ])("does not carry if all < 10: %s", (input, output) => {
+            expect(doCarry(input)).toEqual(output);
         });
 
-        forEach([
+        it.each([
             [
                 [10, 0, 0],
                 [0, 1, 0],
@@ -42,11 +41,11 @@ describe("array", () => {
                 [111, 0, 0],
                 [1, 1, 1],
             ],
-        ]).it("carries over: $input", (input, output) => {
-            expect(doCarry(input)).to.deep.eq(output);
+        ])("carries over: %s", (input, output) => {
+            expect(doCarry(input)).toEqual(output);
         });
 
-        forEach([
+        it.each([
             [
                 [1000, 0, 0],
                 [0, 0, 0],
@@ -59,13 +58,13 @@ describe("array", () => {
                 [1111, 222, 0],
                 [1, 3, 3],
             ],
-        ]).it("cuts overflow and keeps array length: %s", (input, output) => {
-            expect(doCarry(input)).to.deep.eq(output);
+        ])("cuts overflow and keeps array length: %s", (input, output) => {
+            expect(doCarry(input)).toEqual(output);
         });
     });
 
     describe("multiplyArray", () => {
-        forEach([
+        it.each([
             [
                 [0, 0, 0],
                 [5, 0, 0],
@@ -86,11 +85,11 @@ describe("array", () => {
                 [0, 0, 0],
                 [0, 0, 0],
             ],
-        ]).it("multiply without carry: %s * %s", (a, b, output) => {
-            expect(multiplyArray(a, b)).to.deep.eq(output);
+        ])("multiply without carry: %s * %s", (a, b, output) => {
+            expect(multiplyArray(a, b)).toEqual(output);
         });
 
-        forEach([
+        it.each([
             [
                 [2, 2, 0],
                 [5, 5, 5],
@@ -106,8 +105,8 @@ describe("array", () => {
                 [5, 6, 7],
                 [5, 9, 8],
             ],
-        ]).it("multiply without carry: %s * %s", (a, b, output) => {
-            expect(multiplyArray(a, b)).to.deep.eq(output);
+        ])("multiply without carry: %s * %s", (a, b, output) => {
+            expect(multiplyArray(a, b)).toEqual(output);
         });
     });
 });

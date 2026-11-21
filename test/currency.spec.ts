@@ -1,11 +1,10 @@
+import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 import MDBReader from "../src/index.js";
-import forEach from "mocha-each";
-import { expect } from "chai";
 
 describe("Currency", () => {
-    forEach([["V2016/currency.accdb"]]).describe("%s", (filename) => {
+    describe.each([["V2016/currency.accdb"]])("%s", (filename) => {
         const path = resolve("test/data", filename);
 
         let buffer: Buffer;
@@ -21,22 +20,22 @@ describe("Currency", () => {
                 offset = buffer.indexOf(positivePattern, offset + 1)) {
                 matches.push(offset);
             }
-            expect(matches).to.have.lengthOf(1);
+            expect(matches).toHaveLength(1);
             buffer.writeBigInt64LE(-420000n, matches[0]!);
             const snapshot = Buffer.from(buffer);
 
             const reader = new MDBReader(buffer);
-            expect(buffer).to.deep.eq(snapshot);
+            expect(buffer).toEqual(snapshot);
             const table = reader.getTable("Table");
-            expect(table.getData()).to.deep.eq([{ ID: 1, Money: "-42.0000" }]);
-            expect(buffer).to.deep.eq(snapshot);
-            expect(table.getData()).to.deep.eq([{ ID: 1, Money: "-42.0000" }]);
-            expect(buffer).to.deep.eq(snapshot);
+            expect(table.getData()).toEqual([{ ID: 1, Money: "-42.0000" }]);
+            expect(buffer).toEqual(snapshot);
+            expect(table.getData()).toEqual([{ ID: 1, Money: "-42.0000" }]);
+            expect(buffer).toEqual(snapshot);
 
             const secondReader = new MDBReader(buffer);
-            expect(buffer).to.deep.eq(snapshot);
-            expect(secondReader.getTable("Table").getData()).to.deep.eq([{ ID: 1, Money: "-42.0000" }]);
-            expect(buffer).to.deep.eq(snapshot);
+            expect(buffer).toEqual(snapshot);
+            expect(secondReader.getTable("Table").getData()).toEqual([{ ID: 1, Money: "-42.0000" }]);
+            expect(buffer).toEqual(snapshot);
         });
 
         it("getData(): returns correct currency data", () => {
@@ -44,10 +43,10 @@ describe("Currency", () => {
             const table = reader.getTable("Table");
             const rows = table.getData();
 
-            expect(rows.length).to.eq(1);
+            expect(rows.length).toBe(1);
 
             const row = rows[0]!;
-            expect(row['Money']).to.eq("42.0000");
+            expect(row['Money']).toBe("42.0000");
         });
     });
 });

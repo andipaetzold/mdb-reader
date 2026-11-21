@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import { readInteger } from "./integer.js";
 
 describe("Integer", () => {
@@ -9,6 +9,6 @@ describe("Integer", () => {
         buffer.writeInt16LE(value);
 
         const result = readInteger(buffer);
-        expect(result).to.eq(value);
+        expect(result).toBe(value);
     });
 });

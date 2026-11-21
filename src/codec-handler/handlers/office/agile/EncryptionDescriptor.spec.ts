@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import { parseEncryptionDescriptor } from "./EncryptionDescriptor.js";
 
 function descriptor(spinCount: string | undefined): Buffer {
@@ -20,7 +20,7 @@ function descriptor(spinCount: string | undefined): Buffer {
 describe("parseEncryptionDescriptor", () => {
     for (const spinCount of [0, 1, 100000, 10000000]) {
         it(`should accept spinCount ${spinCount}`, () => {
-            expect(parseEncryptionDescriptor(descriptor(String(spinCount))).passwordKeyEncryptor.spinCount).to.equal(
+            expect(parseEncryptionDescriptor(descriptor(String(spinCount))).passwordKeyEncryptor.spinCount).toBe(
                 spinCount
             );
         });
@@ -28,7 +28,7 @@ describe("parseEncryptionDescriptor", () => {
 
     for (const spinCount of ["10000001", "2147e6", "1e9999", "Infinity", "NaN", "-1", "1.5", "true", "false", "", undefined]) {
         it(`should reject spinCount ${String(spinCount)}`, () => {
-            expect(() => parseEncryptionDescriptor(descriptor(spinCount))).to.throw("Invalid spinCount ");
+            expect(() => parseEncryptionDescriptor(descriptor(spinCount))).toThrow("Invalid spinCount ");
         });
     }
 });
