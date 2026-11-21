@@ -62,7 +62,7 @@ describe("reader environments", () => {
     it("uses only the owning adapter to decrypt pages after reader construction", () => {
         const node = trackCrypto(nodeEnvironment);
         const browser = trackCrypto(browserEnvironment);
-        const nodeReader = new BaseMDBReader(readFileSync(encryptedFixture), node.environment, encryptedOptions);
+        const nodeReader = new BaseMDBReader(node.environment, readFileSync(encryptedFixture), encryptedOptions);
         const nodeInitHashes = node.hashes;
         const nodeInitDeciphers = node.decipher.mock.calls.length;
 
@@ -71,7 +71,7 @@ describe("reader environments", () => {
         expect(browser.hashes).toBe(0);
         expect(browser.decipher).not.toHaveBeenCalled();
 
-        const browserReader = new BaseMDBReader(readFileSync(encryptedFixture), browser.environment, encryptedOptions);
+        const browserReader = new BaseMDBReader(browser.environment, readFileSync(encryptedFixture), encryptedOptions);
         const browserInitHashes = browser.hashes;
         const browserInitDeciphers = browser.decipher.mock.calls.length;
 
@@ -98,14 +98,14 @@ describe("reader environments", () => {
     it("uses only the owning adapter to inflate attachments when rows are read", () => {
         const nodeInflate = vi.fn(nodeEnvironment.inflate);
         const browserInflate = vi.fn(browserEnvironment.inflate);
-        const nodeTable = new BaseMDBReader(readFileSync(attachmentFixture), {
-            ...nodeEnvironment,
-            inflate: nodeInflate,
-        }).getTable("Table1");
-        const browserTable = new BaseMDBReader(readFileSync(attachmentFixture), {
-            ...browserEnvironment,
-            inflate: browserInflate,
-        }).getTable("Table1");
+        const nodeTable = new BaseMDBReader(
+            { ...nodeEnvironment, inflate: nodeInflate },
+            readFileSync(attachmentFixture),
+        ).getTable("Table1");
+        const browserTable = new BaseMDBReader(
+            { ...browserEnvironment, inflate: browserInflate },
+            readFileSync(attachmentFixture),
+        ).getTable("Table1");
 
         expect(nodeInflate).not.toHaveBeenCalled();
         expect(browserInflate).not.toHaveBeenCalled();

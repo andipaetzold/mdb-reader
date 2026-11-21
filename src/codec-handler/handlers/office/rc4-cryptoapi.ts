@@ -12,10 +12,10 @@ const VALID_CRYPTO_ALGORITHMS: CryptoAlgorithm[] = [CRYPTO_ALGORITHMS.RC4];
 const VALID_HASH_ALGORITHMS: HashAlgorithm[] = [HASH_ALGORITHMS.SHA1];
 
 export function createRC4CryptoAPICodecHandler(
+    environment: Environment,
     encodingKey: Buffer,
     encryptionProvider: Buffer,
     password: Buffer,
-    environment: Environment,
 ): CodecHandler {
     const headerLength = encryptionProvider.readInt32LE(8);
     const headerBuffer = encryptionProvider.slice(12, 12 + headerLength);
@@ -27,13 +27,13 @@ export function createRC4CryptoAPICodecHandler(
 
     const decryptPage: DecryptPage = (pageBuffer, pageIndex) => {
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageIndex);
-        const encryptionKey = getEncryptionKey(encryptionHeader, baseHash, pageEncodingKey, environment);
+        const encryptionKey = getEncryptionKey(environment, encryptionHeader, baseHash, pageEncodingKey);
         return decryptRC4(encryptionKey, pageBuffer);
     };
     return {
         decryptPage,
         verifyPassword: () => {
-            const encryptionKey = getEncryptionKey(encryptionHeader, baseHash, intToBuffer(0), environment);
+            const encryptionKey = getEncryptionKey(environment, encryptionHeader, baseHash, intToBuffer(0));
 
             const rc4Decrypter = createRC4Decrypter(encryptionKey);
 
@@ -53,7 +53,7 @@ export function createRC4CryptoAPICodecHandler(
     };
 }
 
-function getEncryptionKey(header: EncryptionHeader, baseHash: Buffer, data: Buffer, environment: Environment): Buffer {
+function getEncryptionKey(environment: Environment, header: EncryptionHeader, baseHash: Buffer, data: Buffer): Buffer {
     const key = hash(environment, "sha1", [baseHash, data], roundToFullByte(header.keySize));
     if (header.keySize === 40) {
         return key.slice(0, roundToFullByte(128));

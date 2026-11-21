@@ -11,24 +11,24 @@ const ENC_VERIFIER_VALUE_BLOCK = [0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e
 const ENC_VALUE_BLOCK = [0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0xd6];
 
 export function createAgileCodecHandler(
+    environment: Environment,
     encodingKey: Buffer,
     encryptionProvider: Buffer,
     password: Buffer,
-    environment: Environment,
 ): CodecHandler {
     const { keyData, passwordKeyEncryptor } = parseEncryptionDescriptor(encryptionProvider);
 
-    const key = decryptKeyValue(password, passwordKeyEncryptor, environment);
+    const key = decryptKeyValue(environment, password, passwordKeyEncryptor);
     const decryptPage: DecryptPage = (b, pageNumber) => {
         const pageEncodingKey = getPageEncodingKey(encodingKey, pageNumber);
         const iv = hash(environment, keyData.hash.algorithm, [keyData.salt, pageEncodingKey], keyData.blockSize);
 
-        return blockDecrypt(keyData.cipher, key, iv, b, environment);
+        return blockDecrypt(environment, keyData.cipher, key, iv, b);
     };
 
     const verifyPassword: VerifyPassword = () => {
-        const verifier = decryptVerifierHashInput(password, passwordKeyEncryptor, environment);
-        const verifierHash = decryptVerifierHashValue(password, passwordKeyEncryptor, environment);
+        const verifier = decryptVerifierHashInput(environment, password, passwordKeyEncryptor);
+        const verifierHash = decryptVerifierHashValue(environment, password, passwordKeyEncryptor);
 
         let testHash = hash(environment, passwordKeyEncryptor.hash.algorithm, [verifier]);
 
@@ -47,70 +47,70 @@ export function createAgileCodecHandler(
     };
 }
 
-function decryptKeyValue(password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor, environment: Environment): Buffer {
+function decryptKeyValue(environment: Environment, password: Buffer, passwordKeyEncryptor: PasswordKeyEncryptor): Buffer {
     const key = deriveKey(
+        environment,
         password,
         Buffer.from(ENC_VALUE_BLOCK),
         passwordKeyEncryptor.hash.algorithm,
         passwordKeyEncryptor.salt,
         passwordKeyEncryptor.spinCount,
         roundToFullByte(passwordKeyEncryptor.keyBits),
-        environment,
     );
 
     return blockDecrypt(
+        environment,
         passwordKeyEncryptor.cipher,
         key,
         passwordKeyEncryptor.salt,
         passwordKeyEncryptor.encrypted.keyValue,
-        environment,
     );
 }
 
 function decryptVerifierHashInput(
+    environment: Environment,
     password: Buffer,
     passwordKeyEncryptor: PasswordKeyEncryptor,
-    environment: Environment,
 ): Buffer {
     const key = deriveKey(
+        environment,
         password,
         Buffer.from(ENC_VERIFIER_INPUT_BLOCK),
         passwordKeyEncryptor.hash.algorithm,
         passwordKeyEncryptor.salt,
         passwordKeyEncryptor.spinCount,
         roundToFullByte(passwordKeyEncryptor.keyBits),
-        environment,
     );
 
     return blockDecrypt(
+        environment,
         passwordKeyEncryptor.cipher,
         key,
         passwordKeyEncryptor.salt,
         passwordKeyEncryptor.encrypted.verifierHashInput,
-        environment,
     );
 }
 
 function decryptVerifierHashValue(
+    environment: Environment,
     password: Buffer,
     passwordKeyEncryptor: PasswordKeyEncryptor,
-    environment: Environment,
 ): Buffer {
     const key = deriveKey(
+        environment,
         password,
         Buffer.from(ENC_VERIFIER_VALUE_BLOCK),
         passwordKeyEncryptor.hash.algorithm,
         passwordKeyEncryptor.salt,
         passwordKeyEncryptor.spinCount,
         roundToFullByte(passwordKeyEncryptor.keyBits),
-        environment,
     );
 
     return blockDecrypt(
+        environment,
         passwordKeyEncryptor.cipher,
         key,
         passwordKeyEncryptor.salt,
         passwordKeyEncryptor.encrypted.verifierHashValue,
-        environment,
     );
 }

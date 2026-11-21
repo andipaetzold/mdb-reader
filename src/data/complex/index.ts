@@ -70,7 +70,7 @@ export function readComplex(buffer: Buffer, column: ColumnDefinition, database: 
             const attachment: Attachment = {
                 name: row.FileName,
                 type: row.FileType,
-                data: decodeAttachmentFileData(row.FileData, database.environment),
+                data: decodeAttachmentFileData(database.environment, row.FileData),
             };
 
             if (row.FileURL) {

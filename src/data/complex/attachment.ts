@@ -8,7 +8,7 @@ const DATA_TYPES = {
 /**
  * Decodes attachment FileData as stored in Access (OLE wrapper with optional deflate).
  */
-export function decodeAttachmentFileData(buffer: Buffer, environment: Environment): Buffer {
+export function decodeAttachmentFileData(environment: Environment, buffer: Buffer): Buffer {
     /**
      * 0-3: type flag; 0=raw, 1=compressed
      * 4-7: length

@@ -219,7 +219,7 @@ describe("cyclic table definitions", () => {
                 buffer.writeUInt32LE(repeatedPage, secondPage * pageSize + 4);
             }
             const originalBuffer = Buffer.from(buffer);
-            const database = new Database(buffer, "", environment);
+            const database = new Database(environment, buffer, "");
             const getPage = database.getPage.bind(database);
             let reads = 0;
             database.getPage = (page) => {
@@ -240,7 +240,7 @@ describe("cyclic table definitions", () => {
             const buffer = Buffer.from(readFileSync(resolve("test/data", filename)));
             buffer.writeUInt32LE(2, 2 * pageSize + 4);
             const originalBuffer = Buffer.from(buffer);
-            const database = new Database(buffer, "", environment);
+            const database = new Database(environment, buffer, "");
             const getPage = database.getPage.bind(database);
             let reads = 0;
             database.getPage = (page) => {

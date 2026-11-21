@@ -16,12 +16,12 @@ export default class MDBReader {
     #sysObjects: SysObject[];
     #database: Database;
 
-    constructor(buffer: Buffer, environment: Environment, { password }: Options = {}) {
+    constructor(environment: Environment, buffer: Buffer, { password }: Options = {}) {
         this.#buffer = buffer;
 
         assertPageType(this.#buffer, PageType.DatabaseDefinitionPage);
 
-        this.#database = new Database(this.#buffer, password ?? "", environment);
+        this.#database = new Database(environment, this.#buffer, password ?? "");
 
         const mSysObjectsTable = getMSysObjectsTable(this.#database).getData<{
             Id: number;

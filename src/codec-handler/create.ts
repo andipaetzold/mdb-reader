@@ -7,9 +7,9 @@ import { createOfficeCodecHandler } from "./handlers/office/index.js";
 import type { CodecHandler } from "./types.js";
 
 export function createCodecHandler(
+    environment: Environment,
     databaseDefinitionPage: Buffer,
     password: string,
-    environment: Environment,
 ): CodecHandler {
     const format = getJetFormat(databaseDefinitionPage);
     switch (format.codecType) {
@@ -17,7 +17,7 @@ export function createCodecHandler(
             return createJetCodecHandler(databaseDefinitionPage);
 
         case CodecType.OFFICE:
-            return createOfficeCodecHandler(databaseDefinitionPage, password, environment);
+            return createOfficeCodecHandler(environment, databaseDefinitionPage, password);
 
         default:
             return createIdentityHandler();

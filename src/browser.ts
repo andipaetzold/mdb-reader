@@ -8,6 +8,6 @@ export default class MDBReader extends BaseMDBReader {
      * @param buffer Buffer of the database.
      */
     constructor(buffer: Buffer, options: Options = {}) {
-        super(buffer, environment, options);
+        super(environment, buffer, options);
     }
 }

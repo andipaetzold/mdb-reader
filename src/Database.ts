@@ -18,7 +18,7 @@ export class Database {
     #codecHandler: CodecHandler;
     #databaseDefinitionPage: Buffer;
 
-    constructor(buffer: Buffer, password: string, environment: Environment) {
+    constructor(environment: Environment, buffer: Buffer, password: string) {
         this.#buffer = buffer;
         this.#environment = environment;
 
@@ -29,7 +29,7 @@ export class Database {
         this.#databaseDefinitionPage = Buffer.alloc(this.#format.pageSize);
         this.#buffer.copy(this.#databaseDefinitionPage, 0, 0, this.#format.pageSize);
         decryptHeader(this.#databaseDefinitionPage, this.#format);
-        this.#codecHandler = createCodecHandler(this.#databaseDefinitionPage, password, this.#environment);
+        this.#codecHandler = createCodecHandler(this.#environment, this.#databaseDefinitionPage, password);
 
         if (!this.#codecHandler.verifyPassword()) {
             throw new Error("Wrong password");

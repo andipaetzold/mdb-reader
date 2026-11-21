@@ -15,9 +15,9 @@ const KEY_OFFSET = 0x3e;
 const KEY_SIZE = 4;
 
 export function createOfficeCodecHandler(
+    environment: Environment,
     databaseDefinitionPage: Buffer,
     password: string,
-    environment: Environment,
 ): CodecHandler {
     const encodingKey = databaseDefinitionPage.slice(KEY_OFFSET, KEY_OFFSET + KEY_SIZE);
 
@@ -38,7 +38,7 @@ export function createOfficeCodecHandler(
     switch (version) {
         case "4.4":
             // Agile Encryption: 4.4
-            return createAgileCodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer, environment);
+            return createAgileCodecHandler(environment, encodingKey, encryptionProviderBuffer, passwordBuffer);
 
         case "4.3":
         case "3.3":
@@ -56,10 +56,10 @@ export function createOfficeCodecHandler(
                     try {
                         // RC4 CryptoAPI Encryption
                         return createRC4CryptoAPICodecHandler(
+                            environment,
                             encodingKey,
                             encryptionProviderBuffer,
                             passwordBuffer,
-                            environment,
                         );
                     } catch {
                         // Non Standard Encryption
