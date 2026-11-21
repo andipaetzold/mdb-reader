@@ -23,7 +23,7 @@ yarn add mdb-reader
 
 ### Node / JavaScript
 
--   Node 18, 20, 22, 24 and 26 (LTS)
+-   Node.js LTS 22 (22.11.0+), 24 (24.11.0+), and 26 (26.13.0+)
 -   Works in the browser with [buffer](https://www.npmjs.com/package/buffer) ([Example](https://github.com/andipaetzold/mdb-reader/tree/main/examples/browser))
 
 ### Access Database versions
