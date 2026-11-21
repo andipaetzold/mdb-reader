@@ -1,4 +1,4 @@
-import { getTableNames } from '$lib/database';
+import { getTableNames } from '#lib/database.ts';
 
 export const actions = {
 	default: async ({ request }) => {
