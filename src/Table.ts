@@ -1,9 +1,8 @@
-import { ColumnTypes } from "./index.js";
 import { type Column, type ColumnDefinition, getColumnType, parseColumnFlags } from "./column.js";
 import { readFieldValue } from "./data/index.js";
-import { Database } from "./Database.js";
+import type { Database } from "./Database.js";
 import { PageType, assertPageType } from "./PageType.js";
-import type { Value } from "./types.js";
+import { ColumnTypes, type Value } from "./types.js";
 import { uncompressText } from "./unicodeCompression.js";
 import { findMapPages } from "./usage-map.js";
 import { getBitmapValue, roundToFullByte } from "./util.js";

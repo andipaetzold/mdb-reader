@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import MDBReader from "../src/index.js";
+import MDBReader from "../src/node.js";
 
 describe("LongText", () => {
     it("rejects a pointer-only cycle", () => {

@@ -3,12 +3,11 @@
     "compilerOptions": {
         "rootDir": "src",
         "types": ["node"],
-        "outDir": "lib/node",
+        "outDir": "lib",
         "module": "Node16",
         "moduleResolution": "node16",
         "declaration": true,
-        "declarationDir": "lib/types",
         "verbatimModuleSyntax": true
     },
-    "files": ["src/index.ts"]
+    "include": ["src/node.ts", "src/browser.ts", "typings/**/*.d.ts"]
 }

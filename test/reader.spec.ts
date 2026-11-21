@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../src/index.js";
+import MDBReader from "../src/node.js";
 
 describe("MDBReader", () => {
     describe.each([

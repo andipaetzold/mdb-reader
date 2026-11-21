@@ -1,3 +1,4 @@
+import type { Environment } from "../environment/types.js";
 import { fixBufferLength, intToBuffer } from "../util.js";
 import { hash } from "./hash.js";
 
@@ -10,18 +11,19 @@ export function deriveKey(
     algorithm: string,
     salt: Buffer,
     iterations: number,
-    keyByteLength: number
+    keyByteLength: number,
+    environment: Environment,
 ): Buffer {
-    const baseHash = hash(algorithm, [salt, password]);
-    const iterHash = iterateHash(algorithm, baseHash, iterations);
-    const finalHash = hash(algorithm, [iterHash, blockBytes]);
+    const baseHash = hash(environment, algorithm, [salt, password]);
+    const iterHash = iterateHash(algorithm, baseHash, iterations, environment);
+    const finalHash = hash(environment, algorithm, [iterHash, blockBytes]);
     return fixBufferLength(finalHash, keyByteLength, 0x36);
 }
 
-function iterateHash(algorithm: string, baseBuffer: Buffer, iterations: number): Buffer {
+function iterateHash(algorithm: string, baseBuffer: Buffer, iterations: number, environment: Environment): Buffer {
     let iterHash = baseBuffer;
     for (let i = 0; i < iterations; ++i) {
-        iterHash = hash(algorithm, [intToBuffer(i), iterHash]);
+        iterHash = hash(environment, algorithm, [intToBuffer(i), iterHash]);
     }
     return iterHash;
 }

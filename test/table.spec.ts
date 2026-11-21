@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader, { type Table } from "../src/index.js";
+import MDBReader, { type Table } from "../src/node.js";
 import { Database } from "../src/Database.js";
+import { environment } from "../src/environment/node.js";
 import { Table as TableDefinition } from "../src/Table.js";
 
 describe("Table", () => {
@@ -131,7 +132,7 @@ describe("Table", () => {
                     buffer.writeUInt32LE(repeatedPage, secondPage * pageSize + 4);
                 }
                 const originalBuffer = Buffer.from(buffer);
-                const database = new Database(buffer, "");
+                const database = new Database(buffer, "", environment);
                 const getPage = database.getPage.bind(database);
                 let reads = 0;
                 database.getPage = (page) => {
@@ -152,7 +153,7 @@ describe("Table", () => {
                 const buffer = Buffer.from(readFileSync(resolve("test/data", filename)));
                 buffer.writeUInt32LE(2, 2 * pageSize + 4);
                 const originalBuffer = Buffer.from(buffer);
-                const database = new Database(buffer, "");
+                const database = new Database(buffer, "", environment);
                 const getPage = database.getPage.bind(database);
                 let reads = 0;
                 database.getPage = (page) => {

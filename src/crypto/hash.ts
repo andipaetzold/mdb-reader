@@ -1,7 +1,7 @@
-import { environment } from "../environment/index.js";
+import type { Environment } from "../environment/types.js";
 import { fixBufferLength } from "../util.js";
 
-export function hash(algorithm: string, buffers: Buffer[], length?: number): Buffer {
+export function hash(environment: Environment, algorithm: string, buffers: Buffer[], length?: number): Buffer {
     const digest = environment.createHash(algorithm);
 
     for (const buffer of buffers) {

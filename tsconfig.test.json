@@ -4,6 +4,5 @@
         "rootDir": ".",
         "noEmit": true
     },
-    "files": [],
     "include": ["src/**/*.ts", "test/**/*.ts", "typings/**/*.d.ts", "vitest.config.ts"]
 }

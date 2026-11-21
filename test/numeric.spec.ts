@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../src/index.js";
+import MDBReader from "../src/node.js";
 
 describe("Numeric", () => {
     describe.each([["V2000/numeric.mdb"], ["V2003/numeric.mdb"], ["V2007/numeric.accdb"], ["V2010/numeric.accdb"]])(

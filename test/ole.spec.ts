@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { createHash } from "node:crypto";
 import { readFileSync } from "fs";
-import MDBReader from "../src/index.js";
+import MDBReader from "../src/node.js";
 import { resolve } from "path";
 
 describe("OLE", () => {

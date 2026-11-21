@@ -1,4 +1,4 @@
-import type { Column } from "../index.js";
+import type { Column } from "../column.js";
 import { Database } from "../Database.js";
 import { uncompressText } from "../unicodeCompression.js";
 

@@ -1,3 +1,4 @@
+import type { Environment } from "../../../environment/types.js";
 import { isEmptyBuffer } from "../../../util.js";
 import { createIdentityHandler } from "../identity.js";
 import { createAgileCodecHandler } from "./agile/index.js";
@@ -13,7 +14,11 @@ const CRYPT_STRUCTURE_OFFSET = 0x299;
 const KEY_OFFSET = 0x3e;
 const KEY_SIZE = 4;
 
-export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, password: string): CodecHandler {
+export function createOfficeCodecHandler(
+    databaseDefinitionPage: Buffer,
+    password: string,
+    environment: Environment,
+): CodecHandler {
     const encodingKey = databaseDefinitionPage.slice(KEY_OFFSET, KEY_OFFSET + KEY_SIZE);
 
     if (isEmptyBuffer(encodingKey)) {
@@ -33,7 +38,7 @@ export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, passwor
     switch (version) {
         case "4.4":
             // Agile Encryption: 4.4
-            return createAgileCodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
+            return createAgileCodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer, environment);
 
         case "4.3":
         case "3.3":
@@ -50,7 +55,12 @@ export function createOfficeCodecHandler(databaseDefinitionPage: Buffer, passwor
                 } else {
                     try {
                         // RC4 CryptoAPI Encryption
-                        return createRC4CryptoAPICodecHandler(encodingKey, encryptionProviderBuffer, passwordBuffer);
+                        return createRC4CryptoAPICodecHandler(
+                            encodingKey,
+                            encryptionProviderBuffer,
+                            passwordBuffer,
+                            environment,
+                        );
                     } catch {
                         // Non Standard Encryption
                     }
