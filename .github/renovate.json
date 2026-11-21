@@ -7,6 +7,11 @@
             "matchUpdateTypes": ["patch", "minor"],
             "groupName": "dev dependencies (non-major)",
             "groupSlug": "dev-dependencies"
+        },
+        {
+            "description": "Node.js and its types and TSConfig must be updated manually",
+            "matchPackageNames": ["node", "@types/node", "@tsconfig/node*"],
+            "enabled": false
         }
     ],
     "ignoreDeps": ["parcel"],
