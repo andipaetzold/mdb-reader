@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../src/node.js";
+import { readers } from "./readers.js";
 import type { Attachment } from "../src/types.js";
 
-describe("Complex", () => {
+describe.each(readers)("Complex ($platform)", ({ MDBReader }) => {
     describe.each([["V2016/attachments.accdb"]])("%s", (filename) => {
         const path = resolve("test/data", filename);
 

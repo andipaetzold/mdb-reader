@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../../src/node.js";
+import { readers } from "../readers.js";
 
-describe("Creation Date", () => {
+describe.each(readers)("Creation Date ($platform)", ({ MDBReader }) => {
     describe.each([
         ["V1997.mdb", null],
         ["V2000.mdb", "2022-01-07T16:20:28.023Z"],

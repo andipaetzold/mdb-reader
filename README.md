@@ -40,14 +40,16 @@ npm install mdb-reader
 
 To decrypt databases, this library requires a few dependencies:
 
--   [`browserify-aes`](https://www.npmjs.com/browserify-aes): Only imported when running in browser
--   [`create-hash`](https://www.npmjs.com/create-hash): Only imported when running in browser
+-   [`browserify-aes`](https://www.npmjs.com/browserify-aes): Used by the browser entry
+-   [`create-hash`](https://www.npmjs.com/create-hash): Used by the browser entry
 -   [`fast-xml-parser`](https://www.npmjs.com/fast-xml-parser)
 
 ## Usage
 
+Import `mdb-reader` to select the entry automatically. Node.js uses the Node entry, and browser bundlers using the default export condition use the browser entry.
+
 ```javascript
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import MDBReader from "mdb-reader";
 
 const buffer = readFileSync("database.mdb");
@@ -59,6 +61,15 @@ const table = reader.getTable("Cats");
 table.getColumnNames(); // ['id', 'name', 'color']
 table.getData(); // [{id: 5, name: 'Ashley', color: 'black'}, ...]
 ```
+
+To select an entry explicitly, import `mdb-reader/node` or `mdb-reader/browser`.
+
+```javascript
+import NodeMDBReader from "mdb-reader/node";
+import BrowserMDBReader from "mdb-reader/browser";
+```
+
+For browser use, pass a `Buffer` from the [`buffer`](https://www.npmjs.com/package/buffer) polyfill. See the [browser example](examples/browser) for the bundler setup.
 
 ## Examples
 
@@ -251,23 +262,16 @@ Only `name`, `type`, and `data` are always present; the rest are set when stored
 
 ## Development
 
-### Build
-
-To build the library, first install the dependencies, then run `npm run build` for a single build or `npm run watch` for automatic rebuilds.
+Build the Node and browser entries and their shared implementation together, then run the tests against both source entries and the built package.
 
 ```sh
-npm install
+npm ci
 npm run build
-```
-
-### Tests
-
-To run the tests, first install the dependencies, then run `npm test`. Watch mode can be started with `npm test -- --watch`.
-
-```sh
-npm install
 npm test
+npm run lint
 ```
+
+Run `npx vitest` to watch the fixture and unit tests. Rebuild after source changes to refresh the package used by the entry point and declaration checks.
 
 ## Resources
 

@@ -69,7 +69,7 @@
         "build": "tsc -P tsconfig.json",
         "test": "npm run typecheck && npm run test:unit && npm run test:esm",
         "test:unit": "vitest run",
-        "test:esm": "node --input-type=module -e \"import MDBReader from 'mdb-reader'; import NodeMDBReader from 'mdb-reader/node'; import BrowserMDBReader from 'mdb-reader/browser';\"",
+        "test:esm": "node test/package-exports.mjs",
         "lint": "oxlint",
         "typecheck": "tsc -P tsconfig.test.json"
     },

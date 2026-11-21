@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { createHash } from "node:crypto";
 import { readFileSync } from "fs";
-import MDBReader from "../src/node.js";
+import { readers } from "./readers.js";
 import { resolve } from "path";
 
-describe("OLE", () => {
+describe.each(readers)("OLE ($platform)", ({ MDBReader }) => {
     let buffer: Buffer;
 
     beforeEach(() => {

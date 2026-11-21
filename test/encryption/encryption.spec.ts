@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../../src/node.js";
+import { readers } from "../readers.js";
 
-describe("Encryption", () => {
+describe.each(readers)("Encryption ($platform)", ({ MDBReader }) => {
     describe.each([
         ["office-agile-4.4.accdb", "password"],
         ["office-agile-4.2.accdb", "password"],

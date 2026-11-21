@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../src/node.js";
+import { readers } from "./readers.js";
 
-describe("BigInt", () => {
+describe.each(readers)("BigInt ($platform)", ({ MDBReader }) => {
     describe.each([["V2016/bigint.accdb"]])("%s", (filename) => {
         const path = resolve("test/data", filename);
 

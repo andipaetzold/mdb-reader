@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader from "../../src/node.js";
+import { readers } from "../readers.js";
 
-describe("Password", () => {
+describe.each(readers)("Password ($platform)", ({ MDBReader }) => {
     // TODO: test Jet 3 with password
     describe.each([
         ["V1997_no-password.mdb", null, null],

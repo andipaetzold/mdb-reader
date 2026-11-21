@@ -1,12 +1,13 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
-import MDBReader, { type Table } from "../src/node.js";
+import { readers } from "./readers.js";
+import type { Table } from "../src/index.js";
 import { Database } from "../src/Database.js";
 import { environment } from "../src/environment/node.js";
 import { Table as TableDefinition } from "../src/Table.js";
 
-describe("Table", () => {
+describe.each(readers)("Table ($platform)", ({ MDBReader }) => {
     // The test databases are slightly different, so we need some extra arguments here
     describe.each([
         ["V1997/test.mdb", true, 50, 100, 50],
@@ -112,66 +113,6 @@ describe("Table", () => {
         });
     });
 
-    describe("cyclic table definitions", () => {
-        describe.each([
-            ["V1997/test.mdb", 2048, 34, 44],
-            ["V2000/test.mdb", 4096, 30, 708],
-            ["V2003/test.mdb", 4096, 30, 708],
-            ["V2007/test.accdb", 4096, 67, 78],
-            ["V2010/test.accdb", 4096, 79, 90],
-        ])("%s", (filename, pageSize, firstPage, secondPage) => {
-            it.each([
-                ["A→A", false, false],
-                ["A→B→A", true, false],
-                ["A→B→B", true, true],
-            ])("rejects %s", (_chain, useSecondPage, repeatSecondPage) => {
-                const buffer = Buffer.from(readFileSync(resolve("test/data", filename)));
-                const repeatedPage = repeatSecondPage ? secondPage : firstPage;
-                buffer.writeUInt32LE(useSecondPage ? secondPage : firstPage, firstPage * pageSize + 4);
-                if (useSecondPage) {
-                    buffer.writeUInt32LE(repeatedPage, secondPage * pageSize + 4);
-                }
-                const originalBuffer = Buffer.from(buffer);
-                const database = new Database(buffer, "", environment);
-                const getPage = database.getPage.bind(database);
-                let reads = 0;
-                database.getPage = (page) => {
-                    if (++reads > 4) {
-                        throw new Error("Test table-definition read budget exceeded");
-                    }
-                    return getPage(page);
-                };
-
-                expect(() => new TableDefinition("Table2", database, firstPage)).toThrow(
-                    new Error(`Cyclic table definition for table "Table2": repeated page ${repeatedPage}`)
-                );
-                expect(reads).toBe(useSecondPage ? 2 : 1);
-                expect(buffer.equals(originalBuffer)).toBe(true);
-            });
-
-            it("rejects a catalog self-loop", () => {
-                const buffer = Buffer.from(readFileSync(resolve("test/data", filename)));
-                buffer.writeUInt32LE(2, 2 * pageSize + 4);
-                const originalBuffer = Buffer.from(buffer);
-                const database = new Database(buffer, "", environment);
-                const getPage = database.getPage.bind(database);
-                let reads = 0;
-                database.getPage = (page) => {
-                    if (++reads > 4) {
-                        throw new Error("Test catalog read budget exceeded");
-                    }
-                    return getPage(page);
-                };
-
-                expect(() => new TableDefinition("MSysObjects", database, 2)).toThrow(
-                    new Error('Cyclic table definition for table "MSysObjects": repeated page 2')
-                );
-                expect(reads).toBe(1);
-                expect(buffer.equals(originalBuffer)).toBe(true);
-            });
-        });
-    });
-
     describe("getData()", () => {
         describe("real/ASampleDatabase.accdb", () => {
             const path = resolve("test/data/real/ASampleDatabase.accdb");
@@ -254,6 +195,66 @@ describe("Table", () => {
 
                 expect(withInsertedColTable.getData()).toEqual([{ col1: true, col2: true, col3: false }]);
             });
+        });
+    });
+});
+
+describe("cyclic table definitions", () => {
+    describe.each([
+        ["V1997/test.mdb", 2048, 34, 44],
+        ["V2000/test.mdb", 4096, 30, 708],
+        ["V2003/test.mdb", 4096, 30, 708],
+        ["V2007/test.accdb", 4096, 67, 78],
+        ["V2010/test.accdb", 4096, 79, 90],
+    ])("%s", (filename, pageSize, firstPage, secondPage) => {
+        it.each([
+            ["A→A", false, false],
+            ["A→B→A", true, false],
+            ["A→B→B", true, true],
+        ])("rejects %s", (_chain, useSecondPage, repeatSecondPage) => {
+            const buffer = Buffer.from(readFileSync(resolve("test/data", filename)));
+            const repeatedPage = repeatSecondPage ? secondPage : firstPage;
+            buffer.writeUInt32LE(useSecondPage ? secondPage : firstPage, firstPage * pageSize + 4);
+            if (useSecondPage) {
+                buffer.writeUInt32LE(repeatedPage, secondPage * pageSize + 4);
+            }
+            const originalBuffer = Buffer.from(buffer);
+            const database = new Database(buffer, "", environment);
+            const getPage = database.getPage.bind(database);
+            let reads = 0;
+            database.getPage = (page) => {
+                if (++reads > 4) {
+                    throw new Error("Test table-definition read budget exceeded");
+                }
+                return getPage(page);
+            };
+
+            expect(() => new TableDefinition("Table2", database, firstPage)).toThrow(
+                new Error(`Cyclic table definition for table "Table2": repeated page ${repeatedPage}`)
+            );
+            expect(reads).toBe(useSecondPage ? 2 : 1);
+            expect(buffer.equals(originalBuffer)).toBe(true);
+        });
+
+        it("rejects a catalog self-loop", () => {
+            const buffer = Buffer.from(readFileSync(resolve("test/data", filename)));
+            buffer.writeUInt32LE(2, 2 * pageSize + 4);
+            const originalBuffer = Buffer.from(buffer);
+            const database = new Database(buffer, "", environment);
+            const getPage = database.getPage.bind(database);
+            let reads = 0;
+            database.getPage = (page) => {
+                if (++reads > 4) {
+                    throw new Error("Test catalog read budget exceeded");
+                }
+                return getPage(page);
+            };
+
+            expect(() => new TableDefinition("MSysObjects", database, 2)).toThrow(
+                new Error('Cyclic table definition for table "MSysObjects": repeated page 2')
+            );
+            expect(reads).toBe(1);
+            expect(buffer.equals(originalBuffer)).toBe(true);
         });
     });
 });
