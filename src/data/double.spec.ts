@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import { readDouble } from "./double.js";
 
 describe("Double", () => {
@@ -9,6 +9,6 @@ describe("Double", () => {
         buffer.writeDoubleLE(value);
 
         const result = readDouble(buffer);
-        expect(result).to.eq(value);
+        expect(result).toBe(value);
     });
 });

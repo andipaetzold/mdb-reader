@@ -1,14 +1,13 @@
+import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 import MDBReader from "../../src/index.js";
-import forEach from "mocha-each";
-import { expect } from "chai";
 
 describe("Encryption", () => {
-    forEach([
+    describe.each([
         ["office-agile-4.4.accdb", "password"],
         ["office-agile-4.2.accdb", "password"],
-    ]).describe("%s", (filename, password) => {
+    ])("%s", (filename, password) => {
         const path = resolve("test/encryption/data", filename);
 
         let buffer: Buffer;
@@ -17,14 +16,13 @@ describe("Encryption", () => {
             buffer = readFileSync(path);
         });
 
-        it("should be able to read a page", function () {
-            this.timeout(5000); // node 20 in CI is slow
+        it("should be able to read a page", () => {
             const reader = new MDBReader(buffer, { password });
-            expect(reader.getTableNames()).to.deep.eq(["Table1"]);
+            expect(reader.getTableNames()).toEqual(["Table1"]);
         });
     });
 
-    forEach([["office-agile-4.4.accdb"], ["office-agile-4.2.accdb"]]).describe("%s", (filename) => {
+    describe.each([["office-agile-4.4.accdb"], ["office-agile-4.2.accdb"]])("%s", (filename) => {
         const path = resolve("test/encryption/data", filename);
 
         let buffer: Buffer;
@@ -34,7 +32,7 @@ describe("Encryption", () => {
         });
 
         it("should throw for wrong password", () => {
-            expect(() => new MDBReader(buffer, { password: "wrong-password" })).to.throw("Wrong password");
+            expect(() => new MDBReader(buffer, { password: "wrong-password" })).toThrow("Wrong password");
         });
     });
 });

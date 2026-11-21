@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import { readLong } from "./long.js";
 
 describe("Long", () => {
@@ -8,6 +8,6 @@ describe("Long", () => {
         buffer.writeInt32LE(value);
 
         const result = readLong(buffer, {} as never, {} as never);
-        expect(result).to.equal(value);
+        expect(result).toBe(value);
     });
 });

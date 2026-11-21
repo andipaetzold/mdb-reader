@@ -1,11 +1,10 @@
+import { describe, it, expect, beforeEach } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 import MDBReader from "../src/index.js";
-import forEach from "mocha-each";
-import { expect } from "chai";
 
 describe("BigInt", () => {
-    forEach([["V2016/bigint.accdb"]]).describe("%s", (filename) => {
+    describe.each([["V2016/bigint.accdb"]])("%s", (filename) => {
         const path = resolve("test/data", filename);
 
         let buffer: Buffer;
@@ -22,10 +21,10 @@ describe("BigInt", () => {
             const table = reader.getTable("Table");
             const rows = table.getData();
 
-            expect(rows.length).to.eq(1);
+            expect(rows.length).toBe(1);
 
             const row = rows[0]!;
-            expect(row['Numeric']).to.eq(42n);
+            expect(row['Numeric']).toBe(42n);
         });
     });
 });

@@ -1,13 +1,12 @@
+import { describe, it, expect } from "vitest";
 import { readNumeric } from "./numeric.js";
-import forEach from "mocha-each";
-import { expect } from "chai";
 
 // http://jabakobob.net/mdbviewer/mdbtools/samples.html
 // https://sourceforge.net/p/mdbtools/mailman/mdbtools-dev/thread/loom.20110408T215525-601%40post.gmane.org/#msg27332696
 
 describe("Numeric", () => {
     describe("readNumeric", () => {
-        forEach([
+        it.each([
             [
                 [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xa0, 0x86, 0x01, 0x00],
                 8,
@@ -440,12 +439,12 @@ describe("Numeric", () => {
                 28,
                 "-0.1234567890123456789012345678",
             ],
-        ]).it("reads numeric value %s: precision=%d, scale=%d", (buffer, precision, scale, expectedResult) => {
+        ])("reads numeric value %s: precision=%d, scale=%d", (buffer, precision, scale, expectedResult) => {
             const result = readNumeric(Buffer.from(buffer), { scale, precision });
-            expect(result).to.eq(expectedResult);
+            expect(result).toBe(expectedResult);
 
             const actualScale = (result.split(".")[1] ?? "").length;
-            expect(actualScale).to.eq(scale);
+            expect(actualScale).toBe(scale);
         });
     });
 });

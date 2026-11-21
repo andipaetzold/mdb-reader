@@ -1,20 +1,19 @@
+import { describe, it, expect, beforeEach, beforeAll } from "vitest";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 import MDBReader, { type Table } from "../src/index.js";
-import { expect } from "chai";
-import forEach from "mocha-each";
 import { Database } from "../src/Database.js";
 import { Table as TableDefinition } from "../src/Table.js";
 
 describe("Table", () => {
     // The test databases are slightly different, so we need some extra arguments here
-    forEach([
+    describe.each([
         ["V1997/test.mdb", true, 50, 100, 50],
         ["V2000/test.mdb", false, 100, 200, 100],
         ["V2003/test.mdb", false, 100, 200, 100],
         ["V2007/test.accdb", true, 100, 200, 100],
         ["V2010/test.accdb", true, 100, 200, 100],
-    ]).describe("%s", (filename, reverseRows, columnALength, columnBLength, table4Length) => {
+    ])("%s", (filename, reverseRows, columnALength, columnBLength, table4Length) => {
         const path = resolve("test/data", filename);
 
         let buffer: Buffer;
@@ -32,25 +31,25 @@ describe("Table", () => {
                 rows.reverse();
             }
 
-            expect(rows[0]!["A"]).to.eq("abcdefg");
-            expect(rows[0]!["B"]).to.eq("hijklmnop");
-            expect(rows[0]!["C"]).to.eq(2);
-            expect(rows[0]!["D"]).to.eq(222);
-            expect(rows[0]!["E"]).to.eq(333333333);
-            expect(rows[0]!["F"]).to.eq(444.555);
-            expect((rows[0]!["G"] as Date).getTime()).to.eq(148953600000); // TODO: check expected value
-            expect(rows[0]!["H"]).to.eq("3.5000");
-            expect(rows[0]!["I"]).to.eq(true);
+            expect(rows[0]!["A"]).toBe("abcdefg");
+            expect(rows[0]!["B"]).toBe("hijklmnop");
+            expect(rows[0]!["C"]).toBe(2);
+            expect(rows[0]!["D"]).toBe(222);
+            expect(rows[0]!["E"]).toBe(333333333);
+            expect(rows[0]!["F"]).toBe(444.555);
+            expect((rows[0]!["G"] as Date).getTime()).toBe(148953600000); // TODO: check expected value
+            expect(rows[0]!["H"]).toBe("3.5000");
+            expect(rows[0]!["I"]).toBe(true);
 
-            expect(rows[1]!["A"]).to.eq("a");
-            expect(rows[1]!["B"]).to.eq("b");
-            expect(rows[1]!["C"]).to.eq(0);
-            expect(rows[1]!["D"]).to.eq(0);
-            expect(rows[1]!["E"]).to.eq(0);
-            expect(rows[1]!["F"]).to.eq(0);
-            expect((rows[1]!["G"] as Date).getTime()).to.eq(376963200000); // TODO: check expected value
-            expect(rows[1]!["H"]).to.eq("0.0000");
-            expect(rows[1]!["I"]).to.eq(false);
+            expect(rows[1]!["A"]).toBe("a");
+            expect(rows[1]!["B"]).toBe("b");
+            expect(rows[1]!["C"]).toBe(0);
+            expect(rows[1]!["D"]).toBe(0);
+            expect(rows[1]!["E"]).toBe(0);
+            expect(rows[1]!["F"]).toBe(0);
+            expect((rows[1]!["G"] as Date).getTime()).toBe(376963200000); // TODO: check expected value
+            expect(rows[1]!["H"]).toBe("0.0000");
+            expect(rows[1]!["I"]).toBe(false);
         });
 
         describe("getColumns()", () => {
@@ -59,34 +58,34 @@ describe("Table", () => {
                 const table = reader.getTable("Table1");
                 const columns = table.getColumns();
 
-                expect(columns[0]!.name).to.eq("A");
-                expect(columns[0]!.type).to.eq("text");
-                expect(columns[0]!.size).to.eq(columnALength);
+                expect(columns[0]!.name).toBe("A");
+                expect(columns[0]!.type).toBe("text");
+                expect(columns[0]!.size).toBe(columnALength);
 
-                expect(columns[1]!.name).to.eq("B");
-                expect(columns[1]!.type).to.eq("text");
-                expect(columns[1]!.size).to.eq(columnBLength);
+                expect(columns[1]!.name).toBe("B");
+                expect(columns[1]!.type).toBe("text");
+                expect(columns[1]!.size).toBe(columnBLength);
 
-                expect(columns[2]!.name).to.eq("C");
-                expect(columns[2]!.type).to.eq("byte");
+                expect(columns[2]!.name).toBe("C");
+                expect(columns[2]!.type).toBe("byte");
 
-                expect(columns[3]!.name).to.eq("D");
-                expect(columns[3]!.type).to.eq("integer");
+                expect(columns[3]!.name).toBe("D");
+                expect(columns[3]!.type).toBe("integer");
 
-                expect(columns[4]!.name).to.eq("E");
-                expect(columns[4]!.type).to.eq("long");
+                expect(columns[4]!.name).toBe("E");
+                expect(columns[4]!.type).toBe("long");
 
-                expect(columns[5]!.name).to.eq("F");
-                expect(columns[5]!.type).to.eq("double");
+                expect(columns[5]!.name).toBe("F");
+                expect(columns[5]!.type).toBe("double");
 
-                expect(columns[6]!.name).to.eq("G");
-                expect(columns[6]!.type).to.eq("datetime");
+                expect(columns[6]!.name).toBe("G");
+                expect(columns[6]!.type).toBe("datetime");
 
-                expect(columns[7]!.name).to.eq("H");
-                expect(columns[7]!.type).to.eq("currency");
+                expect(columns[7]!.name).toBe("H");
+                expect(columns[7]!.type).toBe("currency");
 
-                expect(columns[8]!.name).to.eq("I");
-                expect(columns[8]!.type).to.eq("boolean");
+                expect(columns[8]!.name).toBe("I");
+                expect(columns[8]!.type).toBe("boolean");
             });
 
             it("can handle many columns", () => {
@@ -94,11 +93,11 @@ describe("Table", () => {
                 const table = reader.getTable("Table2");
                 const columns = table.getColumns();
 
-                expect(columns.length).to.eq(89);
+                expect(columns.length).toBe(89);
                 for (let i = 0; i < 89; ++i) {
-                    expect(columns[i]!.name).to.eq(`column${i + 1}`);
-                    expect(columns[i]!.type).to.eq("text");
-                    expect(columns[i]!.size).to.eq(table4Length);
+                    expect(columns[i]!.name).toBe(`column${i + 1}`);
+                    expect(columns[i]!.type).toBe("text");
+                    expect(columns[i]!.size).toBe(table4Length);
                 }
             });
         });
@@ -108,23 +107,23 @@ describe("Table", () => {
             const table = reader.getTable("Table1");
             const columnNames = table.getColumnNames();
 
-            expect(columnNames).to.deep.eq(["A", "B", "C", "D", "E", "F", "G", "H", "I"]);
+            expect(columnNames).toEqual(["A", "B", "C", "D", "E", "F", "G", "H", "I"]);
         });
     });
 
     describe("cyclic table definitions", () => {
-        forEach([
+        describe.each([
             ["V1997/test.mdb", 2048, 34, 44],
             ["V2000/test.mdb", 4096, 30, 708],
             ["V2003/test.mdb", 4096, 30, 708],
             ["V2007/test.accdb", 4096, 67, 78],
             ["V2010/test.accdb", 4096, 79, 90],
-        ]).describe("%s", (filename, pageSize, firstPage, secondPage) => {
-            forEach([
+        ])("%s", (filename, pageSize, firstPage, secondPage) => {
+            it.each([
                 ["A→A", false, false],
                 ["A→B→A", true, false],
                 ["A→B→B", true, true],
-            ]).it("rejects %s", (_chain, useSecondPage, repeatSecondPage) => {
+            ])("rejects %s", (_chain, useSecondPage, repeatSecondPage) => {
                 const buffer = Buffer.from(readFileSync(resolve("test/data", filename)));
                 const repeatedPage = repeatSecondPage ? secondPage : firstPage;
                 buffer.writeUInt32LE(useSecondPage ? secondPage : firstPage, firstPage * pageSize + 4);
@@ -142,12 +141,11 @@ describe("Table", () => {
                     return getPage(page);
                 };
 
-                expect(() => new TableDefinition("Table2", database, firstPage)).to.throw(
-                    Error,
-                    `Cyclic table definition for table "Table2": repeated page ${repeatedPage}`
+                expect(() => new TableDefinition("Table2", database, firstPage)).toThrow(
+                    new Error(`Cyclic table definition for table "Table2": repeated page ${repeatedPage}`)
                 );
-                expect(reads).to.eq(useSecondPage ? 2 : 1);
-                expect(buffer.equals(originalBuffer)).to.eq(true);
+                expect(reads).toBe(useSecondPage ? 2 : 1);
+                expect(buffer.equals(originalBuffer)).toBe(true);
             });
 
             it("rejects a catalog self-loop", () => {
@@ -164,12 +162,11 @@ describe("Table", () => {
                     return getPage(page);
                 };
 
-                expect(() => new TableDefinition("MSysObjects", database, 2)).to.throw(
-                    Error,
-                    'Cyclic table definition for table "MSysObjects": repeated page 2'
+                expect(() => new TableDefinition("MSysObjects", database, 2)).toThrow(
+                    new Error('Cyclic table definition for table "MSysObjects": repeated page 2')
                 );
-                expect(reads).to.eq(1);
-                expect(buffer.equals(originalBuffer)).to.eq(true);
+                expect(reads).toBe(1);
+                expect(buffer.equals(originalBuffer)).toBe(true);
             });
         });
     });
@@ -179,7 +176,7 @@ describe("Table", () => {
             const path = resolve("test/data/real/ASampleDatabase.accdb");
             let table: Table;
 
-            before(() => {
+            beforeAll(() => {
                 const buffer = readFileSync(path);
                 const reader = new MDBReader(buffer);
                 table = reader.getTable("Asset Items");
@@ -187,50 +184,50 @@ describe("Table", () => {
 
             it("no options", () => {
                 const rows = table.getData();
-                expect(rows.length).to.eq(65);
+                expect(rows.length).toBe(65);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
-                expect(new Set(assetNumbers).size).to.eq(65);
+                expect(new Set(assetNumbers).size).toBe(65);
             });
 
             it("with rowOffset", () => {
                 const rows = table.getData({ rowOffset: 30 });
-                expect(rows.length).to.eq(35);
+                expect(rows.length).toBe(35);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
-                expect(new Set(assetNumbers).size).to.eq(35);
+                expect(new Set(assetNumbers).size).toBe(35);
             });
 
             it("with rowOffset > rowCount", () => {
                 const rows = table.getData({ rowOffset: 100 });
-                expect(rows.length).to.eq(0);
+                expect(rows.length).toBe(0);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
-                expect(new Set(assetNumbers).size).to.eq(0);
+                expect(new Set(assetNumbers).size).toBe(0);
             });
 
             it("with rowLimit", () => {
                 const rows = table.getData({ rowLimit: 40 });
-                expect(rows.length).to.eq(40);
+                expect(rows.length).toBe(40);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
-                expect(new Set(assetNumbers).size).to.eq(40);
+                expect(new Set(assetNumbers).size).toBe(40);
             });
 
             it("with rowLimit > rowCount", () => {
                 const rows = table.getData({ rowLimit: 100 });
-                expect(rows.length).to.eq(65);
+                expect(rows.length).toBe(65);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
-                expect(new Set(assetNumbers).size).to.eq(65);
+                expect(new Set(assetNumbers).size).toBe(65);
             });
 
             it("with rowOffset & rowLimit", () => {
                 const rows = table.getData({ rowOffset: 30, rowLimit: 15 });
-                expect(rows.length).to.eq(15);
+                expect(rows.length).toBe(15);
 
                 const assetNumbers = rows.map((row) => row["Asset No"]);
-                expect(new Set(assetNumbers).size).to.eq(15);
+                expect(new Set(assetNumbers).size).toBe(15);
             });
         });
 
@@ -241,7 +238,7 @@ describe("Table", () => {
                 const reader = new MDBReader(buffer);
                 const withDeletedColTable = reader.getTable("Table1");
 
-                expect(withDeletedColTable.getData()).to.deep.eq([
+                expect(withDeletedColTable.getData()).toEqual([
                     { col1: 0, col2: 1, col3: 2, col5: 4, col6: 5, col7: 6, col8: 7 },
                 ]);
             });
@@ -254,7 +251,7 @@ describe("Table", () => {
                 const reader = new MDBReader(buffer);
                 const withInsertedColTable = reader.getTable("Table1");
 
-                expect(withInsertedColTable.getData()).to.deep.eq([{ col1: true, col2: true, col3: false }]);
+                expect(withInsertedColTable.getData()).toEqual([{ col1: true, col2: true, col3: false }]);
             });
         });
     });

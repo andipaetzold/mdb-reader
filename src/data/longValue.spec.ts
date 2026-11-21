@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import type { Column } from "../column.js";
 import type { Database } from "../Database.js";
 import { readOLE } from "./ole.js";
@@ -46,34 +46,34 @@ for (const kind of ["OLE", "Memo"] as const) {
         ] as const) {
             it(`rejects a ${name} before fetching a row twice`, () => {
                 const rows = new Map(links.map(([pointer, next]) => [pointer, row(next)]));
-                expect(() => decode(10, rows, links[0][0])).to.throw(`Cyclic ${kind} long-value chain at page-row ${repeated}`);
+                expect(() => decode(10, rows, links[0][0])).toThrow(`Cyclic ${kind} long-value chain at page-row ${repeated}`);
             });
         }
 
         for (const length of [0, 1, 2, 3, 4]) {
             it(`rejects a row of ${length} bytes without payload`, () => {
                 expect(() => decode(10, new Map([[256, Buffer.alloc(length)]])))
-                    .to.throw(`Invalid ${kind} long-value row: no payload`);
+                    .toThrow(`Invalid ${kind} long-value row: no payload`);
             });
         }
 
         it("returns an empty value without lookups", () => {
-            expect(decode(0, new Map())).to.equal("");
+            expect(decode(0, new Map())).toBe("");
         });
 
         it("preserves early null termination", () => {
-            expect(decode(4, new Map([[256, row(0)]]))).to.equal(kind === "OLE" ? "ab\0\0" : "ab");
+            expect(decode(4, new Map([[256, row(0)]]))).toBe(kind === "OLE" ? "ab\0\0" : "ab");
         });
 
         for (const trailing of [256, 999]) {
             it(`ignores trailing pointer ${trailing} after exact completion`, () => {
-                expect(decode(4, new Map([[256, row(257)], [257, row(trailing, "cd")]]))).to.equal("abcd");
+                expect(decode(4, new Map([[256, row(257)], [257, row(trailing, "cd")]]))).toBe("abcd");
             });
         }
 
         it("reads distinct rows on the same page", () => {
             expect(decode(6, new Map([[256, row(257)], [257, row(258, "cd")], [258, row(0, "ef")]])))
-                .to.equal("abcdef");
+                .toBe("abcdef");
         });
 
         it("permits independent reads of the same chain", () => {
@@ -91,19 +91,19 @@ for (const kind of ["OLE", "Memo"] as const) {
             const read = kind === "OLE" ? readOLE : readMemo;
             for (let i = 0; i < 2; i++) {
                 const result = read(header(4), {} as Column, database);
-                expect(typeof result === "string" ? result : result.toString()).to.equal("abcd");
+                expect(typeof result === "string" ? result : result.toString()).toBe("abcd");
             }
-            expect(lookups).to.equal(4);
+            expect(lookups).toBe(4);
         });
 
         it("reads initial and continuation pointers as unsigned", () => {
             expect(decode(4, new Map([[0x80000100, row(0x80000101)], [0x80000101, row(0, "cd")]]), 0x80000100))
-                .to.equal("abcd");
+                .toBe("abcd");
         });
 
         it("preserves final chunk overflow handling", () => {
             expect(decode(3, new Map([[256, row(257)], [257, row(999, "cd")]])))
-                .to.equal(kind === "OLE" ? "abc" : "ab");
+                .toBe(kind === "OLE" ? "abc" : "ab");
         });
     });
 }

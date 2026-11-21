@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import { readFloat } from "./float.js";
 
 describe("Float", () => {
@@ -9,7 +9,7 @@ describe("Float", () => {
         buffer.writeFloatLE(value);
 
         const result = readFloat(buffer);
-        expect(result).to.be.greaterThanOrEqual(value);
-        expect(result).to.be.lessThan(value + 0.00001);
+        expect(result).toBeGreaterThanOrEqual(value);
+        expect(result).toBeLessThan(value + 0.00001);
     });
 });

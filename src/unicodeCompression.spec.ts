@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 import { uncompressText } from "./unicodeCompression.js";
 
 const compressionHeader = Buffer.from([0xff, 0xfe]);
@@ -9,7 +9,7 @@ describe("uncompressText", () => {
         const inputBuffer = Buffer.from([0x53, 0xe9, 0x72, 0x69, 0x65]);
 
         const result = uncompressText(inputBuffer, { textEncoding: "unknown" });
-        expect(result).to.eq(inputString);
+        expect(result).toBe(inputString);
     });
 
     it("decodes uncompressed Jet4 buffer", () => {
@@ -17,7 +17,7 @@ describe("uncompressText", () => {
         const inputBuffer = Buffer.from(inputString, "ucs-2");
 
         const result = uncompressText(inputBuffer, { textEncoding: "ucs-2" });
-        expect(result).to.eq(inputString);
+        expect(result).toBe(inputString);
     });
 
     describe("decodes compressed ascii", () => {
@@ -25,19 +25,19 @@ describe("uncompressText", () => {
             const inputString = "This is a test";
             const inputBuffer = Buffer.from(inputString, "ucs-2");
             const compressedInputBuffer = inputBuffer.filter((_byte, index) => index % 2 === 0);
-            expect(compressedInputBuffer.length).to.eq(inputBuffer.length / 2);
+            expect(compressedInputBuffer.length).toBe(inputBuffer.length / 2);
 
             const fullInputBuffer = Buffer.concat([compressionHeader, compressedInputBuffer]);
 
             const result = uncompressText(fullInputBuffer, { textEncoding: "ucs-2" });
-            expect(result).to.eq(inputString);
+            expect(result).toBe(inputString);
         });
 
         it("with uncompressed characters", () => {
             const asciiInputString = "ASCII";
             const asciiInputBuffer = Buffer.from(asciiInputString, "ucs-2");
             const asciiCompressedInputBuffer = asciiInputBuffer.filter((_byte, index) => index % 2 === 0);
-            expect(asciiCompressedInputBuffer.length).to.eq(asciiInputBuffer.length / 2);
+            expect(asciiCompressedInputBuffer.length).toBe(asciiInputBuffer.length / 2);
 
             const unicodeInputString = "Ț✚";
             const unicodeInputBuffer = Buffer.from(unicodeInputString, "ucs-2");
@@ -52,7 +52,7 @@ describe("uncompressText", () => {
             ]);
 
             const result = uncompressText(fullInputBuffer, { textEncoding: "ucs-2" });
-            expect(result).to.eq(`${asciiInputString}${unicodeInputString}${asciiInputString}`);
+            expect(result).toBe(`${asciiInputString}${unicodeInputString}${asciiInputString}`);
         });
 
         it("with an uncompressed character as last char", () => {
@@ -62,7 +62,7 @@ describe("uncompressText", () => {
                 Buffer.from("Hello world", "ucs-2"),
             ]);
             const result = uncompressText(fullInputBuffer, { textEncoding: "ucs-2" });
-            expect(result).to.eq("Hello world");
+            expect(result).toBe("Hello world");
         });
     });
 });
