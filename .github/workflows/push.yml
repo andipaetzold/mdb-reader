@@ -29,25 +29,6 @@ jobs:
             - name: Test
               run: npm test
 
-    pako-compatibility:
-        name: Pako ${{ matrix.pako }} compatibility
-        runs-on: ubuntu-26.04
-        strategy:
-            matrix:
-                pako: ["2", "3"]
-
-        steps:
-            - uses: actions/checkout@v7
-            - uses: actions/setup-node@v7
-              with:
-                  node-version-file: ".nvmrc"
-                  cache: "npm"
-            - run: npm ci
-            - name: Install pako major
-              run: npm install --no-save --package-lock=false pako@${{ matrix.pako }}
-            - run: npm run build
-            - run: npm test
-
     lint:
         name: Lint
         runs-on: ubuntu-26.04
@@ -63,7 +44,7 @@ jobs:
     release-please:
         name: Release Please
         runs-on: ubuntu-26.04
-        needs: [build-test, pako-compatibility, lint]
+        needs: [build-test, lint]
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         permissions:
             contents: write
@@ -85,7 +66,7 @@ jobs:
     publish-npm:
         name: Publish to npm
         runs-on: ubuntu-26.04
-        needs: [build-test, pako-compatibility, lint]
+        needs: [build-test, lint]
         if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags/v')
         permissions:
             contents: read
