@@ -13,11 +13,6 @@ JavaScript library to read data from Access databases.
 npm install mdb-reader
 ```
 
-or
-
-```sh
-yarn add mdb-reader
-```
 
 ## Compatibility
 
