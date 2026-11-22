@@ -1,4 +1,5 @@
 import { Database } from "./Database.js";
+import type { Environment } from "./environment/types.js";
 import { PageType, assertPageType } from "./PageType.js";
 import { type SysObject, isSysObjectType, isSystemObject, SysObjectTypes } from "./SysObject.js";
 import { Table } from "./Table.js";
@@ -15,15 +16,12 @@ export default class MDBReader {
     #sysObjects: SysObject[];
     #database: Database;
 
-    /**
-     * @param buffer Buffer of the database.
-     */
-    constructor(buffer: Buffer, { password }: Options | undefined = {}) {
+    constructor(environment: Environment, buffer: Buffer, { password }: Options = {}) {
         this.#buffer = buffer;
 
         assertPageType(this.#buffer, PageType.DatabaseDefinitionPage);
 
-        this.#database = new Database(this.#buffer, password ?? "");
+        this.#database = new Database(environment, this.#buffer, password ?? "");
 
         const mSysObjectsTable = getMSysObjectsTable(this.#database).getData<{
             Id: number;

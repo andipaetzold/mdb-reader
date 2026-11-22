@@ -1,8 +1,7 @@
 import type { ColumnDefinition, ComplexColumnDefinition } from "../../column.js";
-import { Database } from "../../Database.js";
+import type { Database } from "../../Database.js";
 import { Table } from "../../Table.js";
-import type { Attachment, Value } from "../../types.js";
-import { ColumnTypes } from "../../types.js";
+import { type Attachment, ColumnTypes, type Value } from "../../types.js";
 import { decodeAttachmentFileData } from "./attachment.js";
 import { resolveFlatTableForComplexColumn } from "./utils.js";
 
@@ -71,7 +70,7 @@ export function readComplex(buffer: Buffer, column: ColumnDefinition, database: 
             const attachment: Attachment = {
                 name: row.FileName,
                 type: row.FileType,
-                data: decodeAttachmentFileData(row.FileData),
+                data: decodeAttachmentFileData(database.environment, row.FileData),
             };
 
             if (row.FileURL) {

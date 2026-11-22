@@ -1,6 +1,7 @@
 import { type CodecHandler, createCodecHandler } from "./codec-handler/index.js";
 import { decryptRC4 } from "./crypto/index.js";
 import { readDateTime } from "./data/datetime.js";
+import type { Environment } from "./environment/types.js";
 import { getJetFormat, type JetFormat } from "./JetFormat/index.js";
 import { PageType, assertPageType } from "./PageType.js";
 import type { SortOrder } from "./types.js";
@@ -11,13 +12,15 @@ const PASSWORD_OFFSET = 0x42;
 
 export class Database {
     #buffer: Buffer;
+    readonly #environment: Environment;
     #format: JetFormat;
 
     #codecHandler: CodecHandler;
     #databaseDefinitionPage: Buffer;
 
-    constructor(buffer: Buffer, password: string) {
+    constructor(environment: Environment, buffer: Buffer, password: string) {
         this.#buffer = buffer;
+        this.#environment = environment;
 
         assertPageType(this.#buffer, PageType.DatabaseDefinitionPage);
 
@@ -26,11 +29,15 @@ export class Database {
         this.#databaseDefinitionPage = Buffer.alloc(this.#format.pageSize);
         this.#buffer.copy(this.#databaseDefinitionPage, 0, 0, this.#format.pageSize);
         decryptHeader(this.#databaseDefinitionPage, this.#format);
-        this.#codecHandler = createCodecHandler(this.#databaseDefinitionPage, password);
+        this.#codecHandler = createCodecHandler(this.#environment, this.#databaseDefinitionPage, password);
 
         if (!this.#codecHandler.verifyPassword()) {
             throw new Error("Wrong password");
         }
+    }
+
+    get environment(): Environment {
+        return this.#environment;
     }
 
     get format(): JetFormat {

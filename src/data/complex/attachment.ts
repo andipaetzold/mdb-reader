@@ -1,4 +1,4 @@
-import { environment } from "../../environment/index.js";
+import type { Environment } from "../../environment/types.js";
 
 const DATA_TYPES = {
     RAW: 0,
@@ -8,7 +8,7 @@ const DATA_TYPES = {
 /**
  * Decodes attachment FileData as stored in Access (OLE wrapper with optional deflate).
  */
-export function decodeAttachmentFileData(buffer: Buffer): Buffer {
+export function decodeAttachmentFileData(environment: Environment, buffer: Buffer): Buffer {
     /**
      * 0-3: type flag; 0=raw, 1=compressed
      * 4-7: length
