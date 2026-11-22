@@ -63,6 +63,7 @@ table.getData(); // [{id: 5, name: 'Ashley', color: 'black'}, ...]
 ## Examples
 
 - [`browser`](examples/browser) - Running in the browser with parcel
+- [`browser-cdn`](examples/browser-cdn) - Running in the browser with jsDelivr ESM imports and no build step
 - [`to-json`](examples/to-json) - CLI script that accepts a database file name and outputs the data as JSON
 - [`sveltekit`](examples/sveltekit) - Running with SvelteKit
 
