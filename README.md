@@ -271,7 +271,7 @@ npm test
 npm run lint
 ```
 
-Run `npx vitest` to watch the fixture and unit tests. Rebuild after source changes to refresh the package used by the entry point and declaration checks.
+Run `npx vitest` to watch the fixture and unit tests. Rebuild after source changes to refresh the emitted files used by the ESM import check.
 
 ## Resources
 
