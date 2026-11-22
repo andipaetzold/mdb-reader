@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.0.0](https://github.com/andipaetzold/mdb-reader/compare/v3.2.2...v4.0.0) (2026-11-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* Upgrade to Node.js 22.11.0, 24.11.0, or 26.13.0, or any later release within one of those LTS lines.
+
+### Features
+
+* add explicit Node and browser entry points ([#454](https://github.com/andipaetzold/mdb-reader/issues/454)) ([2e5e1f5](https://github.com/andipaetzold/mdb-reader/commit/2e5e1f5871e3b5784ce03a8cbdedaca67d3ee530))
+* support pako v3 alongside v2 ([#453](https://github.com/andipaetzold/mdb-reader/issues/453)) ([fed49b4](https://github.com/andipaetzold/mdb-reader/commit/fed49b49bbbfbf3a42e1266acf64fe5daf50cee5))
+
+
+### Bug Fixes
+
+* drop support for Node.js 18 and 20 ([#438](https://github.com/andipaetzold/mdb-reader/issues/438)) ([8c75acb](https://github.com/andipaetzold/mdb-reader/commit/8c75acbfb4de1d4b156cf49cb877a63bff99ba0f))
+
 ## [3.2.2](https://github.com/andipaetzold/mdb-reader/compare/v3.2.1...v3.2.2) (2026-11-18)
 
 

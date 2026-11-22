@@ -1,6 +1,6 @@
 {
     "name": "mdb-reader",
-    "version": "3.2.2",
+    "version": "4.0.0",
     "description": "JavaScript library to read data from Access databases",
     "main": "lib/node.js",
     "browser": "lib/browser.js",
