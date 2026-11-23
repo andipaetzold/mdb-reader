@@ -10,7 +10,7 @@ jobs:
         runs-on: ubuntu-26.04
         strategy:
             matrix:
-                node: ["22.11.0", "22", "24.11.0", "24", "26.13.0", "26"]
+                node: ["22.12.0", "22", "24.11.0", "24", "26.13.0", "26"]
 
         steps:
             - uses: actions/checkout@v7

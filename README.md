@@ -18,7 +18,7 @@ npm install mdb-reader
 
 ### Node / JavaScript
 
--   Node.js LTS 22 (22.11.0+), 24 (24.11.0+), and 26 (26.13.0+)
+-   Node.js LTS 22 (22.12.0+), 24 (24.11.0+), and 26 (26.13.0+)
 -   Works in the browser with [buffer](https://www.npmjs.com/package/buffer) ([Example](https://github.com/andipaetzold/mdb-reader/tree/main/examples/browser))
 
 ### Access Database versions
