@@ -56,7 +56,7 @@
         "@tsconfig/node22": "22.0.7",
         "@tsconfig/strictest": "2.0.9",
         "@types/node": "22.20.5",
-        "@types/pako": "2.0.4",
+        "@types/pako": "3.0.0",
         "oxlint": "1.94.0",
         "rimraf": "6.1.4",
         "typescript": "7.0.2",
